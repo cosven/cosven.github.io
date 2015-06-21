@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="Hexo,next" />
+  <meta name="keywords" content="Network,security," />
 
 
 
@@ -43,7 +43,7 @@
 
 
 
-  <title> Hello World // 笑一笑，十年少 ~ </title>
+  <title> 通信安全 // 笑一笑，十年少 ~ </title>
 </head>
 
 <body>
@@ -154,7 +154,7 @@
           
           
             
-              Hello World
+              通信安全
             
           
         </h1>
@@ -162,17 +162,28 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-06-19
+          发表于 2015-06-21
         </span>
 
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/网络相关/">网络相关</a>
+
+              
+              
+
+            
+          </span>
         
 
         
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/06/19/hello-world/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/19/hello-world/"></span>
+            <a href="/2015/06/21/通信安全/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/21/通信安全/"></span>
             </a>
           </span>
           
@@ -184,33 +195,63 @@
 
       
       
+        <div class="post-gallery">
+          
+            <a class="post-gallery-img fancybox" href="/" rel="gallery_cib6vqdh50003if1wsfbb6m7n">
+              <img src="/" />
+            </a>
+          
+        </div>
+      
 
       
-        <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start">Quick Start</h2><h3 id="Create_a_new_post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server">Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files">Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
+        <h2 id="通信安全">通信安全</h2><p><strong> 技术的进步在于不断的折腾 … </strong></p>
+<a id="more"></a>
+<h2 id="概述">概述</h2><p>如何数据位秘密地，未被篡改的从源端发送到接收方，以及如何将有害的数据排除在外，这就是我们平常所说的 <code>通信安全</code>。</p>
+<p><strong> Internet 缺乏安全性，我们要保证Internet尽量的安全，那么我们应该在Internet的哪一层动手？</strong></p>
+<blockquote>
+<p>很多安全专家认为，为了真正的安全，必须建立一个端到端的加密和完整性检查。也就是说：在 <code>应用层</code> 上建立这样一个安全保证机制。源进程对数据加密，目标进程对数据解密，这样做的好处是：<strong>无论在这其中进行了怎样的修改，都可以被检测到</strong>, 但是这也存在一个弊端：它必须改变所有的应用系统。</p>
+<p>也有另外很多专家认为：没有人愿意以任何一种方式来修改已有的程序，所以 <code>网络层</code> 应该认证或者加密数据包。</p>
+</blockquote>
+<p>这两个方案最后的综合讨论结果提出了一个 <code>IPSec（IP安全，IP security）</code>的设计方案。</p>
+<h2 id="IPSec">IPSec</h2><p>IPSec 设计方案是一个多服务、多算法和多粒度的框架。IPSec允许<code>空算法（null algorithm）</code>。</p>
+<blockquote>
+<p>空算法：</p>
+</blockquote>
+<h3 id="特点">特点</h3><h4 id="多服务">多服务</h4><p>IPSec支持多种服务的原因在于考虑了并不是每个人都愿意为所有的服务、时间支付费用，所以IPSec按照“点菜”的方式来提供这些服务。</p>
+<p>这些服务包括那些呢？最主要的服务就是<code>保密性</code>和<code>数据完整性</code>，以及针对<code>重放攻击（即入侵者重放一次回话过程）的保护</code>。这些服务都是建立在<code>对称密钥密码学</code>。</p>
+<blockquote>
+<p>重放攻击：攻击者利用你的验证之后的数据进行一些需要授权的操作。比如说，您登陆之后，服务器给你一个密钥，用来进行之后的操作，攻击者可以通过截取你这个密钥，进行后续的攻击。这样子，他就不需要得知你的用户名和密码，他也能进行操作（大概这样理解）</p>
+<p>对称密钥密码学：基本思想就是使用相同的密钥来进行加密和解密。</p>
+</blockquote>
+<h4 id="多算法">多算法</h4><p>IPSec支持多算法的考虑在于任何一个现在被认为安全的算法在将来都可能都会被攻破。IPSec设计与算法无关的好处是，即使某个特殊的算法将来被攻破，这个框架仍然可以保存下来。</p>
+<h4 id="多粒度">多粒度</h4><p>IPSec支持多粒度，就是说它小到可以保护单个TCP连接，大一点也能保护一对主机之间的所有流量，或者一对安全路由器之间的所有流浪。</p>
+<h3 id="IPSec中使用的连接">IPSec中使用的连接</h3><p>关于IPSec，它落在IP层，但是它是面向连接的。（它建立一个密钥，并且在一定长的时间内使用该密钥，在本质上，这就是一种连接）。</p>
+<p>在IPSec环境中，一个“连接”成称为一个安全关联（<code>SA，security association</code>）。SA是什么？<br>SA是两个端点之间的单纯连接，他有一个与之关联的安全<strong>标识符</strong>，如果两个方向上都需要安全通信的话，则要求使用两个安全关联。数据包携带着安全标识符通过这些安全连接，而标识符是用来查询密钥和其他有关安全信息。</p>
+<h3 id="IPSec方案中的组成部分">IPSec方案中的组成部分</h3>
       
     </div>
 
     <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Network/"> #Network </a>
+          
+            <a href="/tags/security/"> #security </a>
+          
+        </div>
       
 
       
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/06/19/hexo-装后尝试/">hexo 装后尝试</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/19/hexo-装后尝试/">hexo 装后尝试</a>
             
           </div>
         </div>
@@ -228,8 +269,8 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2015/06/19/hello-world/"
-               data-title="Hello World" data-url="http://www.cosven.com/2015/06/19/hello-world/">
+          <div class="ds-thread" data-thread-key="2015/06/21/通信安全/"
+               data-title="通信安全" data-url="http://www.cosven.com/2015/06/21/通信安全/">
           </div>
         
       </div>
@@ -328,7 +369,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick_Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create_a_new_post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run_server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate_static_files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy_to_remote_sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#通信安全"><span class="nav-number">1.</span> <span class="nav-text">通信安全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#概述"><span class="nav-number">2.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IPSec"><span class="nav-number">3.</span> <span class="nav-text">IPSec</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特点"><span class="nav-number">3.1.</span> <span class="nav-text">特点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#多服务"><span class="nav-number">3.1.1.</span> <span class="nav-text">多服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多算法"><span class="nav-number">3.1.2.</span> <span class="nav-text">多算法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多粒度"><span class="nav-number">3.1.3.</span> <span class="nav-text">多粒度</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IPSec中使用的连接"><span class="nav-number">3.2.</span> <span class="nav-text">IPSec中使用的连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IPSec方案中的组成部分"><span class="nav-number">3.3.</span> <span class="nav-text">IPSec方案中的组成部分</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
