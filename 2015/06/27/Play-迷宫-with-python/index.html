@@ -206,7 +206,7 @@
 <p><code>深度优先算法</code> 是什么？</p>
 </blockquote>
 <h4 id="算法目标">算法目标</h4><p>让图上所有的点都互相连通（一开始所有的点都都被强 隔开）</p>
-<h4 id="算法思想">算法思想</h4><ul>
+<h4 id="算法过程">算法过程</h4><ul>
 <li><p>用一个数组来保存已经互相连通的点，对于已经连通的点，我们对它进行 <strong>标记</strong>，并用 <em>connected_points</em> 来保存。<br>也就是说，当所有的点都被标记完了，我们的算法就结束。</p>
 </li>
 <li><p>用一个数组来保存未被标记的点，初始的时候，所有的点都未被标记。我们用<br><em>unconnected_points</em> 来表示。</p>
@@ -243,18 +243,18 @@
 <li><p><em>unconnected_points</em>为空，算法结束</p>
 </li>
 </ol>
-<h3 id="使用深度优先算法破解迷宫">使用深度优先算法破解迷宫</h3><h4 id="算法思想-1">算法思想</h4><ul>
-<li>创建 一个栈保存曾经走过的点：<em>dfs_visited_pointes_stack</em></li>
-<li>已经有一个起点和终点, 将起点标记为 <strong>当前格</strong></li>
+<h3 id="使用深度优先算法破解迷宫">使用深度优先算法破解迷宫</h3><h4 id="算法过程（貌似下面这个思路有点不同寻常，虽然也可以）">算法过程（貌似下面这个思路有点不同寻常，虽然也可以）</h4><ul>
+<li>创建 一个<strong>栈</strong>保存曾经走过的点：<em>dfs_visited_pointes_stack</em></li>
+<li>将 <strong>起点</strong> <strong>标记</strong>为 <strong>当前格</strong></li>
 </ul>
 <ol>
 <li><p>当 <strong>当前格</strong> 有可以走通的邻格 （四邻格模式）</p>
 <ol>
+<li>标记 <strong>当前格</strong> 已经走过</li>
 <li>选择其中一个可以走通的邻格</li>
-<li>标记该邻格已经走过</li>
 <li>如果邻格是目标点，退出算法，否则往下</li>
 <li>将 <strong>当前格</strong> 入栈</li>
-<li>将邻格设为 <strong>当前格</strong></li>
+<li>将邻格设为 <strong>当前格</strong>, 循环</li>
 </ol>
 </li>
 <li><p>（<strong>当前格</strong> 已经没有未被 <strong>标记</strong> 邻格了），判断栈是否为空，如果不为空</p>
@@ -264,6 +264,33 @@
 </ol>
 </li>
 <li><p>算法结束</p>
+</li>
+</ol>
+<h3 id="使用_A*_算法破解迷宫">使用 A* 算法破解迷宫</h3><blockquote>
+<p>广度优先算法：</p>
+<p>迪杰斯特拉算法：</p>
+<p>A* ：</p>
+</blockquote>
+<h4 id="算法过程-1">算法过程</h4><blockquote>
+<p>启发式函数：</p>
+</blockquote>
+<ul>
+<li><p>自定义一个启发式函数，估算当前点到目标点的距离。（常用的启发式函数就是：abs(x-goal_x) + abs(y-goal_y)）</p>
+</li>
+<li><p>创建一个 <strong>队列</strong> 保存曾经走过的点: <em>astar_visited_pointes_queue</em></p>
+</li>
+<li><p>创建一个数组保存每一点到起点的 <strong>距离</strong>: <em>current_distance</em>，初始化为无穷大</p>
+</li>
+<li><p>将 <strong>起点</strong> 放入队列, 设置它到起点的距离为0</p>
+</li>
+</ul>
+<ol>
+<li>当 <strong>队列不为空</strong> 的时候<ol>
+<li>从队列pop一个元素出来，将它标记为 <strong>当前点</strong></li>
+<li>如果当前点就是目标点，算法结束</li>
+<li>计算 <strong>当前点</strong> 的每个邻居 <strong>各自</strong> 到起点的距离，使用启发式函数估算它们 <strong>各自</strong> 到目标点的距离, 相加得到 <strong>各自的</strong> 总距离。对比这个距离与之前保存的距离，如果比之前的距离小，那么用现在的距离更新之前保存的距离值。</li>
+<li>把它们 <strong>放入队列</strong> 中，对 <strong>队列进行升序排序</strong></li>
+</ol>
 </li>
 </ol>
 <h3 id="使用变形的Prim算法生成迷宫">使用变形的Prim算法生成迷宫</h3><h2 id="附带遇到的一些问题">附带遇到的一些问题</h2><h5 id="一个类的什么样的成员或者变量应该设为私有，什么样的变量设为公有？">一个类的什么样的成员或者变量应该设为私有，什么样的变量设为公有？</h5><p>参考: <a href="http://programmers.stackexchange.com/questions/143736/why-do-we-need-private-variables" target="_blank" rel="external">http://programmers.stackexchange.com/questions/143736/why-do-we-need-private-variables</a></p>
@@ -414,7 +441,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#迷宫自动生成"><span class="nav-number">1.</span> <span class="nav-text">迷宫自动生成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用类似深度优先算法生成迷宫"><span class="nav-number">1.1.</span> <span class="nav-text">使用类似深度优先算法生成迷宫</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#算法目标"><span class="nav-number">1.1.1.</span> <span class="nav-text">算法目标</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法思想"><span class="nav-number">1.1.2.</span> <span class="nav-text">算法思想</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用深度优先算法破解迷宫"><span class="nav-number">1.2.</span> <span class="nav-text">使用深度优先算法破解迷宫</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#算法思想-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">算法思想</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用变形的Prim算法生成迷宫"><span class="nav-number">1.3.</span> <span class="nav-text">使用变形的Prim算法生成迷宫</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#附带遇到的一些问题"><span class="nav-number">2.</span> <span class="nav-text">附带遇到的一些问题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#一个类的什么样的成员或者变量应该设为私有，什么样的变量设为公有？"><span class="nav-number">2.0.0.1.</span> <span class="nav-text">一个类的什么样的成员或者变量应该设为私有，什么样的变量设为公有？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#GUI中按钮等元素的Hover等事件是怎样从“底层”实现的？"><span class="nav-number">2.0.0.2.</span> <span class="nav-text">GUI中按钮等元素的Hover等事件是怎样从“底层”实现的？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#是创建多个对象好，还是使用多个属性数组来描述对象好？"><span class="nav-number">2.0.0.3.</span> <span class="nav-text">是创建多个对象好，还是使用多个属性数组来描述对象好？</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#迷宫自动生成"><span class="nav-number">1.</span> <span class="nav-text">迷宫自动生成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用类似深度优先算法生成迷宫"><span class="nav-number">1.1.</span> <span class="nav-text">使用类似深度优先算法生成迷宫</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#算法目标"><span class="nav-number">1.1.1.</span> <span class="nav-text">算法目标</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法过程"><span class="nav-number">1.1.2.</span> <span class="nav-text">算法过程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用深度优先算法破解迷宫"><span class="nav-number">1.2.</span> <span class="nav-text">使用深度优先算法破解迷宫</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#算法过程（貌似下面这个思路有点不同寻常，虽然也可以）"><span class="nav-number">1.2.1.</span> <span class="nav-text">算法过程（貌似下面这个思路有点不同寻常，虽然也可以）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用_A*_算法破解迷宫"><span class="nav-number">1.3.</span> <span class="nav-text">使用 A* 算法破解迷宫</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#算法过程-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">算法过程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用变形的Prim算法生成迷宫"><span class="nav-number">1.4.</span> <span class="nav-text">使用变形的Prim算法生成迷宫</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#附带遇到的一些问题"><span class="nav-number">2.</span> <span class="nav-text">附带遇到的一些问题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#一个类的什么样的成员或者变量应该设为私有，什么样的变量设为公有？"><span class="nav-number">2.0.0.1.</span> <span class="nav-text">一个类的什么样的成员或者变量应该设为私有，什么样的变量设为公有？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#GUI中按钮等元素的Hover等事件是怎样从“底层”实现的？"><span class="nav-number">2.0.0.2.</span> <span class="nav-text">GUI中按钮等元素的Hover等事件是怎样从“底层”实现的？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#是创建多个对象好，还是使用多个属性数组来描述对象好？"><span class="nav-number">2.0.0.3.</span> <span class="nav-text">是创建多个对象好，还是使用多个属性数组来描述对象好？</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
