@@ -43,7 +43,7 @@
 
 
 
-  <title> 标签: test, hexo // 笑一笑，十年少 ~ </title>
+  <title> 归档 // 笑一笑，十年少 ~ </title>
 </head>
 
 <body>
@@ -57,7 +57,7 @@
   </div>
 <![endif]-->
 
-  <div class="container one-column ">
+  <div class="container one-column  page-archive ">
     <div class="headband"></div>
 
     <div id="header" class="header">
@@ -143,14 +143,31 @@
           
 
   <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h2 >
-        test, hexo
-        <small>标签</small>
-      </h2>
-    </div>
+    <span class="archive-move-on"></span>
+
+    <span class="archive-page-counter">
+      
+      
+      
+        
+      
+      嗯..! 目前共计 4 篇日志。 继续努力。
+    </span>
 
     
+
+      
+      
+      
+
+      
+        
+        <div class="collection-title">
+          <h2 class="archive-year motion-element" id="archive-year-2015">2015</h2>
+        </div>
+      
+      
+
       
 
   <div class="post post-type-normal">
@@ -158,24 +175,27 @@
 
       <div class="post-title">
         
-            <a class="post-title-link" href="/2015/06/19/hexo-装后尝试/">
-              hexo 装后尝试
+            <a class="post-title-link" href="/2015/07/07/FeelUOwn-技术阶段总结/">
+              FeelUOwn 技术阶段总结
             </a>
         
       </div>
 
       <div class="post-meta">
-        <span class="post-time"> 06-19 </span>
+        <span class="post-time"> 07-07 </span>
       </div>
 
     </div>
   </div>
 
 
+
     
+
   </div>
 
   
+
 
         </div>
 
@@ -321,6 +341,12 @@
   <script type="text/javascript" src="/js/search-toggle.js"></script>
 
   
+  
+    <script type="text/javascript" id="motion.page.archive">
+      $('.archive-year').velocity('transition.slideLeftIn');
+    </script>
+  
+
 
   <script type="text/javascript">
     $(document).ready(function () {
