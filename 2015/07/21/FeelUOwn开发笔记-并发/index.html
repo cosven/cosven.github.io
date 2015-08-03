@@ -214,6 +214,35 @@
 <h3 id="Twisted,_Tornodo,_gevent">Twisted, Tornodo, gevent</h3><p>简要的看了别人对这几个东西的对比分析，我没有得出什么有用的结论。所以我想找<code>deepin-music</code>这个开源项目来参考了一下，看它是否用了其中的某个框架，结果… 直接在代码中搜这三个关键词，发现一个也没搜到，倒是搜threading这个词有很多结果。所以得出结论：<strong>上面三个东西可能不是最好的解决方案</strong></p>
 <p>然后我就想把之前使用nodejs的经验套过来，我感觉nodejs的那个异步应该不错，但是我记得nodejs的那个异步没办法对程序的运行状态进行跟踪，貌似也办法终止。</p>
 <p>所以我又去google了一番，发现这篇文章或许有帮助: <a href="https://us.pycon.org/2013/schedule/presentation/62/" target="_blank" rel="external">https://us.pycon.org/2013/schedule/presentation/62/</a></p>
+<p><a href="http://stackoverflow.com/questions/1595649/threading-in-a-pyqt-application-use-qt-threads-or-python-threads" target="_blank" rel="external">Use Qt threads or Python threads?</a></p>
+<p>所以，之后焦点转移到 <code>asyncio</code> 这个东西上面来了。</p>
+<p>qt 和 asyncio 怎样组合呢，<a href="https://github.com/harvimt/quamash" target="_blank" rel="external">github</a> 上有人给出了解决方案。不知道方案成熟不</p>
+<p>最后还是选用了 <code>quamash</code>, 目前感觉还挺好用的。</p>
+<h3 id="asyncio">asyncio</h3><p><code>asyncio</code> 通过使用<code>协程</code>的并发模型在单线程上进行并发。</p>
+<ol>
+<li><p>它有一个可插拔的事件循环(<code>event loop</code>)，这个事件循环可以根据特定的系统实现。比如说，它可以根据Qt本身的事件循环来实现在qt上可用的 <code>event loop</code></p>
+</li>
+<li><p>它还有很多其他的特性，我暂时都没用到。</p>
+</li>
+</ol>
+<blockquote>
+<p>貌似很多其他很多并发库也都是使用类似 <code>event loop</code> 这种模式。</p>
+</blockquote>
+<p>事件循环比较容易理解。就是一个服务员一直在工作，服务员有个<em>事件循环</em>，然后某个顾客说你帮我做一下<em>这件事</em>，服务员就把<em>这件事</em>扔到事件循环，其他顾客也同样的要服务员做事，服务员的<em>事件循环</em>中就有很多事要干，服务员就把自己的时间分成很小时间段，每个小的时间段中服务员都为某个顾客服务，这样子，服务员非常迅速的切换，每个顾客都感觉服务员在为他服务。</p>
+<p>体现在程序上也非常简单好用。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello_world</span><span class="params">(text)</span>:</span></span><br><span class="line">    time.sleep(<span class="number">2</span>)</span><br><span class="line">    print(text)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">stop_event_loop</span><span class="params">()</span>:</span></span><br><span class="line">    event_loop = asyncio.get_event_loop()</span><br><span class="line">    event_loop.stop()</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line">loop.call_soon(hello_world, <span class="string">"hello"</span>)</span><br><span class="line">print(<span class="string">"1"</span>)</span><br><span class="line">loop.call_soon(hello_world, <span class="string">"world"</span>)</span><br><span class="line">print(<span class="string">"2"</span>)</span><br><span class="line">loop.call_later(<span class="number">10</span>, stop_event_loop)    <span class="comment"># 10 秒后调用stop_event_loop函数</span></span><br><span class="line">loop.run_forever()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出的顺序将会是</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line">hello</span><br><span class="line">world</span><br></pre></td></tr></table></figure>
+<h3 id="实践过程遇到几个坑">实践过程遇到几个坑</h3><ol>
+<li>python 中一个函数如果有多个<code>装饰器</code>, 他们的执行顺序是怎样一定要弄清楚。</li>
+</ol>
+<blockquote>
+<p>我自己写了一个装饰器，它能让函数变成并行（就是使用上面的call_soon函数），<br>但是有的函数它本来就有pyqtSlot这个装饰器，我本来没有注意装饰器的顺序，把自己的装饰器放在pyqtSlot的<strong>前面</strong>，导致了一些非常奇葩的问题。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="decorator">@decorator1</span></span><br><span class="line"><span class="decorator">@decorator2</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></span><br><span class="line">    do something</span><br></pre></td></tr></table></figure>
+<p>它会先执行decorator2, 在执行decorator1</p>
+<ol>
+<li>分析网易云音乐的网页端的加密</li>
+</ol>
+<p>用 chrome 或者 firefox 的 js debug，找到加密相关的函数，可以搜一些关键字(encrypt, base64, md5之类的字段) 设置断点，查看变量的值，就能比较容易的发现目标。</p>
 
       
     </div>
@@ -297,7 +326,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-count">7</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -311,7 +340,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">10</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
@@ -349,7 +378,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#摸着石头过河"><span class="nav-number">1.</span> <span class="nav-text">摸着石头过河</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简述"><span class="nav-number">2.</span> <span class="nav-text">简述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单需求分析"><span class="nav-number">3.</span> <span class="nav-text">简单需求分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#哪些地方可能需要用到异步"><span class="nav-number">3.1.</span> <span class="nav-text">哪些地方可能需要用到异步</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几种已有的异步框架的简要对比"><span class="nav-number">4.</span> <span class="nav-text">几种已有的异步框架的简要对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Twisted,_Tornodo,_gevent"><span class="nav-number">4.1.</span> <span class="nav-text">Twisted, Tornodo, gevent</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#摸着石头过河"><span class="nav-number">1.</span> <span class="nav-text">摸着石头过河</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简述"><span class="nav-number">2.</span> <span class="nav-text">简述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单需求分析"><span class="nav-number">3.</span> <span class="nav-text">简单需求分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#哪些地方可能需要用到异步"><span class="nav-number">3.1.</span> <span class="nav-text">哪些地方可能需要用到异步</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几种已有的异步框架的简要对比"><span class="nav-number">4.</span> <span class="nav-text">几种已有的异步框架的简要对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Twisted,_Tornodo,_gevent"><span class="nav-number">4.1.</span> <span class="nav-text">Twisted, Tornodo, gevent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#asyncio"><span class="nav-number">4.2.</span> <span class="nav-text">asyncio</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实践过程遇到几个坑"><span class="nav-number">4.3.</span> <span class="nav-text">实践过程遇到几个坑</span></a></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
