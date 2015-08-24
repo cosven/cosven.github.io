@@ -157,7 +157,7 @@
           
             
               <a class="post-title-link" href="/2015/08/24/全局快捷键解决方案/">
-                全局快捷键解决方案
+                FeelUOwn - python - 全局快捷键解决方案
               </a>
             
           
@@ -191,21 +191,16 @@
 
       
         
-          <p>这段时间一直在忙活给FeelUOwn补充一下实用的细节功能。其中全局快捷键就是我下手的第一个目标。<br>而对于一个音乐播放器，笔记本键盘的MultiMedia快捷键肯定要捕捉到吧。<br>然后我自己使用的mac，所以我想让它也支持mac平台。</p>
-<p>经过一段时间的google，我尝试了几种解决方案</p>
-<ol>
-<li><p>pygs, pyglobalshortcut. 基于Qt，你搜python，global shortcut 这个东西基本上是排在第一。但是我在mac上python3<br>pip安装竟然失败失败，这是放弃的一个原因。另外，我想这种方案应该是无法捕获到Mac上的multimedia快捷键（没有验证过）。</p>
-</li>
-<li><p>稍微进入底层，尝试用更加 lower level 的解决方案。<br> 我找到了 python3-xlib 这个Linux平台的解决, mac平台就需要使用 python-Objc.</p>
-</li>
-</ol>
-<p>我觉得第二种方案应该是比较合理的。</p>
-<p>一方面，想使用一个库来达到跨平台的效果基本不现实，没有发现类似的解决方案。<br>从而，各平台采用不同的方法就是一个比较直接的想法。</p>
-<p>另外一方面，我在Github上看到一个 <a href="https://github.com/SavinaRoja/PyUserInput" target="_blank" rel="external">PyUserInput</a>，它是一个用来模拟鼠标点击、键盘按压的跨平台的库。我看它的依赖: </p>
-<blockquote>
-<p>Depending on your platform, you will need the following python modules for PyUserInput to function:<br>Linux - Xlib<br>Mac - Quartz, AppKit<br>Windows - pywin32, pyHook</p>
-</blockquote>
-
+          <p>一段时间的探索实践，对比并整合了一套(个人认为是比较靠谱的)python跨平台全局快捷键解决方案。</p>
+<pre><code><span class="title">Linux</span> - Xlib
+Mac - Quartz, AppKit
+Windows - pywin32, pyHook
+</code></pre>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/08/24/全局快捷键解决方案/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
