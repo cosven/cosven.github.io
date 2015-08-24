@@ -1,0 +1,720 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.3"/>
+
+
+
+
+  <meta name="keywords" content="algorithm,python," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/avatar.png?v=0.4.3" />
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    analytics: {
+      google: ''
+    },
+    sidebar: 'post'
+  };
+</script>
+
+
+
+
+  <title> Play 迷宫 with python and pygame // 笑一笑，十年少 ~ </title>
+</head>
+
+<body>
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">笑一笑，十年少 ~</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<div class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/">
+            <i class="menu-item-icon icon-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            <i class="menu-item-icon icon-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            <i class="menu-item-icon icon-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            <i class="menu-item-icon icon-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            <i class="menu-item-icon icon-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+</div>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              Play 迷宫 with python and pygame
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-06-27
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/算法/">算法</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/06/27/Play-迷宫-with-python/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/27/Play-迷宫-with-python/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p>这篇笔记主要包含两个大的部分。<strong>迷宫自动生成</strong> 和 <strong>迷宫寻路</strong></p>
+<p><strong>迷宫自动生成</strong> 包含了……算法</p>
+<p><strong>迷宫寻路</strong> 包含了……算法</p>
+<p><a href="/attachment/maze.zip">项目工程代码</a></p>
+<a id="more"></a>
+<h2 id="迷宫自动生成">迷宫自动生成</h2><p><strong>生成的迷宫将会满足什么条件 ?</strong><br>从迷宫的任意一点出发，可以达到迷宫另外的任意一点。</p>
+<h3 id="使用类似深度优先算法生成迷宫">使用类似深度优先算法生成迷宫</h3><blockquote>
+<p><code>深度优先算法</code> 是什么？是搜索算法的一种。是沿着树的深度遍历树的节点，尽可能深的搜索树的分支。当节点v的所在边都己被探寻过，搜索将回溯到发现节点v的那条边的起始节点。这一过程一直进行到已发现从源节点可达的所有节点为止。如果还存在未被发现的节点，则选择其中一个作为源节点并重复以上过程，整个进程反复进行直到所有节点都被访问为止。属于盲目搜索。<br>深度优先搜索是图论中的经典算法，利用深度优先搜索算法可以产生目标图的相应拓扑排序表，利用拓扑排序表可以方便的解决很多相关的图论问题，如最大路径问题等等。</p>
+</blockquote>
+<h4 id="算法目标">算法目标</h4><p>让图上所有的点都互相连通（一开始所有的点都都被强 隔开）</p>
+<h4 id="算法过程">算法过程</h4><ul>
+<li><p>用一个数组来保存已经互相连通的点，对于已经连通的点，我们对它进行 <strong>标记</strong>，并用 <em>connected_points</em> 来保存。<br>也就是说，当所有的点都被标记完了，我们的算法就结束。</p>
+</li>
+<li><p>用一个数组来保存未被标记的点，初始的时候，所有的点都未被标记。我们用<br><em>unconnected_points</em> 来表示。</p>
+</li>
+<li><p>另外还需要创建 一个栈。<em>dfs_visited_pointes_stack</em></p>
+</li>
+</ul>
+<ol>
+<li>随机选择一个点作为起点，把起点设置为 <strong>当前格</strong> 并进行 <strong>标记</strong></li>
+<li><p>当还存在未被标记的点时，也就是 <em>unconnected_points</em> 不为空的时候。</p>
+<ol>
+<li><p>当 <strong>当前格</strong> 有未被标记的邻格 （四邻格模式）</p>
+<ol>
+<li>随机选择一个 <strong>未被标记</strong> 的邻格</li>
+<li>将 <strong>当前格</strong> 入栈</li>
+<li>移除 <strong>当前格</strong> 与 邻格之间的墙</li>
+<li><strong>标记</strong> 邻格，并将它设为 <strong>当前格</strong></li>
+</ol>
+</li>
+<li><p>（<strong>当前格</strong> 已经没有未被 <strong>标记</strong> 邻格了），判断栈是否为空，如果不为空</p>
+<ol>
+<li>栈顶得格子出栈，并让它成为<strong>当前格</strong></li>
+<li>跳到上面的循环</li>
+</ol>
+</li>
+<li><p>（栈空了，<strong>当前格</strong> 已经没有未被 <strong>标记</strong> 邻格了）</p>
+<ol>
+<li>随机从 <em>unconnected_points</em> 中选择一个格子设为 <strong>当前格</strong></li>
+<li>跳到上面的循环</li>
+</ol>
+</li>
+</ol>
+</li>
+<li><p><em>unconnected_points</em>为空，算法结束</p>
+</li>
+</ol>
+<h4 id="关键算法代码">关键算法代码</h4><p>后面可运行的整体工程代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_dfs</span><span class="params">(self, current_person)</span>:</span></span><br><span class="line">    <span class="string">"""dfs 生成迷宫核心算法</span><br><span class="line">    """</span></span><br><span class="line">    self.connected_persons.append(current_person)</span><br><span class="line">    self.unconnected_persons.remove(current_person)</span><br><span class="line">    current_person.is_connected = <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> len(self.unconnected_persons) &gt; <span class="number">0</span>:    <span class="comment"># 当还有未被访问的点</span></span><br><span class="line">        self.mark_neighbor_to_no(current_person)</span><br><span class="line">        <span class="keyword">while</span> len(self.visited_stack) &gt; <span class="number">0</span>:</span><br><span class="line">            current_person = self.visited_stack.pop()</span><br><span class="line">            self.mark_neighbor_to_no(current_person)</span><br><span class="line">        count = len(self.unconnected_persons)</span><br><span class="line">        <span class="keyword">print</span> <span class="string">u"剩余的没有连接的点个数: %d"</span> % count</span><br><span class="line">        <span class="keyword">if</span> count == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        num = randint(<span class="number">0</span>, count)</span><br><span class="line">        current_person = self.unconnected_persons[num]</span><br><span class="line">        <span class="keyword">return</span> self.generate_dfs(current_person)</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">mark_neighbor_to_no</span><span class="params">(self, current_person)</span>:</span></span><br><span class="line">    <span class="string">"""dfs 生成迷宫的一部分</span><br><span class="line">    </span><br><span class="line">    选择当前点的一个邻居来充当当前点</span><br><span class="line">    """</span></span><br><span class="line">    neighbor_pid = current_person.get_random_unconnected_neighbor_pid()</span><br><span class="line">    <span class="keyword">if</span> neighbor_pid != <span class="keyword">False</span>:</span><br><span class="line">        <span class="comment"># 随机选择一个邻格</span></span><br><span class="line">        neighbor = Person.get_person_by_pid(neighbor_pid)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 将当前格入栈</span></span><br><span class="line">        self.visited_stack.append(current_person)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 拆墙</span></span><br><span class="line">        Maze.crash_wall(current_person, neighbor)   <span class="comment"># 把墙销毁</span></span><br><span class="line">        pygame.display.update()</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 标记已经访问过的点</span></span><br><span class="line">        self.connected_persons.append(neighbor)</span><br><span class="line">        self.unconnected_persons.remove(neighbor)</span><br><span class="line">        neighbor.is_connected = <span class="keyword">True</span>    <span class="comment"># 标记邻格</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 将邻格设为当前格</span></span><br><span class="line">        current_person = neighbor</span><br><span class="line">        <span class="keyword">return</span> self.mark_neighbor_to_no(current_person)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 当前格已经没有未被标记的邻格了</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">True</span></span><br></pre></td></tr></table></figure>
+<h4 id="演示gif">演示gif</h4><p><img src="http://7viixf.com1.z0.glb.clouddn.com/algorithm/generate_maze_dfs.gif" alt="dfs生成迷宫演示"></p>
+<h2 id="迷宫破解">迷宫破解</h2><h3 id="使用深度优先算法破解迷宫">使用深度优先算法破解迷宫</h3><h4 id="算法过程（貌似下面这个思路有点不同寻常，虽然也可以）">算法过程（貌似下面这个思路有点不同寻常，虽然也可以）</h4><ul>
+<li>创建 一个<strong>栈</strong>保存曾经走过的点：<em>dfs_visited_pointes_stack</em></li>
+<li>将 <strong>起点</strong> <strong>标记</strong>为 <strong>当前格</strong></li>
+</ul>
+<ol>
+<li><p>当 <strong>当前格</strong> 有可以走通的邻格 （四邻格模式）</p>
+<ol>
+<li>标记 <strong>当前格</strong> 已经走过</li>
+<li>选择其中一个可以走通的邻格</li>
+<li>如果邻格是目标点，退出算法，否则往下</li>
+<li>将 <strong>当前格</strong> 入栈</li>
+<li>将邻格设为 <strong>当前格</strong>, 循环</li>
+</ol>
+</li>
+<li><p>（<strong>当前格</strong> 已经没有未被 <strong>标记</strong> 邻格了），判断栈是否为空，如果不为空</p>
+<ol>
+<li>栈顶得格子出栈，并让它成为<strong>当前格</strong></li>
+<li>跳到上面的循环</li>
+</ol>
+</li>
+<li><p>算法结束</p>
+</li>
+</ol>
+<h4 id="关键算法代码-1">关键算法代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hacking_dfs</span><span class="params">(self, current_person, goal_person)</span>:</span></span><br><span class="line">    self.dfs_maze_path.append(current_person)</span><br><span class="line"></span><br><span class="line">    current_person.is_walked = <span class="keyword">True</span></span><br><span class="line">    current_person.set_tried(self.screen)</span><br><span class="line">    <span class="comment"># pygame.display.update()</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># print "walked person: %d, walked stack: %d" % (len(self.walked_persons),</span></span><br><span class="line">    <span class="comment">#         len(self.walked_persons))</span></span><br><span class="line">    neighbor_pid = current_person.get_walkable_neighbor_pid(current_person)</span><br><span class="line">    <span class="comment"># print "walking: ", neighbor_pid</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> current_person.pid == goal_person.pid:</span><br><span class="line">        notify(<span class="string">'hacking succeed !'</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> neighbor_pid == <span class="keyword">False</span>:</span><br><span class="line">        <span class="keyword">if</span> len(self.walked_stack) &gt; <span class="number">0</span>:</span><br><span class="line">            self.dfs_maze_path = list(self.walked_stack)</span><br><span class="line">            </span><br><span class="line">            current_person = self.walked_stack.pop()</span><br><span class="line">            <span class="keyword">return</span> self.hacking_dfs(current_person, goal_person)</span><br><span class="line"></span><br><span class="line">        notify(<span class="string">'hacking failed !'</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">False</span></span><br><span class="line">    </span><br><span class="line">    neighbor = Person.get_person_by_pid(neighbor_pid)</span><br><span class="line"></span><br><span class="line">    self.walked_stack.append(current_person)</span><br><span class="line">    self.walked_persons.append(current_person)</span><br><span class="line"></span><br><span class="line">    current_person = neighbor</span><br><span class="line">    <span class="keyword">return</span> self.hacking_dfs(neighbor, goal_person)</span><br></pre></td></tr></table></figure>
+<h3 id="使用_A*_算法_更快的_破解迷宫">使用 A* 算法 更快的 破解迷宫</h3><blockquote>
+<p>广度优先算法：？</p>
+<p>迪杰斯特拉算法: 来自维基百科的gif解释：<img src="http://7viixf.com1.z0.glb.clouddn.com/algorithm/Dijkstra_Animation.gif" alt="迪杰斯特拉"></p>
+<p>A* ：？</p>
+</blockquote>
+<p>广度优先 -&gt; 地接斯特拉 -&gt; A star, 三者可以说有个递进的关系在</p>
+<h4 id="算法过程-1">算法过程</h4><blockquote>
+<p>启发式搜索：？</p>
+</blockquote>
+<ul>
+<li><p>自定义一个启发式函数，估算当前点到目标点的代价。（在迷宫这种特定的环境下，常用的启发式函数就是计算当前点到终点的距离：abs(x-goal_x) + abs(y-goal_y)）</p>
+</li>
+<li><p>创建一个 <strong>队列</strong> 保存曾经走过的点: <em>astar_visited_pointes_queue</em></p>
+</li>
+<li><p>创建一个数组保存每一点到起点的 <strong>距离</strong>: <em>current_distance</em>，初始化为无穷大</p>
+</li>
+<li><p>将 <strong>起点</strong> 放入队列, 设置它到起点的距离为0</p>
+</li>
+</ul>
+<ol>
+<li>当 <strong>队列不为空</strong> 的时候<ol>
+<li>从队列pop一个元素出来，将它标记为 <strong>当前点</strong></li>
+<li>如果当前点就是目标点，算法结束</li>
+<li>计算 <strong>当前点</strong> 的每个邻居 <strong>各自</strong> 到起点的距离，使用启发式函数估算它们 <strong>各自</strong> 到目标点的距离, 相加得到 <strong>各自的</strong> 总距离。对比这个距离与之前保存的距离，如果比之前的距离小，那么用现在的距离更新之前保存的距离值。</li>
+<li>把它们 <strong>放入队列</strong> 中，对 <strong>队列进行升序排序</strong></li>
+</ol>
+</li>
+</ol>
+<h4 id="关键算法代码-2">关键算法代码</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hacking_astar</span><span class="params">(self, goal_person)</span>:</span></span><br><span class="line">    <span class="keyword">while</span> len(self.astar_walked_queue) &gt; <span class="number">0</span>:</span><br><span class="line">        <span class="comment"># 因为后面的顺序是从大到小</span></span><br><span class="line">        current_person = self.astar_walked_queue.popleft()</span><br><span class="line">        <span class="keyword">print</span> <span class="string">"排序之后选择了："</span>, current_person.calculate_total_distance(goal_person)</span><br><span class="line"></span><br><span class="line">        current_person.set_tried(self.screen)</span><br><span class="line">        pygame.display.update()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> current_person.pid == goal_person.pid:</span><br><span class="line">            notify(<span class="string">"Hacking succeed !"</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line">        current_dis = current_person.astar_distance</span><br><span class="line">        <span class="keyword">for</span> neighbor_pid <span class="keyword">in</span> current_person.neighbor_pids:</span><br><span class="line">            neighbor = Person.get_person_by_pid(neighbor_pid)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> Maze.has_wall_between(current_person, neighbor):</span><br><span class="line">                <span class="keyword">if</span> neighbor.astar_distance == <span class="keyword">None</span>:</span><br><span class="line">                    neighbor.astar_distance = <span class="number">1</span> + current_dis   <span class="comment"># 1 如果不同的话，就是不同权重</span></span><br><span class="line">                    neighbor.astar_came_from = current_person</span><br><span class="line">                    self.astar_walked_queue.append(neighbor)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    neighbor.astar_distance = neighbor.astar_distance </span><br><span class="line"></span><br><span class="line">                    <span class="comment"># 在这里没有判断相等的情况</span></span><br><span class="line">                    <span class="comment"># 相等的话说明可以有两条道路走，我们只选择其中一条。</span></span><br><span class="line">                    <span class="keyword">if</span> <span class="keyword">not</span> (<span class="number">1</span> + current_dis) &gt; neighbor.astar_distance:</span><br><span class="line">                        neighbor.astar_distance = <span class="number">1</span> + current_dis</span><br><span class="line">                        neighbor.astar_came_from = current_person</span><br><span class="line">   </span><br><span class="line">        <span class="keyword">print</span> <span class="string">"排序中... "</span></span><br><span class="line">        <span class="comment"># 对队列中的元素进行从小到大的排序（这里也可以用sorted来排序）</span></span><br><span class="line">        tmp_list = list()   <span class="comment"># 在这中迷宫中，queue中元素不会很多</span></span><br><span class="line">        <span class="keyword">while</span> len(self.astar_walked_queue) &gt; <span class="number">0</span>:</span><br><span class="line">            tmp_person = self.astar_walked_queue.pop()</span><br><span class="line">            tmp_dis = tmp_person.calculate_total_distance(goal_person)</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> len(tmp_list) &gt; <span class="number">0</span>:</span><br><span class="line">                last_person = tmp_list[-<span class="number">1</span>]</span><br><span class="line">                <span class="keyword">if</span> tmp_person.calculate_total_distance(goal_person) &gt;= \</span><br><span class="line">                        last_person.calculate_total_distance(goal_person):</span><br><span class="line">                    tmp_list.append(tmp_person)</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">                <span class="keyword">for</span> i, person <span class="keyword">in</span> enumerate(tmp_list):</span><br><span class="line">                    <span class="keyword">if</span> tmp_dis &lt; person.calculate_total_distance(goal_person):</span><br><span class="line">                        tmp_list.insert(i, tmp_person)</span><br><span class="line">                        <span class="keyword">break</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                tmp_list.append(tmp_person)</span><br><span class="line">        </span><br><span class="line">        self.astar_walked_queue = deque(tmp_list)   <span class="comment"># deque是python中的一个高效率的队列类</span></span><br><span class="line">        <span class="comment"># sorted(self.astar_walked_queue, key=lambda person:</span></span><br><span class="line">        <span class="comment">#         person.calculate_total_distance(goal_person))</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">print</span> <span class="string">"排序完毕... "</span></span><br><span class="line"></span><br><span class="line">    notify(<span class="string">'Hacking failed !'</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<h4 id="演示gif-1">演示gif</h4><p><img src="http://7viixf.com1.z0.glb.clouddn.com/algorithm/hack_maze_astar.gif" alt="astar演示"></p>
+<h2 id="附带遇到的一些问题">附带遇到的一些问题</h2><h5 id="一个类的什么样的成员或者变量应该设为私有，什么样的变量设为公有？">一个类的什么样的成员或者变量应该设为私有，什么样的变量设为公有？</h5><p>参考: <a href="http://programmers.stackexchange.com/questions/143736/why-do-we-need-private-variables" target="_blank" rel="external">http://programmers.stackexchange.com/questions/143736/why-do-we-need-private-variables</a></p>
+<ul>
+<li>大概的一个总结：这些变量默认都应该设置为私有的，只有必须公开的才设为公有成员。</li>
+<li>感觉这东西应该有一个比较官方的说法才对。</li>
+</ul>
+<h5 id="GUI中按钮等元素的Hover等事件是怎样从“底层”实现的？">GUI中按钮等元素的Hover等事件是怎样从“底层”实现的？</h5><p><strong> 想法 </strong></p>
+<p>从编写 opengl 和 pygame 来看，一些比较“底层”的函数调用可以帮我们得到鼠标当前的位置。也可以对一些鼠标的移动、点击事件进行处理。<br>所以要实现 hover 这个事件响应：在每次鼠标事件中判断鼠标当前点是否在一个按钮的范围内.</p>
+<h5 id="是创建多个对象好，还是使用多个属性数组来描述对象好？">是创建多个对象好，还是使用多个属性数组来描述对象好？</h5><p>先记录下这个问题</p>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/algorithm/"> #algorithm </a>
+          
+            <a href="/tags/python/"> #python </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/07/07/FeelUOwn-技术阶段总结/">FeelUOwn 技术阶段总结</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/06/21/通信安全/">通信安全 - IPSec</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2015/06/27/Play-迷宫-with-python/"
+               data-title="Play 迷宫 with python and pygame" data-url="http://www.cosven.com/2015/06/27/Play-迷宫-with-python/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="ysw" />
+          <p class="site-author-name">ysw</p>
+        </div>
+        <p class="site-description motion-element"></p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+              <a href="https://github.com/cosven" target="_blank">github</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://weibo.com/zjuysw" target="_blank">weibo</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://douban.com/people/ysw-yo" target="_blank">douban</a>
+            </span>
+            
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#迷宫自动生成"><span class="nav-number">1.</span> <span class="nav-text">迷宫自动生成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用类似深度优先算法生成迷宫"><span class="nav-number">1.1.</span> <span class="nav-text">使用类似深度优先算法生成迷宫</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#算法目标"><span class="nav-number">1.1.1.</span> <span class="nav-text">算法目标</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#算法过程"><span class="nav-number">1.1.2.</span> <span class="nav-text">算法过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关键算法代码"><span class="nav-number">1.1.3.</span> <span class="nav-text">关键算法代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#演示gif"><span class="nav-number">1.1.4.</span> <span class="nav-text">演示gif</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#迷宫破解"><span class="nav-number">2.</span> <span class="nav-text">迷宫破解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用深度优先算法破解迷宫"><span class="nav-number">2.1.</span> <span class="nav-text">使用深度优先算法破解迷宫</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#算法过程（貌似下面这个思路有点不同寻常，虽然也可以）"><span class="nav-number">2.1.1.</span> <span class="nav-text">算法过程（貌似下面这个思路有点不同寻常，虽然也可以）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关键算法代码-1"><span class="nav-number">2.1.2.</span> <span class="nav-text">关键算法代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用_A*_算法_更快的_破解迷宫"><span class="nav-number">2.2.</span> <span class="nav-text">使用 A* 算法 更快的 破解迷宫</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#算法过程-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">算法过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关键算法代码-2"><span class="nav-number">2.2.2.</span> <span class="nav-text">关键算法代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#演示gif-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">演示gif</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#附带遇到的一些问题"><span class="nav-number">3.</span> <span class="nav-text">附带遇到的一些问题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#一个类的什么样的成员或者变量应该设为私有，什么样的变量设为公有？"><span class="nav-number">3.0.0.1.</span> <span class="nav-text">一个类的什么样的成员或者变量应该设为私有，什么样的变量设为公有？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#GUI中按钮等元素的Hover等事件是怎样从“底层”实现的？"><span class="nav-number">3.0.0.2.</span> <span class="nav-text">GUI中按钮等元素的Hover等事件是怎样从“底层”实现的？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#是创建多个对象好，还是使用多个属性数组来描述对象好？"><span class="nav-number">3.0.0.3.</span> <span class="nav-text">是创建多个对象好，还是使用多个属性数组来描述对象好？</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp; 
+  2015
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">ysw</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.3"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.3"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.3" id="motion.global"></script>
+
+
+
+  <script type="text/javascript" src="/js/search-toggle.js"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.3" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if (isDesktop() && CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    });
+  </script>
+
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ysw-blog"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+
+  
+
+
+  
+  
+
+</body>
+</html>

@@ -1,0 +1,658 @@
+<!doctype html>
+<html class="theme-next use-motion theme-next-mist">
+<head>
+  
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+  <link rel="stylesheet" type="text/css" href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5"/>
+
+
+<link rel="stylesheet" type="text/css" href="/css/main.css?v=0.4.3"/>
+
+
+
+
+  <meta name="keywords" content="dbus," />
+
+
+
+
+
+  <link rel="shorticon icon" type="image/x-icon" href="/avatar.png?v=0.4.3" />
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var CONFIG = {
+    scheme: 'Mist',
+    analytics: {
+      google: ''
+    },
+    sidebar: 'post'
+  };
+</script>
+
+
+
+
+  <title> D-Bus学习 // 笑一笑，十年少 ~ </title>
+</head>
+
+<body>
+  <!--[if lte IE 8]>
+  <div style=' clear: both; height: 59px; padding:0 0 0 15px; position: relative;margin:0 auto;'>
+    <a href="http://windows.microsoft.com/en-US/internet-explorer/products/ie/home?ocid=ie6_countdown_bannercode">
+      <img src="http://7u2nvr.com1.z0.glb.clouddn.com/picouterie.jpg" border="0" height="42" width="820"
+           alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today or use other browser ,like chrome firefox safari."
+           style='margin-left:auto;margin-right:auto;display: block;'/>
+    </a>
+  </div>
+<![endif]-->
+
+  <div class="container one-column page-post-detail">
+    <div class="headband"></div>
+
+    <div id="header" class="header">
+      <div class="header-inner">
+        <h1 class="site-meta">
+  <span class="logo-line-before"><i></i></span>
+  <a href="/" class="brand">
+      <span class="logo">
+        <i class="icon-logo"></i>
+      </span>
+      <span class="site-title">笑一笑，十年少 ~</span>
+  </a>
+  <span class="logo-line-after"><i></i></span>
+</h1>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<div class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu ">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/">
+            <i class="menu-item-icon icon-home"></i> <br />
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            <i class="menu-item-icon icon-categories"></i> <br />
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about">
+            <i class="menu-item-icon icon-about"></i> <br />
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            <i class="menu-item-icon icon-archives"></i> <br />
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            <i class="menu-item-icon icon-tags"></i> <br />
+            标签
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+</div>
+
+
+      </div>
+    </div>
+
+    <div id="main" class="main">
+      <div class="main-inner">
+        <div id="content" class="content">
+          
+
+  <div id="posts" class="posts-expand">
+    
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              D-Bus学习
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-07-22
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/linux/">linux</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/07/22/dbus学习一/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/07/22/dbus学习一/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        <p><strong> 学习目标 </strong></p>
+<ol>
+<li>D-Bus 是干什么的，它存在的目的？</li>
+<li>D-Bus 的一些基本概念和原理。</li>
+<li>D-Bus 的一些应用示例。</li>
+</ol>
+<a id="more"></a>
+<h3 id="D-Bus_是干什么的">D-Bus 是干什么的</h3><p>D-Bus 是一个提供简便系统中进程间通信的<code>消息总线系统</code>。它包含一个能以全系统或者针对一个用户会话运行的<code>守护进程</code>，和一系列提供与 D-Bus <code>通信的库</code>。</p>
+<h3 id="D-Bus_的一些基本知识">D-Bus 的一些基本知识</h3><p>从架构上来说，D-Bus包含了几层：</p>
+<ol>
+<li><code>libdbus</code></li>
+<li><code>message bus daemon</code></li>
+<li><code>wrapper libraries or binds</code></li>
+</ol>
+<p><strong> 为什么是选用D-Bus</strong></p>
+<blockquote>
+<p>D-Bus 专注解决了两件事情</p>
+<ol>
+<li>同一个桌面会话的桌面应用程序之间的通信</li>
+<li>桌面会话和操作系统之间的通信</li>
+</ol>
+</blockquote>
+<p><strong> 它相比于其他类似的IPC技术的优点 </strong></p>
+<blockquote>
+</blockquote>
+<h4 id="基本概念">基本概念</h4><p>不管你通过什么语言，什么框架来使用D-Bus, 下面这写基本概念都是需要了解，都是互通的。</p>
+<h6 id="Native_Objects_and_Object_Paths">Native Objects and Object Paths</h6><h6 id="Methods_and_Signals">Methods and Signals</h6><h6 id="Interfaces">Interfaces</h6><p>Think of an interface as a named group of methods and signals</p>
+<h6 id="Proxies">Proxies</h6><p>A proxy object is a convenient native object created to represent a remote object in another process. </p>
+<h6 id="Bus_Names">Bus Names</h6><p><code>Bus Names</code> 一方面可以充当一个应用的标识符。它是独一无二的。一般命名就像<code>:34-907</code>这样子。它以冒号开头，后面会有数字，数字没什么含义。</p>
+<p>应用也可以要求拥有一个好记的名字。比如说 VLCPlayer</p>
+<p><code>Bus Names</code> 还经常被用来跟踪应该用的生命周期。</p>
+<h6 id="Addresses">Addresses</h6><p>Address -&gt; [Bus Name] -&gt; Path -&gt; Interface -&gt; Method</p>
+<h5 id="Messages">Messages</h5><p>通过在进程之间发送messages，D-Bus得以正常工作。常见的Message的类型有四种。</p>
+<ol>
+<li>Method call messages ask to invoke a method on an object.</li>
+<li>Method return messages return the results of invoking a method.</li>
+<li>Error messages return an exception caused by invoking a method.</li>
+<li>Signal messages are notifications that a given signal has been emitted (that an event has occurred). You could also think of these as “event” messages.</li>
+</ol>
+<p>每个Message都会有一个header，一个body。header就包括fields，body包含arguments。大概跟HTTP的一个请求有些像吧。</p>
+<h5 id="Calling_a_Method">Calling a Method</h5><p>D-Bus中一个Method的调用由两个messages组成。<br>一个Message从进程A发送到进程B，另外一个Message从进程B回复给进程A。</p>
+<h5 id="Emmitting_a_Signal">Emmitting a Signal</h5><p>在D-Bus中，一个Signal由一个单独的message组成。一个Signal就是一个没有方向的广播。</p>
+<h3 id="实战训练">实战训练</h3><h5 id="通过py脚本来从外部控制deepin-music的播放">通过py脚本来从外部控制deepin-music的播放</h5><p>下载安装<code>d-feet</code>, 它帮助我查看dbus里面各种信息。它大概长下面这个样子。</p>
+<p><img src="http://7viixf.com1.z0.glb.clouddn.com/software/dfeet-usage-caption.png" alt="d-feet"></p>
+<p>从这个图片，我们大概可以看出 <code>session bus daemon</code> 中有个<code>bus name</code>为 <em>com.linuxdeepin.DMusic</em>的应用，它的<code>object path</code> 是 <em>/com/linuxdeepin/DMusic</em>，它有<code>interfaces</code>，然后<code>interfaces</code>中又分两个小组（图片中只显示了一个），其中一个为 <em>com.linuxdeepin.Dmusic</em>, 这个 <code>interface</code> 下就有一些<code>methods</code> 和 <code>signal</code>, 这个例子没有 <code>signal</code> 。然后这些<code>method</code>貌似都是可以被其他进程调用的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> dbus</span><br><span class="line"></span><br><span class="line">session_bus = dbus.SessionBus()  <span class="comment"># get session bus</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># try to get deepin_music dbus proxy</span></span><br><span class="line">dmusic_dbus_object = session_bus.get_object(<span class="string">'com.linuxdeepin.DMusic'</span>, <span class="string">'/com/linuxdeepin/DMusic'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># get method from a dbus object</span></span><br><span class="line">next_method = dmusic_dbus_object.get_dbus_method(<span class="string">'Next'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># invoke the method</span></span><br><span class="line">next_method.call_async()  <span class="comment"># amazing, dmusic just play next song !</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果对上面那些dbus的基本概念有了了解之后，写出这个简单而又神奇的脚本也就不难了。黑科技 ！！！装逼神器啊… mac和windows下应该也有类似的东西吧。。。</p>
+</blockquote>
+<h3 id="参考资料：">参考资料：</h3><ol>
+<li><a href="http://dbus.freedesktop.org/doc/dbus-tutorial.html" target="_blank" rel="external">http://dbus.freedesktop.org/doc/dbus-tutorial.html</a></li>
+</ol>
+
+      
+    </div>
+
+    <div class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/dbus/"> #dbus </a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/08/03/敏捷开发/">敏捷开发</a>
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/07/21/FeelUOwn开发笔记-并发/">FeelUOwn 并发设计思路记录</a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </div>
+  </div>
+
+
+
+    
+
+    
+      <div class="comments" id="comments">
+        
+          <div class="ds-thread" data-thread-key="2015/07/22/dbus学习一/"
+               data-title="D-Bus学习" data-url="http://www.cosven.com/2015/07/22/dbus学习一/">
+          </div>
+        
+      </div>
+    
+  </div>
+
+
+        </div>
+
+        
+      </div>
+
+
+      
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview">
+        <div class="site-author motion-element">
+          <img class="site-author-image" src="/images/default_avatar.jpg" alt="ysw" />
+          <p class="site-author-name">ysw</p>
+        </div>
+        <p class="site-description motion-element"></p>
+        <div class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          <div class="site-state-item site-state-categories">
+            <a href="/categories">
+              <span class="site-state-item-count">5</span>
+              <span class="site-state-item-name">分类</span>
+              </a>
+          </div>
+
+          <div class="site-state-item site-state-tags">
+            <a href="/tags">
+              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-name">标签</span>
+              </a>
+          </div>
+
+        </div>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+              <a href="https://github.com/cosven" target="_blank">github</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://weibo.com/zjuysw" target="_blank">weibo</a>
+            </span>
+            
+              <span class="links-of-author-item">
+              <a href="http://douban.com/people/ysw-yo" target="_blank">douban</a>
+            </span>
+            
+          
+        </div>
+
+        
+        
+
+      </div>
+
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#D-Bus_是干什么的"><span class="nav-number">1.</span> <span class="nav-text">D-Bus 是干什么的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#D-Bus_的一些基本知识"><span class="nav-number">2.</span> <span class="nav-text">D-Bus 的一些基本知识</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基本概念"><span class="nav-number">2.1.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Native_Objects_and_Object_Paths"><span class="nav-number">2.1.0.1.</span> <span class="nav-text">Native Objects and Object Paths</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Methods_and_Signals"><span class="nav-number">2.1.0.2.</span> <span class="nav-text">Methods and Signals</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Interfaces"><span class="nav-number">2.1.0.3.</span> <span class="nav-text">Interfaces</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Proxies"><span class="nav-number">2.1.0.4.</span> <span class="nav-text">Proxies</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Bus_Names"><span class="nav-number">2.1.0.5.</span> <span class="nav-text">Bus Names</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#Addresses"><span class="nav-number">2.1.0.6.</span> <span class="nav-text">Addresses</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Messages"><span class="nav-number">2.1.1.</span> <span class="nav-text">Messages</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Calling_a_Method"><span class="nav-number">2.1.2.</span> <span class="nav-text">Calling a Method</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Emmitting_a_Signal"><span class="nav-number">2.1.3.</span> <span class="nav-text">Emmitting a Signal</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实战训练"><span class="nav-number">3.</span> <span class="nav-text">实战训练</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#通过py脚本来从外部控制deepin-music的播放"><span class="nav-number">3.0.1.</span> <span class="nav-text">通过py脚本来从外部控制deepin-music的播放</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料："><span class="nav-number">4.</span> <span class="nav-text">参考资料：</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
+      
+
+    </div>
+  </div>
+
+
+    </div>
+
+    <div id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; &nbsp; 
+  2015
+  <span class="with-love">
+    <i class="icon-heart"></i>
+  </span>
+  <span class="author">ysw</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+
+      </div>
+    </div>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/js/fancy-box.js?v=0.4.3"></script>
+
+
+  <script type="text/javascript" src="/js/helpers.js?v=0.4.3"></script>
+  
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/js/motion_global.js?v=0.4.3" id="motion.global"></script>
+
+
+
+  <script type="text/javascript" src="/js/search-toggle.js"></script>
+
+  
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.3" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if (isDesktop() && CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    });
+  </script>
+
+
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      if (CONFIG.sidebar === 'always') {
+        displaySidebar();
+      }
+    });
+  </script>
+
+  
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+  
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ysw-blog"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+
+  
+
+
+  
+  
+
+</body>
+</html>
