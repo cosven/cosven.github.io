@@ -156,6 +156,171 @@
           
           
             
+              <a class="post-title-link" href="/2015/08/24/全局快捷键解决方案/">
+                全局快捷键解决方案
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-08-24
+        </span>
+
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/08/24/全局快捷键解决方案/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/24/全局快捷键解决方案/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>这段时间一直在忙活给FeelUOwn补充一下实用的细节功能。其中全局快捷键就是我下手的第一个目标。<br>而对于一个音乐播放器，笔记本键盘的MultiMedia快捷键肯定要捕捉到吧。<br>然后我自己使用的mac，所以我想让它也支持mac平台。</p>
+<p>经过一段时间的google，我尝试了几种解决方案</p>
+<ol>
+<li><p>pygs, pyglobalshortcut. 基于Qt，你搜python，global shortcut 这个东西基本上是排在第一。但是我在mac上python3<br>pip安装竟然失败失败，这是放弃的一个原因。另外，我想这种方案应该是无法捕获到Mac上的multimedia快捷键（没有验证过）。</p>
+</li>
+<li><p>稍微进入底层，尝试用更加 lower level 的解决方案。<br> 我找到了 python3-xlib 这个Linux平台的解决, mac平台就需要使用 python-Objc.</p>
+</li>
+</ol>
+<p>我觉得第二种方案应该是比较合理的。</p>
+<p>一方面，想使用一个库来达到跨平台的效果基本不现实，没有发现类似的解决方案。<br>从而，各平台采用不同的方法就是一个比较直接的想法。</p>
+<p>另外一方面，我在Github上看到一个 <a href="https://github.com/SavinaRoja/PyUserInput" target="_blank" rel="external">PyUserInput</a>，它是一个用来模拟鼠标点击、键盘按压的跨平台的库。我看它的依赖: </p>
+<blockquote>
+<p>Depending on your platform, you will need the following python modules for PyUserInput to function:<br>Linux - Xlib<br>Mac - Quartz, AppKit<br>Windows - pywin32, pyHook</p>
+</blockquote>
+
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
+              <a class="post-title-link" href="/2015/08/16/FeelUOwn-View模块重构记录/">
+                FeelUOwn View模块重构记录
+              </a>
+            
+          
+        </h1>
+      
+
+      <div class="post-meta">
+        <span class="post-time">
+          发表于 2015-08-16
+        </span>
+
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/笔记/">笔记</a>
+
+              
+              
+
+            
+          </span>
+        
+
+        
+          
+            <span class="post-comments-count">
+            &nbsp; | &nbsp;
+            <a href="/2015/08/16/FeelUOwn-View模块重构记录/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/16/FeelUOwn-View模块重构记录/"></span>
+            </a>
+          </span>
+          
+        
+      </div>
+    </div>
+
+    <div class="post-body">
+
+      
+      
+
+      
+        
+          <p>重构的时候并没有参考什么标准或者书籍，只是根据自己的思路让程序模块化更加清楚，代码更具可阅读性。这个可能还是需要参考其他的项目。</p>
+<p>重构的过程遇到一些相关性不大的问题:</p>
+<ol>
+<li>python值的传递</li>
+<li>python的 *args **kwargs</li>
+</ol>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/08/16/FeelUOwn-View模块重构记录/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <div class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </div>
+  </div>
+
+
+    
+      
+
+  <div class="post post-type-normal ">
+    <div class="post-header">
+
+      
+      
+        <h1 class="post-title">
+          
+          
+            
               <a class="post-title-link" href="/2015/08/03/敏捷开发/">
                 敏捷开发
               </a>
@@ -728,21 +893,21 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-count">9</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
 
           <div class="site-state-item site-state-categories">
             <a href="/categories">
-              <span class="site-state-item-count">4</span>
+              <span class="site-state-item-count">5</span>
               <span class="site-state-item-name">分类</span>
               </a>
           </div>
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-count">12</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>

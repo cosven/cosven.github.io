@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="软件工程," />
+  <meta name="keywords" content="FeelUOwn," />
 
 
 
@@ -43,7 +43,7 @@
 
 
 
-  <title> 敏捷开发 // 笑一笑，十年少 ~ </title>
+  <title> FeelUOwn View模块重构记录 // 笑一笑，十年少 ~ </title>
 </head>
 
 <body>
@@ -154,7 +154,7 @@
           
           
             
-              敏捷开发
+              FeelUOwn View模块重构记录
             
           
         </h1>
@@ -162,17 +162,28 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-08-03
+          发表于 2015-08-16
         </span>
 
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/笔记/">笔记</a>
+
+              
+              
+
+            
+          </span>
         
 
         
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/08/03/敏捷开发/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/03/敏捷开发/"></span>
+            <a href="/2015/08/16/FeelUOwn-View模块重构记录/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/08/16/FeelUOwn-View模块重构记录/"></span>
             </a>
           </span>
           
@@ -186,63 +197,31 @@
       
 
       
-        <h1 id="敏捷开发">敏捷开发</h1><a id="more"></a>
-<h2 id="历史">历史</h2><p>以前使用的几种模式</p>
+        <p>重构的时候并没有参考什么标准或者书籍，只是根据自己的思路让程序模块化更加清楚，代码更具可阅读性。这个可能还是需要参考其他的项目。</p>
+<p>重构的过程遇到一些相关性不大的问题:</p>
 <ol>
-<li>Ad Hoc</li>
-<li>PSP、TSP</li>
-<li>CMM/CMMI</li>
-<li>瀑布式 (这个比较常用吧)</li>
-<li>重文档</li>
+<li>python值的传递</li>
+<li>python的 *args **kwargs</li>
 </ol>
-<h3 id="测试金字塔">测试金字塔</h3><p>代码编写 — 单元测试</p>
-<h2 id="形式的变化">形式的变化</h2><p>敏捷开发的机会</p>
-<ol>
-<li>以前互联网不发达，现在发达了</li>
-<li>开源软件的发展</li>
-</ol>
-<h2 id="敏捷开发-1">敏捷开发</h2><h4 id="特点">特点</h4><ol>
-<li><p>减少文档和过程</p>
-</li>
-<li><p>增量开发(增量)</p>
-</li>
-<li><p>迭代开发(重复, 改进)</p>
-</li>
-<li><p>自动化的单元测试 与 重构 (这个跟实践联系紧密)</p>
-</li>
-</ol>
-<h4 id="单元测试">单元测试</h4><ol>
-<li>增加代码的可靠性</li>
-<li>自动的回归测试，支持持续集成</li>
-<li>KISS，有利于增量开发与模块划分</li>
-<li>单元测试就是可执行的需求和文档</li>
-<li>找成就感</li>
-</ol>
-<p><strong> 什么时候写单元测试 </strong></p>
-<ol>
-<li>开发代码之前</li>
-<li>零散写</li>
-<li>定位bug之后, 修改代码之前</li>
-<li>重构之前</li>
-</ol>
-<p><strong> 重构 </strong></p>
-<ol>
-<li>提高自己水平</li>
-<li>提高可维护性</li>
-<li>放松</li>
-<li>单元测试先行</li>
-<li>减少代码，在减少一点</li>
-<li>和修改功能交织</li>
-</ol>
-<p><strong> 持续集成 </strong></p>
-<ol>
-<li>持续集成</li>
-<li>随时交付</li>
-</ol>
-<p>XP，极限编程<br>Scrum<br>看板</p>
-<h4 id="敏捷什么时候适用">敏捷什么时候适用</h4><p>注意使用时机</p>
-<p>趣事: git 不允许 权限控制。svn </p>
-<p>一个总结: <strong> 多读书，多读书 </strong></p>
+<a id="more"></a>
+<h2 id="之前的View的设计思路">之前的View的设计思路</h2><p>我把View理解为程序的UI，Controller理解为UI的逻辑操作与交互、数据处理。</p>
+<p><strong> 之前(现在依然沿用) </strong></p>
+<ul>
+<li>程序主窗口的UI和Controller是单独分离出来的。</li>
+<li>小的子窗口的UI和Controller是结合在一起的，相当于把一个小的窗口看成一个整体模块，它自己提供相关的接口。由主窗口来调用。</li>
+</ul>
+<p><strong> 这样做的好处(我的理解，之后要去找一些具体的理论来支持或者推翻) </strong></p>
+<p>主窗口UI逻辑比较复杂，结合太紧也就会导致耦合度高。<br>但是子窗口逻辑相对简单，维护起来本来就容易。如果也分离的话，就让项目变得臃肿。另外，我就觉得把它看成一个模块让主窗口来调用，也挺符合某种逻辑的。</p>
+<h4 id="给view模块的widgets取别名">给view模块的widgets取别名</h4><p><strong> 之前存在的问题 </strong></p>
+<p>View中一些widget的名字经常变化，所以一旦View中的widget名字变化，导致在controller中调用这个widget的函数以及相关的东西都需要变化，这非常不利于维护。</p>
+<p><strong> 解决办法: 取别名 </strong></p>
+<p>给widget取一个<strong>抽象</strong>的名字。所谓抽象，就是把握一个点，这个widget是用来干什么，根据它的作用给它取个变量名，而不是根据它在界面中的位置。<br>controller调用的时候使用这个别名即可。</p>
+<p><strong> 这样做的局限性 </strong><br>将会有大量的别名产生，还是让程序不容易维护。</p>
+<h4 id="python值的传递">python值的传递</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># list, dict 等可改变的对象，貌似是类似C语言引用传递</span></span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>a_ = a</span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>a_[<span class="number">1</span>] = <span class="number">9</span></span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>a, a_</span><br><span class="line">([<span class="number">1</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">4</span>], [<span class="number">1</span>, <span class="number">9</span>, <span class="number">3</span>, <span class="number">4</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 数字，字符串，元组传递貌似是个具体的值</span></span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>b = <span class="number">1</span></span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>b_ = b</span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>b_ = <span class="number">3</span></span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>b, b_</span><br><span class="line">(<span class="number">1</span>, <span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">change</span><span class="params">(a)</span>:</span></span><br><span class="line"><span class="prompt">... </span>    a = <span class="number">6</span></span><br><span class="line">...</span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>b = <span class="number">4</span></span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>change(b)</span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>b</span><br><span class="line"><span class="number">4</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 这个特别注意</span></span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">change_list</span><span class="params">(a)</span>:</span></span><br><span class="line"><span class="prompt">... </span>    a[<span class="number">0</span>] = <span class="number">6</span></span><br><span class="line">...</span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>b = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>change_list(b)</span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>b</span><br><span class="line">[<span class="number">6</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br></pre></td></tr></table></figure>
+<h4 id="*args_和_**kwargs">*args 和 **kwargs</h4><p>一个例子来理解</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(message, title=<span class="string">"default"</span>, timeout=<span class="number">1000</span>)</span>:</span></span><br><span class="line">    print(<span class="string">"message"</span>, title, timeout)</span><br><span class="line"></span><br><span class="line">func(message, timeout=<span class="number">200</span>)  <span class="comment"># #1</span></span><br></pre></td></tr></table></figure>
+<p><code>#1</code> 为什么可以这么调用？</p>
+<p>我能理解<code>args</code>的含义，但是之前不懂<code>kwargs</code>代表什么。kw == keyword。<br>关于上面这个问题，只要去搜搜<code>python keyword arguments</code>大概就能找到答案。</p>
 
       
     </div>
@@ -251,7 +230,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/软件工程/"> #软件工程 </a>
+            <a href="/tags/FeelUOwn/"> #FeelUOwn </a>
           
         </div>
       
@@ -260,13 +239,13 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/08/16/FeelUOwn-View模块重构记录/">FeelUOwn View模块重构记录</a>
+              <a href="/2015/08/24/全局快捷键解决方案/">全局快捷键解决方案</a>
             
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2015/07/22/dbus学习一/">D-Bus学习</a>
+              <a href="/2015/08/03/敏捷开发/">敏捷开发</a>
             
           </div>
         </div>
@@ -284,8 +263,8 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2015/08/03/敏捷开发/"
-               data-title="敏捷开发" data-url="http://www.cosven.com/2015/08/03/敏捷开发/">
+          <div class="ds-thread" data-thread-key="2015/08/16/FeelUOwn-View模块重构记录/"
+               data-title="FeelUOwn View模块重构记录" data-url="http://www.cosven.com/2015/08/16/FeelUOwn-View模块重构记录/">
           </div>
         
       </div>
@@ -384,7 +363,7 @@
           <div class="post-toc">
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#敏捷开发"><span class="nav-number">1.</span> <span class="nav-text">敏捷开发</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#历史"><span class="nav-number">1.1.</span> <span class="nav-text">历史</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#测试金字塔"><span class="nav-number">1.1.1.</span> <span class="nav-text">测试金字塔</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#形式的变化"><span class="nav-number">1.2.</span> <span class="nav-text">形式的变化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#敏捷开发-1"><span class="nav-number">1.3.</span> <span class="nav-text">敏捷开发</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#特点"><span class="nav-number">1.3.0.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单元测试"><span class="nav-number">1.3.0.2.</span> <span class="nav-text">单元测试</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#敏捷什么时候适用"><span class="nav-number">1.3.0.3.</span> <span class="nav-text">敏捷什么时候适用</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#之前的View的设计思路"><span class="nav-number">1.</span> <span class="nav-text">之前的View的设计思路</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#给view模块的widgets取别名"><span class="nav-number">1.0.1.</span> <span class="nav-text">给view模块的widgets取别名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#python值的传递"><span class="nav-number">1.0.2.</span> <span class="nav-text">python值的传递</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#*args_和_**kwargs"><span class="nav-number">1.0.3.</span> <span class="nav-text">*args 和 **kwargs</span></a></li></ol></li></ol></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
