@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="test, hexo," />
+  <meta name="keywords" content="MVC,个人感悟," />
 
 
 
@@ -43,7 +43,7 @@
 
 
 
-  <title> hexo 装后尝试 // 笑一笑，十年少 ~ </title>
+  <title> 个人感悟(MVC) // 笑一笑，十年少 ~ </title>
 </head>
 
 <body>
@@ -154,7 +154,7 @@
           
           
             
-              hexo 装后尝试
+              个人感悟(MVC)
             
           
         </h1>
@@ -162,17 +162,28 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-06-19
+          发表于 2015-09-10
         </span>
 
+        
+          <span class="post-category">
+            &nbsp; | &nbsp; 分类于
+            
+              <a href="/categories/个人感悟/">个人感悟</a>
+
+              
+              
+
+            
+          </span>
         
 
         
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/06/19/hexo-装后尝试/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/19/hexo-装后尝试/"></span>
+            <a href="/2015/09/10/MVC感悟/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/09/10/MVC感悟/"></span>
             </a>
           </span>
           
@@ -186,8 +197,23 @@
       
 
       
-        <p>相对于octopress来说，hexo方便许多了。</p>
-<p><a href="http://ibruce.info/2013/11/22/hexo-your-blog/" target="_blank" rel="external">一个比较好用的教程</a>, 这里有关于怎样创建hexo博客网站，怎样编写合适的hexo博客内容等。</p>
+        <blockquote>
+<p>之前自己在套用MVC架构的时候，我会经常遇到一个问题，经常有一些东西感觉放在 Model 或者<br>Controller 都可以，也有一些东西感觉放在 View 或者 Controller 中也都可以。</p>
+</blockquote>
+<p>这两天在实习的过程中 <em>粗略的</em> 学习了一个完整的 <code>Flask</code> 的应用，感觉对上面这个问题有了一些新的感悟。</p>
+<a id="more"></a>
+<p>MVC ，说到底，我觉得(目前的想法)它就会要让 <em>代码容易维护</em>，<em>耦合降低</em>，<em>模块之间区分开来</em></p>
+<p>记得很早之前接触MVC这样一个架构，我的理解就是 前端，数据库，后端</p>
+<p>接着又接触到一些个项目，知道Model中应该包含一些自身的 <strong>数据操作</strong>,<br>但是可以有哪些操作呢？</p>
+<p>这几天，我主要对上面提到的这个问题有了一点了解：比如说：基本的一些 <strong>增删查改</strong>，或是 <strong>排序</strong>。而且很多情况下，这些操作可能作为一个 <em>classmethod</em>。<br>有了这样一个认识之后，我觉得Model和Controller就可以更正确的分离。所以还存在一个问题，Controller和View的怎样更好的分离。</p>
+<p><strong> Controller 和 View 怎样分离？(下面的想法基本没有根据,纯属个人体会) </strong></p>
+<p>问题来源分析：Controller 作为一个类似控制中心的角色，它总是希望可以控制View的一些表现。所以解决这个问题，我们始终考虑的就是Controller怎样优雅的控制Veiw。</p>
+<p>我认为最优雅的结局就是：有关View的操作的函数或者什么代码都应该在View中写好，Controller只负责调用。而不是在Controller中写一个View的操作逻辑。</p>
+<p><em>貌似写了这么一些，也木有诞生什么有建设性的想法，就不写下去了。。。</em></p>
+<h3 id="今天接触到的几个专业词汇">今天接触到的几个专业词汇</h3><blockquote>
+<p><code>ACID</code> : 这个概念忘记了是不应该的。<em>是指数据库管理系统（DBMS）在写入/更新资料的过程中，为保证事务（transaction）是正确可靠的，所必须具备的四个特性：原子性（atomicity，或称不可分割性）、一致性（consistency）、隔离性（isolation，又称独立性）、持久性（durability）</em> 来自维基百科</p>
+<p><code>MVCC</code> : 多版本并发控制。这个概念感觉之前倒是没怎么听说过。</p>
+</blockquote>
 
       
     </div>
@@ -196,7 +222,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/test-hexo/"> #test, hexo </a>
+            <a href="/tags/MVC/"> #MVC </a>
+          
+            <a href="/tags/个人感悟/"> #个人感悟 </a>
           
         </div>
       
@@ -205,11 +233,11 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/06/21/通信安全/">通信安全 - IPSec</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/09/01/面试碰到的部分问题/">面试碰到的部分问题</a>
             
           </div>
         </div>
@@ -227,8 +255,8 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2015/06/19/hexo-装后尝试/"
-               data-title="hexo 装后尝试" data-url="http://www.cosven.com/2015/06/19/hexo-装后尝试/">
+          <div class="ds-thread" data-thread-key="2015/09/10/MVC感悟/"
+               data-title="个人感悟(MVC)" data-url="http://www.cosven.com/2015/09/10/MVC感悟/">
           </div>
         
       </div>
@@ -327,7 +355,7 @@
           <div class="post-toc">
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#今天接触到的几个专业词汇"><span class="nav-number">1.</span> <span class="nav-text">今天接触到的几个专业词汇</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>

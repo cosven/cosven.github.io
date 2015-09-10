@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="test, hexo," />
+  <meta name="keywords" content="Hexo,next" />
 
 
 
@@ -43,7 +43,7 @@
 
 
 
-  <title> hexo 装后尝试 // 笑一笑，十年少 ~ </title>
+  <title> 归档 // 笑一笑，十年少 ~ </title>
 </head>
 
 <body>
@@ -57,7 +57,7 @@
   </div>
 <![endif]-->
 
-  <div class="container one-column page-post-detail">
+  <div class="container one-column  page-archive ">
     <div class="headband"></div>
 
     <div id="header" class="header">
@@ -142,81 +142,80 @@
         <div id="content" class="content">
           
 
-  <div id="posts" class="posts-expand">
+  <div id="posts" class="posts-collapse">
+    <span class="archive-move-on"></span>
+
+    <span class="archive-page-counter">
+      
+      
+      
+        
+      
+      嗯..! 目前共计 12 篇日志。 继续努力。
+    </span>
+
     
 
-  <div class="post post-type-normal ">
+      
+      
+      
+
+      
+        
+        <div class="collection-title">
+          <h2 class="archive-year motion-element" id="archive-year-2015">2015</h2>
+        </div>
+      
+      
+
+      
+
+  <div class="post post-type-normal">
     <div class="post-header">
 
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              hexo 装后尝试
-            
-          
-        </h1>
-      
+      <div class="post-title">
+        
+            <a class="post-title-link" href="/2015/09/10/MVC感悟/">
+              个人感悟(MVC)
+            </a>
+        
+      </div>
 
       <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-06-19
-        </span>
+        <span class="post-time"> 09-10 </span>
+      </div>
 
-        
+    </div>
+  </div>
 
+
+
+    
+
+      
+      
+      
+
+      
+      
+
+      
+
+  <div class="post post-type-normal">
+    <div class="post-header">
+
+      <div class="post-title">
         
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/06/19/hexo-装后尝试/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/19/hexo-装后尝试/"></span>
+            <a class="post-title-link" href="/2015/09/01/面试碰到的部分问题/">
+              面试碰到的部分问题
             </a>
-          </span>
-          
         
       </div>
-    </div>
 
-    <div class="post-body">
+      <div class="post-meta">
+        <span class="post-time"> 09-01 </span>
+      </div>
 
-      
-      
-
-      
-        <p>相对于octopress来说，hexo方便许多了。</p>
-<p><a href="http://ibruce.info/2013/11/22/hexo-your-blog/" target="_blank" rel="external">一个比较好用的教程</a>, 这里有关于怎样创建hexo博客网站，怎样编写合适的hexo博客内容等。</p>
-
-      
-    </div>
-
-    <div class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/tags/test-hexo/"> #test, hexo </a>
-          
-        </div>
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2015/06/21/通信安全/">通信安全 - IPSec</a>
-            
-          </div>
-
-          <div class="post-nav-next post-nav-item">
-            
-          </div>
-        </div>
-      
-
-      
-      
     </div>
   </div>
 
@@ -224,16 +223,9 @@
 
     
 
-    
-      <div class="comments" id="comments">
-        
-          <div class="ds-thread" data-thread-key="2015/06/19/hexo-装后尝试/"
-               data-title="hexo 装后尝试" data-url="http://www.cosven.com/2015/06/19/hexo-装后尝试/">
-          </div>
-        
-      </div>
-    
   </div>
+
+  
 
 
         </div>
@@ -255,15 +247,6 @@
   <div id="sidebar" class="sidebar">
     <div class="sidebar-inner">
 
-      
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview">
-            站点概览
-          </li>
-        </ul>
       
 
       <div class="site-overview">
@@ -322,17 +305,6 @@
       </div>
 
       
-        <div class="post-toc-wrap sidebar-panel-active">
-          <div class="post-toc-indicator-top post-toc-indicator"></div>
-          <div class="post-toc">
-            
-            
-              <p class="post-toc-empty">此文章未包含目录</p>
-            
-          </div>
-          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
-        </div>
-      
 
     </div>
   </div>
@@ -375,6 +347,12 @@
 
   
   
+  
+    <script type="text/javascript">
+      postMotionOptions = {stagger: 100, drag: true};
+    </script>
+  
+
 
   
   <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
@@ -395,143 +373,10 @@
 
   
   
-<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.3" id="bootstrap.scrollspy.custom"></script>
-
-
-<script type="text/javascript" id="sidebar.toc.highlight">
-  $(document).ready(function () {
-    var tocSelector = '.post-toc';
-    var $tocSelector = $(tocSelector);
-    var activeCurrentSelector = '.active-current';
-
-    $tocSelector
-      .on('activate.bs.scrollspy', function () {
-        var $currentActiveElement = $(tocSelector + ' .active').last();
-
-        removeCurrentActiveClass();
-        $currentActiveElement.addClass('active-current');
-
-        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
-      })
-      .on('clear.bs.scrollspy', function () {
-        removeCurrentActiveClass();
-      });
-
-    function removeCurrentActiveClass () {
-      $(tocSelector + ' ' + activeCurrentSelector)
-        .removeClass(activeCurrentSelector.substring(1));
-    }
-
-    function processTOC () {
-      getTOCMaxHeight();
-      toggleTOCOverflowIndicators();
-    }
-
-    function getTOCMaxHeight () {
-      var $sidebarInner = $('.sidebar-inner');
-      var height = $('.sidebar').height() -
-                   $tocSelector.position().top -
-                   $('.post-toc-indicator-bottom').height();
-
-      $tocSelector.css('height', height);
-
-      return height;
-    }
-
-    function toggleTOCOverflowIndicators () {
-      tocOverflowIndicator(
-        '.post-toc-indicator-top',
-        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
-      );
-
-      tocOverflowIndicator(
-        '.post-toc-indicator-bottom',
-        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
-      )
-    }
-
-    $(document).on('sidebar.didShow', function () {
-      processTOC();
-    });
-
-    $('body').scrollspy({ target: tocSelector });
-    $(window).on('resize', function () {
-      if ( $('.sidebar').hasClass('sidebar-active') ) {
-        processTOC();
-      }
-    });
-
-    onScroll($tocSelector);
-
-    function onScroll (element) {
-      element.on('mousewheel DOMMouseScroll', function (event) {
-          var oe = event.originalEvent;
-          var delta = oe.wheelDelta || -oe.detail;
-          var self = this;
-
-          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
-          event.preventDefault();
-
-          toggleTOCOverflowIndicators();
-      });
-    }
-
-    function tocOverflowIndicator (indicator, action) {
-      $(indicator).velocity('stop').velocity({
-        opacity: action === 'show' ? 0.4 : 0
-      }, { duration: 100 });
-    }
-
-  });
-</script>
-
-
-  <script type="text/javascript" id="sidebar.nav">
-    $(document).ready(function () {
-      var html = $('html');
-
-      $('.sidebar-nav li').on('click', function () {
-        var item = $(this);
-        var activeTabClassName = 'sidebar-nav-active';
-        var activePanelClassName = 'sidebar-panel-active';
-        if (item.hasClass(activeTabClassName)) {
-          return;
-        }
-
-        var currentTarget = $('.' + activePanelClassName);
-        var target = $('.' + item.data('target'));
-
-        currentTarget.velocity('transition.slideUpOut', 200, function () {
-          target
-            .velocity('stop')
-            .velocity('transition.slideDownIn', 200)
-            .addClass(activePanelClassName);
-        });
-
-        item.siblings().removeClass(activeTabClassName);
-        item.addClass(activeTabClassName);
-      });
-
-      $('.post-toc a').on('click', function (e) {
-        e.preventDefault();
-        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
-        html.velocity('stop').velocity('scroll', {
-          offset: offset  + 'px',
-          mobileHA: false
-        });
-      });
-
-      // Expand sidebar on post detail page by default, when post has a toc.
-      var $tocContent = $('.post-toc-content');
-      if (isDesktop() && CONFIG.sidebar === 'post') {
-        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
-          displaySidebar();
-        }
-      }
-    });
-  </script>
-
-
+    <script type="text/javascript" id="motion.page.archive">
+      $('.archive-year').velocity('transition.slideLeftIn');
+    </script>
+  
 
 
   <script type="text/javascript">
@@ -566,27 +411,6 @@
 
 
   
-  
-
-  
-    
-  
-
-  <script type="text/javascript">
-    var duoshuoQuery = {short_name:"ysw-blog"};
-    (function() {
-      var ds = document.createElement('script');
-      ds.type = 'text/javascript';ds.async = true;
-      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-      ds.charset = 'UTF-8';
-      (document.getElementsByTagName('head')[0]
-      || document.getElementsByTagName('body')[0]).appendChild(ds);
-    })();
-  </script>
-
-
-  
-
 
   
   
