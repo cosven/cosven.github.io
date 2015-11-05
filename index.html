@@ -191,13 +191,12 @@
 
       
         
-          <h4 id="为了实现一个需求，两个模块互相调用该怎么办？">为了实现一个需求，两个模块互相调用该怎么办？</h4><p>从设计上讲，这是不科学的。从实现上讲，在Pytho中，貌似也是特别麻烦的。</p>
-<p>这个问题大概有两种解决办法吧。</p>
-<ol>
-<li>单独写一个小的模块，由它来调用其他两个模块。</li>
-<li>一个模块调用另外一个模块的实例。(这种方法比上面的方法更好)</li>
-</ol>
-
+          <p>一个词叫做<strong>最佳实践</strong></p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/10/22/small设计原则/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -262,10 +261,12 @@
 
       
         
-          <h4 id="httpie">httpie</h4><blockquote>
-<p>cURL 替代品</p>
-</blockquote>
-
+          <p>推荐一些自己使用的工具。提高工作效率或者有点意思的软件</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/10/22/神奇的工具/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -330,13 +331,12 @@
 
       
         
-          <p><strong>一个比较标准的python装饰器函数</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="decorator">@functools.wraps(func)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kw)</span>:</span></span><br><span class="line">        <span class="keyword">print</span> <span class="string">'call %s():'</span> % func.__name__</span><br><span class="line">        <span class="keyword">return</span> func(*args, **kw)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br></pre></td></tr></table></figure>
-<p><strong>一个函数return多种结果，下个函数一个一个判断，是否有更加优雅的解决方案？</strong></p>
-<p><strong>\A\Z 和 ^$的区别</strong></p>
-<p>如果用regex来做验证的话，选择<code>\A\Z</code></p>
-<p><a href="http://stackoverflow.com/questions/577653/difference-between-a-z-and-in-ruby-regular-expressions" target="_blank" rel="external">stackoverflow</a></p>
-
+          <p>一些小问题或者范式</p>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/09/17/python小问题收集/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -485,22 +485,18 @@
 
       
         
-          <ol>
-<li>cookie 和 session</li>
-<li>avl tree</li>
-<li>堆排序</li>
-<li>API设计, restful api</li>
-<li>数据库 什么key</li>
-<li></li>
-</ol>
+          <p>根据学长经验、面试经历、参阅少量笔试试题（真心讨厌刷题,<br>大牛们需要开发一种另一种提升的方法啊）总结得出本科出来技术大概需要掌握4个方面技能。</p>
 <ol>
-<li>设计模式</li>
-<li>http 状态码</li>
-<li>阻塞非阻塞IO</li>
-<li>sed，awk 工具</li>
-<li>进程，线程，协程</li>
+<li>操作系统：主要就是进程、线程等，还有部分<strong>调度算法</strong></li>
+<li>数据结构、排序算法、查找算法</li>
+<li>网络基础：TCP/IP的基础知识。HTTP协议等</li>
+<li>项目经验</li>
 </ol>
-
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/09/01/面试碰到的部分问题/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>

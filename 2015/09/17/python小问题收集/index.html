@@ -186,7 +186,9 @@
       
 
       
-        <p><strong>一个比较标准的python装饰器函数</strong></p>
+        <p>一些小问题或者范式</p>
+<a id="more"></a>
+<p><strong>一个比较标准的python装饰器函数</strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> functools</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">log</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="decorator">@functools.wraps(func)</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kw)</span>:</span></span><br><span class="line">        <span class="keyword">print</span> <span class="string">'call %s():'</span> % func.__name__</span><br><span class="line">        <span class="keyword">return</span> func(*args, **kw)</span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br></pre></td></tr></table></figure>
 <p><strong>一个函数return多种结果，下个函数一个一个判断，是否有更加优雅的解决方案？</strong></p>
 <p><strong>\A\Z 和 ^$的区别</strong></p>
