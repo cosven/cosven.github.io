@@ -230,7 +230,7 @@
 </blockquote>
 <p>事件循环比较容易理解。就是一个服务员一直在工作，服务员有个<em>事件循环</em>，然后某个顾客说你帮我做一下<em>这件事</em>，服务员就把<em>这件事</em>扔到事件循环，其他顾客也同样的要服务员做事，服务员的<em>事件循环</em>中就有很多事要干，服务员就把自己的时间分成很小时间段，每个小的时间段中服务员都为某个顾客服务，这样子，服务员非常迅速的切换，每个顾客都感觉服务员在为他服务。</p>
 <p>体现在程序上也非常简单好用。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello_world</span><span class="params">(text)</span>:</span></span><br><span class="line">    time.sleep(<span class="number">2</span>)</span><br><span class="line">    print(text)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">stop_event_loop</span><span class="params">()</span>:</span></span><br><span class="line">    event_loop = asyncio.get_event_loop()</span><br><span class="line">    event_loop.stop()</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line">loop.call_soon(hello_world, <span class="string">"hello"</span>)</span><br><span class="line">print(<span class="string">"1"</span>)</span><br><span class="line">loop.call_soon(hello_world, <span class="string">"world"</span>)</span><br><span class="line">print(<span class="string">"2"</span>)</span><br><span class="line">loop.call_later(<span class="number">10</span>, stop_event_loop)    <span class="comment"># 10 秒后调用stop_event_loop函数</span></span><br><span class="line">loop.run_forever()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出的顺序将会是</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line">hello</span><br><span class="line">world</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 这个例子并不能体现并发...</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello_world</span><span class="params">(text)</span>:</span></span><br><span class="line">    time.sleep(<span class="number">2</span>)</span><br><span class="line">    print(text)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">stop_event_loop</span><span class="params">()</span>:</span></span><br><span class="line">    event_loop = asyncio.get_event_loop()</span><br><span class="line">    event_loop.stop()</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line">loop.call_soon(hello_world, <span class="string">"hello"</span>)</span><br><span class="line">print(<span class="string">"1"</span>)</span><br><span class="line">loop.call_soon(hello_world, <span class="string">"world"</span>)</span><br><span class="line">print(<span class="string">"2"</span>)</span><br><span class="line">loop.call_later(<span class="number">10</span>, stop_event_loop)    <span class="comment"># 10 秒后调用stop_event_loop函数</span></span><br><span class="line">loop.run_forever()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出的顺序将会是</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line">hello</span><br><span class="line">world</span><br></pre></td></tr></table></figure>
 <h3 id="实践过程遇到几个坑">实践过程遇到几个坑</h3><ol>
 <li>python 中一个函数如果有多个<code>装饰器</code>, 他们的执行顺序是怎样一定要弄清楚。</li>
 </ol>
@@ -254,7 +254,7 @@
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2015/07/22/dbus学习一/">D-Bus学习</a>
+              <a href="/2015/07/22/季度总结/">知识梳理</a>
             
           </div>
 
@@ -326,7 +326,7 @@
         <div class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">15</span>
+              <span class="site-state-item-count">16</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -340,7 +340,7 @@
 
           <div class="site-state-item site-state-tags">
             <a href="/tags">
-              <span class="site-state-item-count">17</span>
+              <span class="site-state-item-count">18</span>
               <span class="site-state-item-name">标签</span>
               </a>
           </div>
