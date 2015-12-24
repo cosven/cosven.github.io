@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2015-12-21 Mon 21:30 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="viewport" content="width=device-width, initial-scale=1" />
+<title></title>
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="ysw" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/bigblow/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/bigblow/css/bigblow.css"/>
+<link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/bigblow/css/hideshow.css"/>
+<script type="text/javascript" src="http://www.pirilampo.org/styles/bigblow/js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="http://www.pirilampo.org/styles/bigblow/js/jquery-ui-1.10.2.min.js"></script>
+<script type="text/javascript" src="http://www.pirilampo.org/styles/bigblow/js/jquery.localscroll-min.js"></script>
+<script type="text/javascript" src="http://www.pirilampo.org/styles/bigblow/js/jquery.scrollTo-1.4.3.1-min.js"></script>
+<script type="text/javascript" src="http://www.pirilampo.org/styles/bigblow/js/jquery.zclip.min.js"></script>
+<script type="text/javascript" src="http://www.pirilampo.org/styles/bigblow/js/bigblow.js"></script>
+<script type="text/javascript" src="http://www.pirilampo.org/styles/bigblow/js/hideshow.js"></script>
+<link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/readtheorg/css/htmlize.css"/>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgheadline54">1. odds and ends</a>
+<ul>
+<li><a href="#orgheadline12">1.1. Commands</a>
+<ul>
+<li><a href="#orgheadline3">1.1.1. shell</a></li>
+<li><a href="#orgheadline5">1.1.2. mysql</a></li>
+<li><a href="#orgheadline7">1.1.3. gunicorn</a></li>
+<li><a href="#orgheadline11">1.1.4. traceroute</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline13">1.2. strange</a></li>
+<li><a href="#orgheadline14">1.3. Vim</a></li>
+<li><a href="#orgheadline15">1.4. Tutorials</a></li>
+<li><a href="#orgheadline16">1.5. Resouces</a></li>
+<li><a href="#orgheadline18">1.6. REST API</a>
+<ul>
+<li><a href="#orgheadline17">1.6.1. API of different version should not use common <code>represent</code> function !!&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></a></li>
+</ul>
+</li>
+<li><a href="#orgheadline21">1.7. Database</a>
+<ul>
+<li><a href="#orgheadline20">1.7.1. one-to-many relationship</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline23">1.8. FeelUOwn</a>
+<ul>
+<li><a href="#orgheadline22">1.8.1. asyncio</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline24">1.9. Unix-like system keyboard shortcut</a></li>
+<li><a href="#orgheadline27">1.10. Data structure</a>
+<ul>
+<li><a href="#orgheadline26">1.10.1. Red-black tree</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline29">1.11. Nginx</a></li>
+<li><a href="#orgheadline51">1.12. React</a>
+<ul>
+<li><a href="#orgheadline31">1.12.1. why React?</a></li>
+<li><a href="#orgheadline35">1.12.2. base</a></li>
+<li><a href="#orgheadline45">1.12.3. React in dashboard</a></li>
+<li><a href="#orgheadline47">1.12.4. only for complicate-form pages</a></li>
+<li><a href="#orgheadline48">1.12.5. how to dynamic add component ?</a></li>
+<li><a href="#orgheadline49">1.12.6. how to graceful access one-to-many input field ???&#xa0;&#xa0;&#xa0;<span class="tag"><span class="pratice">pratice</span>&#xa0;<span class="question">question</span></span></a></li>
+<li><a href="#orgheadline50">1.12.7. if you use some third-party lib, you will be limited !!</a></li>
+</ul>
+</li>
+<li><a href="#orgheadline52">1.13. ABBR</a></li>
+<li><a href="#orgheadline53">1.14. Tips</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+
+<div id="outline-container-orgheadline54" class="outline-2">
+<h2 id="orgheadline54"><span class="section-number-2">1</span> odds and ends</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li><a href="http://www.jianshu.com/p/49f26cd641a2">org-mode 简明教程 (简书)</a></li>
+<li>《梵高传》《必然》《如何欣赏一幅画》|《unix 编程艺术》《重构》</li>
+</ul>
+</div>
+
+<div id="outline-container-orgheadline12" class="outline-3">
+<h3 id="orgheadline12"><span class="section-number-3">1.1</span> Commands</h3>
+<div class="outline-text-3" id="text-1-1">
+</div><div id="outline-container-orgheadline3" class="outline-4">
+<h4 id="orgheadline3"><span class="section-number-4">1.1.1</span> shell</h4>
+<div class="outline-text-4" id="text-1-1-1">
+</div><ol class="org-ol"><li><a id="orgheadline1"></a>file operation<br  /><div class="outline-text-5" id="text-1-1-1-1">
+<p>
+<code>find dirname/ -name *.swp -delete</code> delete those file found
+</p>
+</div></li>
+
+<li><a id="orgheadline2"></a>weechat<br  /><div class="outline-text-5" id="text-1-1-1-2">
+<ul class="org-ul">
+<li><code>/set weechat.network.gnutls_ca_file ~/.weechat/certs/ca-bundle.crt</code></li>
+</ul>
+</div></li></ol>
+</div>
+
+<div id="outline-container-orgheadline5" class="outline-4">
+<h4 id="orgheadline5"><span class="section-number-4">1.1.2</span> mysql</h4>
+<div class="outline-text-4" id="text-1-1-2">
+</div><ol class="org-ol"><li><a id="orgheadline4"></a>mysql connect command&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span><br  /><div class="outline-text-5" id="text-1-1-2-1">
+<div class="org-src-container">
+
+<pre class="src src-sh">mysql -u username -h hostname -p password
+</pre>
+</div>
+</div></li></ol>
+</div>
+
+<div id="outline-container-orgheadline7" class="outline-4">
+<h4 id="orgheadline7"><span class="section-number-4">1.1.3</span> gunicorn</h4>
+<div class="outline-text-4" id="text-1-1-3">
+</div><ol class="org-ol"><li><a id="orgheadline6"></a>gunicorn timeout&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span><br  /><div class="outline-text-5" id="text-1-1-3-1">
+<p>
+use command option like: <code>--graceful-timeout</code>
+</p>
+</div></li></ol>
+</div>
+<div id="outline-container-orgheadline11" class="outline-4">
+<h4 id="orgheadline11"><span class="section-number-4">1.1.4</span> traceroute</h4>
+<div class="outline-text-4" id="text-1-1-4">
+<div class="org-src-container">
+
+<pre class="src src-shell">Flags &#26631;&#35760;&#12290;&#19968;&#20123;&#21487;&#33021;&#30340;&#26631;&#35760;&#22914;&#19979;&#65306; 
+U &#8212; &#36335;&#30001;&#26159;&#27963;&#21160;&#30340; 
+H &#8212; &#30446;&#26631;&#26159;&#19968;&#20010;&#20027;&#26426; 
+G &#8212; &#36335;&#30001;&#25351;&#21521;&#32593;&#20851;<span style="color: #707183;">(</span>&#38750;&#30452;&#25509;&#36830;&#25509;&#32593;&#32476;<span style="color: #707183;">)</span> 
+S &#8212; &#27492;&#36335;&#30001;&#20026;&#25163;&#21160;&#28155;&#21152;
+R &#8212; &#24674;&#22797;&#21160;&#24577;&#36335;&#30001;&#20135;&#29983;&#30340;&#34920;&#39033; 
+D &#8212; &#30001;&#36335;&#30001;&#30340;&#21518;&#21488;&#31243;&#24207;&#21160;&#24577;&#22320;&#23433;&#35013; 
+M &#8212; &#30001;&#36335;&#30001;&#30340;&#21518;&#21488;&#31243;&#24207;&#20462;&#25913; 
+! &#8212; &#25298;&#32477;&#36335;&#30001;
+</pre>
+</div>
+</div>
+
+<ol class="org-ol"><li><a id="orgheadline10"></a>双 VPN 示例<br  /><ol class="org-ol"><li><a id="orgheadline8"></a>sudo route -nv change -net default 172.16.0.1<br  /><div class="outline-text-6" id="text-1-1-4-1-1">
+<p>
+表现为断网状态
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-shell"><span style="color: #D0372D;">0/1</span>                <span style="color: #D0372D;">172.16.0.1</span>         UGSc            <span style="color: #D0372D;">6</span>        <span style="color: #D0372D;">0</span>   utun0
+default            <span style="color: #D0372D;">172.16.0.1</span>         UCS            <span style="color: #D0372D;">23</span>        <span style="color: #D0372D;">0</span>   utun0
+default            <span style="color: #D0372D;">222.205.47.1</span>       UGScI          <span style="color: #D0372D;">56</span>        <span style="color: #D0372D;">0</span>     en5
+<span style="color: #D0372D;">0/1</span>                <span style="color: #D0372D;">172.16.0.1</span>         UGScI          <span style="color: #D0372D;">38</span>       <span style="color: #D0372D;">38</span>    ppp0
+<span style="color: #D0372D;">10.5.1.7</span>           <span style="color: #D0372D;">222.205.47.1</span>       UGHS            <span style="color: #D0372D;">2</span>    <span style="color: #D0372D;">14256</span>     en5
+</pre>
+</div>
+</div></li>
+<li><a id="orgheadline9"></a>sudo route -nv change -net default 172.16.0.1 -netmask 0xfffff000<br  /></li></ol></li></ol>
+</div>
+</div>
+
+
+<div id="outline-container-orgheadline13" class="outline-3">
+<h3 id="orgheadline13"><span class="section-number-3">1.2</span> strange</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li><code>localhost</code> and <code>127.0.0.1</code> on darwin</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgheadline14" class="outline-3">
+<h3 id="orgheadline14"><span class="section-number-3">1.3</span> Vim</h3>
+<div class="outline-text-3" id="text-1-3">
+<ul class="org-ul">
+<li><code>Ctrl-w +</code> and <code>Ctrl-w -</code> to resize the height of the current window by a single row.</li>
+<li>For a vsplit window: You can use <code>Ctrl-w &gt;</code> and <code>Ctrl-w &lt;</code> to resize the width of the current window by a single column.</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgheadline15" class="outline-3">
+<h3 id="orgheadline15"><span class="section-number-3">1.4</span> Tutorials</h3>
+</div>
+
+<div id="outline-container-orgheadline16" class="outline-3">
+<h3 id="orgheadline16"><span class="section-number-3">1.5</span> Resouces</h3>
+</div>
+
+<div id="outline-container-orgheadline18" class="outline-3">
+<h3 id="orgheadline18"><span class="section-number-3">1.6</span> REST API</h3>
+<div class="outline-text-3" id="text-1-6">
+<p>
+<b>resources</b> &amp; <b>state transfer</b>
+</p>
+
+<p>
+<a href="http://bbear.me/qian-hou-duan-fen-chi-tr/">- REST API basic design principle</a>
+</p>
+<ul class="org-ul">
+<li><a href="https://cnodejs.org/topic/551802d3687c387d2f5b2906">Acl on REST API</a></li>
+</ul>
+</div>
+
+<div id="outline-container-orgheadline17" class="outline-4">
+<h4 id="orgheadline17"><span class="section-number-4">1.6.1</span> API of different version should not use common <code>represent</code> function !!&#xa0;&#xa0;&#xa0;<span class="tag"><span class="practice">practice</span></span></h4>
+</div>
+</div>
+
+
+<div id="outline-container-orgheadline21" class="outline-3">
+<h3 id="orgheadline21"><span class="section-number-3">1.7</span> Database</h3>
+<div class="outline-text-3" id="text-1-7">
+</div><div id="outline-container-orgheadline20" class="outline-4">
+<h4 id="orgheadline20"><span class="section-number-4">1.7.1</span> one-to-many relationship</h4>
+<div class="outline-text-4" id="text-1-7-1">
+<ul class="org-ul">
+<li>how to understand one-to-many, many-to-many relationship ?</li>
+<li>one-to-many: how to do CRUD ??</li>
+</ul>
+</div>
+
+<ol class="org-ol"><li><a id="orgheadline19"></a>how to graceful update ?<br  /><div class="outline-text-5" id="text-1-7-1-1">
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="color: #BA36A5;">current_zhihu_ids</span> = <span style="color: #707183;">{</span>...<span style="color: #707183;">}</span>
+<span style="color: #BA36A5;">submited_zhihu_ids</span> = <span style="color: #707183;">{</span>...<span style="color: #707183;">}</span>
+<span style="color: #BA36A5;">zhihu_ids_to_delete</span> = current_zhihu_ids - submited_zhihu_ids
+<span style="color: #BA36A5;">zhihu_ids_to_insert</span> = submited_zhihu_ids - current_zhihu_ids
+<span style="color: #8D8D84;"># </span><span style="color: #8D8D84; font-style: italic;">batch insert and delete</span>
+insert<span style="color: #707183;">(</span>zhihu_ids_to_insert<span style="color: #707183;">)</span>
+delete<span style="color: #707183;">(</span>zhihu_ids_to_delete<span style="color: #707183;">)</span>
+</pre>
+</div>
+</div></li></ol>
+</div>
+</div>
+
+
+<div id="outline-container-orgheadline23" class="outline-3">
+<h3 id="orgheadline23"><span class="section-number-3">1.8</span> FeelUOwn</h3>
+<div class="outline-text-3" id="text-1-8">
+</div><div id="outline-container-orgheadline22" class="outline-4">
+<h4 id="orgheadline22"><span class="section-number-4">1.8.1</span> asyncio</h4>
+<div class="outline-text-4" id="text-1-8-1">
+<ul class="org-ul">
+<li><a href="http://stackoverflow.com/questions/22190403/how-could-i-use-requests-in-asyncio">how to use requests with asyncio ?</a></li>
+<li><a href="http://stackoverflow.com/questions/29269370/how-to-properly-create-and-run-concurrent-tasks-using-pythons-asyncio-module">use coroutine in asyncio - example</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgheadline24" class="outline-3">
+<h3 id="orgheadline24"><span class="section-number-3">1.9</span> Unix-like system keyboard shortcut</h3>
+<div class="outline-text-3" id="text-1-9">
+<blockquote>
+<p>
+Ctrl F, B, N, P, H, D, A, E 分別是往前一格、往後一格、往下一行、往上一行、刪除光標前面的字符、刪除光標後面的字符、去到行首、去到行尾。
+</p>
+</blockquote>
+</div>
+</div>
+
+
+
+<div id="outline-container-orgheadline27" class="outline-3">
+<h3 id="orgheadline27"><span class="section-number-3">1.10</span> Data structure</h3>
+<div class="outline-text-3" id="text-1-10">
+</div><div id="outline-container-orgheadline26" class="outline-4">
+<h4 id="orgheadline26"><span class="section-number-4">1.10.1</span> Red-black tree</h4>
+<div class="outline-text-4" id="text-1-10-1">
+</div><ol class="org-ol"><li><a id="orgheadline25"></a>compare with avl-tree&#xa0;&#xa0;&#xa0;<span class="tag"><span class="thinking">thinking</span></span><br  /><div class="outline-text-5" id="text-1-10-1-1">
+<ul class="org-ul">
+<li>avl-tree is height balanced tree</li>
+</ul>
+</div></li></ol>
+</div>
+</div>
+
+
+<div id="outline-container-orgheadline29" class="outline-3">
+<h3 id="orgheadline29"><span class="section-number-3">1.11</span> Nginx</h3>
+<div class="outline-text-3" id="text-1-11">
+</div><ol class="org-ol"><li><a id="orgheadline28"></a>upstream sent too big header while reading response header from upstream<br  /><div class="outline-text-5" id="text-1-11-0-1">
+<p>
+stackoverflow: <a href="http://stackoverflow.com/questions/23844761/upstream-sent-too-big-header-while-reading-response-header-from-upstream">answer</a>
+</p>
+</div></li></ol>
+</div>
+
+
+<div id="outline-container-orgheadline51" class="outline-3">
+<h3 id="orgheadline51"><span class="section-number-3">1.12</span> React</h3>
+<div class="outline-text-3" id="text-1-12">
+<p>
+<a href="http://www.alloyteam.com/2015/11/we-will-be-componentized-web-long-text/">- 致我们终将组件化的 Web</a>
+</p>
+</div>
+
+<div id="outline-container-orgheadline31" class="outline-4">
+<h4 id="orgheadline31"><span class="section-number-4">1.12.1</span> why React?</h4>
+<div class="outline-text-4" id="text-1-12-1">
+<ul class="org-ul">
+<li>reusable components</li>
+</ul>
+</div>
+
+<ol class="org-ol"><li><a id="orgheadline30"></a>keywords<br  /><div class="outline-text-6" id="text-1-12-1-0-1">
+<ul class="org-ul">
+<li>Efficient</li>
+<li>Composition over inheritance</li>
+<li>Virtual dom</li>
+<li>Unidirectional data flow</li>
+<li>State machine</li>
+</ul>
+</div></li></ol>
+</div>
+
+<div id="outline-container-orgheadline35" class="outline-4">
+<h4 id="orgheadline35"><span class="section-number-4">1.12.2</span> base</h4>
+<div class="outline-text-4" id="text-1-12-2">
+</div><ol class="org-ol"><li><a id="orgheadline32"></a><i>keywords</i> in react ?<br  /></li>
+<li><a id="orgheadline33"></a>how to pass variable in dom ?<br  /></li>
+<li><a id="orgheadline34"></a>validate twice.<br  /></li></ol>
+</div>
+
+<div id="outline-container-orgheadline45" class="outline-4">
+<h4 id="orgheadline45"><span class="section-number-4">1.12.3</span> React in dashboard</h4>
+<div class="outline-text-4" id="text-1-12-3">
+</div><ol class="org-ol"><li><a id="orgheadline36"></a>how to use css ?<br  /></li>
+<li><a id="orgheadline37"></a>Alt.js<br  /></li>
+
+<li><a id="orgheadline38"></a>form label name before ??<br  /></li>
+
+<li><a id="orgheadline39"></a>difference between <code>React.Component</code> and <code>React.createClass</code> ??<br  /><div class="outline-text-5" id="text-1-12-3-4">
+<ul class="org-ul">
+<li><a href="http://reactjsnews.com/composing-components/">essay1</a></li>
+</ul>
+</div></li>
+
+<li><a id="orgheadline43"></a>should we use api as data interface ?<br  /><div class="outline-text-5" id="text-1-12-3-5">
+<ul class="org-ul">
+<li>api has no state</li>
+<li>data interface has state ??</li>
+</ul>
+</div>
+
+<ol class="org-ol"><li><a id="orgheadline40"></a>why not use existed api ?<br  /><div class="outline-text-6" id="text-1-12-3-5-1">
+<ul class="org-ul">
+<li>not enough</li>
+<li>api is designed for other app</li>
+<li>the granularity of APIs, api is Fine-grained</li>
+</ul>
+</div></li>
+
+<li><a id="orgheadline41"></a>solution 1<br  /><div class="outline-text-6" id="text-1-12-3-5-2">
+<ul class="org-ul">
+<li>keep using api</li>
+<li>add api interface</li>
+<li>fine-grained is googd</li>
+</ul>
+
+<p>
+cons: need to add api to apiv1. If add to v2, hard to process token ?
+</p>
+</div></li>
+
+<li><a id="orgheadline42"></a>solution 2<br  /><div class="outline-text-6" id="text-1-12-3-5-3">
+<ul class="org-ul">
+<li>create another interface for inner access.</li>
+</ul>
+
+<p>
+cons: there may exist <b>url conflict</b> ? remove old controller
+<b>answer</b>: create an interface like this <code>/users/&lt;user_id&gt;.json</code>
+</p>
+
+<p>
+However: <code>/users/&lt;user_id&gt;.json</code> this will also result in logic-repeatment among api/views/data-interface ??
+</p>
+</div></li></ol></li>
+
+<li><a id="orgheadline44"></a>list value in wtform is different from react !! ??<br  /></li></ol>
+</div>
+
+
+<div id="outline-container-orgheadline47" class="outline-4">
+<h4 id="orgheadline47"><span class="section-number-4">1.12.4</span> only for complicate-form pages</h4>
+<div class="outline-text-4" id="text-1-12-4">
+<p>
+render page structure in server and render froms and some components in web client,
+when client send a POST request to server, client receive the response and refresh the components.
+</p>
+
+<p>
+In this case, server need only render part of a GET-request page. Clients are responsible for rendering
+rest page and redirect to some new page if needed.
+</p>
+</div>
+
+<ol class="org-ol"><li><a id="orgheadline46"></a>formsy<br  /><div class="outline-text-5" id="text-1-12-4-1">
+<p>
+A form input builder and validator for React JS.
+</p>
+</div></li></ol>
+</div>
+
+<div id="outline-container-orgheadline48" class="outline-4">
+<h4 id="orgheadline48"><span class="section-number-4">1.12.5</span> how to dynamic add component ?</h4>
+<div class="outline-text-4" id="text-1-12-5">
+<p>
+use <code>this.state</code> to trigger react re-render.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgheadline49" class="outline-4">
+<h4 id="orgheadline49"><span class="section-number-4">1.12.6</span> how to graceful access one-to-many input field ???&#xa0;&#xa0;&#xa0;<span class="tag"><span class="pratice">pratice</span>&#xa0;<span class="question">question</span></span></h4>
+<div class="outline-text-4" id="text-1-12-6">
+<ul class="org-ul">
+<li>list field <code>name</code> compatible. <code>name[]</code> vs <code>name-i</code></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgheadline50" class="outline-4">
+<h4 id="orgheadline50"><span class="section-number-4">1.12.7</span> if you use some third-party lib, you will be limited !!</h4>
+</div>
+</div>
+
+
+<div id="outline-container-orgheadline52" class="outline-3">
+<h3 id="orgheadline52"><span class="section-number-3">1.13</span> ABBR</h3>
+<div class="outline-text-3" id="text-1-13">
+<ul class="org-ul">
+<li><code>DSL</code> Domain Specific Language</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-orgheadline53" class="outline-3">
+<h3 id="orgheadline53"><span class="section-number-3">1.14</span> Tips</h3>
+<div class="outline-text-3" id="text-1-14">
+<ul class="org-ul">
+<li>use triple ? <code>???</code> to represent question.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: ysw</p>
+<p class="date">Created: 2015-12-21 Mon 21:30</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
