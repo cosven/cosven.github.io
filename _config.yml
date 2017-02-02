@@ -24,7 +24,7 @@ github_username: NoneYsw
 
 # Build settings
 markdown: kramdown
-# theme: minimal
+theme: minima
 gems:
   - jekyll-feed
 exclude:
