@@ -24,7 +24,7 @@ github_username: cosven
 
 # Build settings
 markdown: kramdown
-theme: minima
+theme: Minimal
 gems:
   - jekyll-feed
 exclude:
