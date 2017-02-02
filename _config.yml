@@ -13,7 +13,7 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: 长笔记 by cosven
+title: =。=
 email: yinshaowen241@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
     总结性的笔记记录
@@ -24,9 +24,6 @@ github_username: cosven
 
 # Build settings
 markdown: kramdown
-theme: jekyll-theme-minimal
-gems:
-  - jekyll-feed
 exclude:
   - Gemfile
   - Gemfile.lock
