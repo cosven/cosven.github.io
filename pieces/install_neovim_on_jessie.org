@@ -1,0 +1,14 @@
+* 在 jessie 安装 neovim
+
+1. 经过多年探索，在 jessie 上安装 neovim 的比较简单的办法是通过 linuxbrew
+
+#+BEGIN_SRC sh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+#+END_SRC
+
+2. 然后安装 vim-plug 给 neovim 用
+
+#+BEGIN_SRC sh
+curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+#+END_SRC
