@@ -1,0 +1,8 @@
+* 升级 debian jessie 内核
+
+从 3.16 升级到 4.7
+
+1. 首先将 backport 加入到 sources.list 中
+2. 然后搜索一下 linux-image
+3. 然后安装
+4. 然后 reboot
