@@ -1,0 +1,75 @@
+* 上线的自动回滚策略
+
+** 搞完这一块得出的几个结论或者关键词
+1. 质变与量变
+2. 与实际情况、场景关系较大
+
+*想到的背后的理论：量变会引起质变。*
+监控指标的变化也就是监控量变，当量变幅度较大或者不正常时，我们认为这时候，这个系统
+很可能会发生质变。
+
+** 根据应用存储指标进行自动回滚
+
+目前主要针对的是 mysql, redis
+指标存储使用的是 graphite 那一套（细节不太了解）
+
+*** mysql 指标
+
+一些常见的 mysql 指标：
+
+- select/update/delete/insert QPS
+- connections count
+- row lock waits
+- transaction stared seconds
+- ...
+
+和 DBA 讨论之后，这两个指标正常情况波动较小，可以用来做参考
+
+- 每分钟 slow query 数
+- 一个事务的时间长短（勉强算一个）
+
+**** slow query 数
+
+根据过去的数据，发现一般的项目正常情况基本都没有 slow query 或者数量特别少。
+有个别大型的项目，它 slow query 数量稍微多一点，而且偶尔会出现每分钟 10 来个 slow query。
+
+- *设定一个阈值？* 不太可行，项目之间差异太大...但是可以有一个最大值
+- *环比？* 上面讲了，一些大型项目，它平常就有 slow query，而且还会突然有数量较多数量
+
+重新思考这个问题，逐个击破。
+
+90% 的项目，一般情况都不会有 slow query，那么当某次上线之后，如果出现了 slow query，
+从无到有，(这里，我们认为这个系统发生了 ~质变~ )，那么我们基本可以触发自动回滚。
+所以，我们可以设置这样一个策略：如果当前一分钟的 slow query 数比过去 6 个小时加起来都多，判断它为有问题...
+
+10% 的项目，从少量到大量 - 设置上限和持续时间。
+
+*** redis
+
+经过和 redis 专业人员讨论，CPU 指标可以用来做自动回滚的参考指标。
+
+**** CPU
+
+经过观察，业务 redis CPU 是可能发生突变的，但一次突变的持续时间不会太长。
+
+举个例子：
+A 业务每隔一段时间会有两分钟 redis CPU 占用持续高
+B 业务每天凌晨 redis CPU 低，白天 7 点开始就一步步爬升
+  这种情形很多业务都会出现，一般是跟着流量变化
+
+
+#+begin_src grafana
+# 计算 redis CPU （每天的）环比的 grafana 函数
+
+aliasByNode(
+    applyByNode(
+        aliasByNode(angmar.high-available.topstory2.storage1177*.cpu, 3),
+        0,
+        "diffSeries(
+            timeShift(summarize(angmar.high-available.topstory2.%.cpu, '1min', 'avg'), '-1d'),
+            summarize(angmar.high-available.topstory2.%.cpu, '1min', 'sum')
+        )"
+    ),
+    3
+)
+#+end_src
