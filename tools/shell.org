@@ -20,3 +20,12 @@ set t_8b=^[[48;2;%lu;%lu;%lum
 #+BEGIN_SRC sh
 dpkg -l | grep linux-image
 #+END_SRC
+
+*** ssh 端口映射
+
+本地端口映射： =ssh -L 9000:cosven.dev:8000 cosven.dev=
+这时，访问本地 9000 端口，就相当于访问 cosven.dev 的 8000 端口
+
+远程端口映射： =ssh -R 2222:localhost:22 cosven.dev=
+假设我们从本地可以 ssh 到 cosven.dev，但是从 cosven.dev 不能 ssh 到本地
+这时，我们可以使用这种方式...
