@@ -29,3 +29,5 @@ dpkg -l | grep linux-image
 远程端口映射： =ssh -R 2222:localhost:22 cosven.dev=
 假设我们从本地可以 ssh 到 cosven.dev，但是从 cosven.dev 不能 ssh 到本地
 这时，我们可以使用这种方式...
+
+=-N= 不登录 =-f= 后台跑
