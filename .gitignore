@@ -9,3 +9,5 @@ _site
 
 # emacs
 .#*
+
+.ipynb_checkpoints/
