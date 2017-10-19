@@ -31,3 +31,10 @@ dpkg -l | grep linux-image
 这时，我们可以使用这种方式...
 
 =-N= 不登录 =-f= 后台跑
+
+*** 替换一个目录下的所有文件中包含某个字符串的文件
+=grep -rnw '/path/to/somewhere/' -e 'pattern'=
+
+*** 查看一个程序占用了那个端口
+
+=lsof -Pan -p PID -i=
