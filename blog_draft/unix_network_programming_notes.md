@@ -86,3 +86,4 @@ TIME_WAIT 状态存在的[意义](http://blog.csdn.net/rain_qingtian/article/det
 然后看到一个解释是：
 
 > Also, the segments in Steps 2 and 3 are both from the end performing the passive close and could be combined into one segment
+
