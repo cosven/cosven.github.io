@@ -68,3 +68,21 @@ TIME_WAIT 状态存在的[意义](http://blog.csdn.net/rain_qingtian/article/det
 #### socket pair
 
 #### buffer size
+
+### 一些实验
+
+#### tcpdump 实验
+
+发现四次挥手并不如预期
+
+每次抓包都只能发现 3 个 segment
+
+```shell
+10:47:36.231626 IP localhost.8888 > localhost.48194: Flags [F.], seq 1, ack 13, win 64, options [nop,nop,TS val 490746164 ecr 490746164], length 0
+10:47:36.234914 IP localhost.48194 > localhost.8888: Flags [F.], seq 13, ack 2, win 64, options [nop,nop,TS val 490746165 ecr 490746164], length 0
+10:47:36.234923 IP localhost.8888 > localhost.48194: Flags [.], ack 14, win 64, options [nop,nop,TS val 490746165 ecr 490746165], length 0
+```
+
+然后看到一个解释是：
+
+> Also, the segments in Steps 2 and 3 are both from the end performing the passive close and could be combined into one segment
