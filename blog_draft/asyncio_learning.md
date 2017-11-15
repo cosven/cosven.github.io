@@ -9,6 +9,7 @@
     - [ ] yield from vs yield?
 - [ ] 生成器 vs 迭代器？
 - [ ] select/poll, epoll？
+- [ ] 有了 asyncio 之后， python thread 还有任何优势吗？
 
 **教程们**
 
