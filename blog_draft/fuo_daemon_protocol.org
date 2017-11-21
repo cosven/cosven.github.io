@@ -1,0 +1,22 @@
+* xxx
+
+** imagination
+
+#+BEGIN_SRC
+## 音乐查询
+ls /
+ls /local/songs
+get /local/songs:123
+
+## 播放器控制
+set random
+next
+pause
+play songid
+seek
+#+END_SRC
+
+*** 类似 vimscript?
+#+BEGIN_SRC
+set random
+#+END_SRC
