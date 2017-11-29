@@ -24,3 +24,23 @@ netstat, lsof
 ### 查看哪些端口可以被程序使用
 
 `sudo cat /proc/sys/net/ipv4/ip_local_port_range`
+
+### HTTP 502 Bad Gateway and 504 Gateway Timeout
+
+> The 504 (Gateway Timeout) status code indicates that the server,
+while acting as a gateway or proxy, did not receive a timely response
+from an upstream server it needed to access in order to complete the
+request.
+
+- [ ] 一个疑问：是不是说可以断定是服务端的问题？
+
+假设链路是 Client -> xxx -> Nginx -> HAProxy -> Server
+
+假设 xxx -> Nginx 这里超时的话？是不是结果应该是 Connection Timeout
+而 Nginx -> HAProxy 或者 HAProxy -> Server 超时的话，就是 504 了。
+
+502
+
+### 503 Service Unavailable
+
+服务端超载了，或者拒绝连接
