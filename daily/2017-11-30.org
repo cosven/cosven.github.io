@@ -7,7 +7,7 @@
 *** review CI MR
     CLOCK: [2017-11-30 Thu 13:56]--[2017-11-30 Thu 14:02] =>  0:06
 
-[[MR by amy]]
+MR by amy
 
 *** DONE 修改 CANARY MR [2/2]
     CLOCK: [2017-11-30 Thu 14:07]--[2017-11-31 Thu 18:00]
