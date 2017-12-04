@@ -1,0 +1,17 @@
+#+SETUPFILE: ../theme-bigblow.setup
+
+* 12 月份全纪录
+
+*** DONE 学习 org mode [100%]                                          :self:
+    CLOCK: [2017-12-04 Mon 10:47]--[2017-12-04 Mon 12:14] =>  1:17
+- [X] 了解时间管理的工作流程
+- [X] 看看能不能把一天的时线给打印出来
+
+*** TODO 了解邻接表，和学弟沟通 [%]                                    :self:
+    CLOCK: [2017-12-04 Mon 12:30]--[2017-12-04 Mon 13:00] =>  0:30
+- [X] 大概懂了邻接表是个啥
+- [ ] 用 c 语言实现解决 pta 那个 [[https://pintia.cn/problem-sets/16/problems/708][问题]]
+
+*** 支持 HDFS  :work:
+**** TODO CI 传输 s3 URL
+     CLOCK: [2017-12-04 Mon 14:12]

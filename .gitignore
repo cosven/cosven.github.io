@@ -10,5 +10,6 @@ _site
 # emacs
 .#*
 *~
+*.org_archive
 
 .ipynb_checkpoints/
