@@ -20,3 +20,6 @@ seek
 #+BEGIN_SRC
 set random
 #+END_SRC
+
+*** werkzeug routing 模块
+类似 fuocore 目前这样子，多个 url 对应多个 handler，类似 map 的机制。

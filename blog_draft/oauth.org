@@ -1,0 +1,45 @@
+* oauth 实践
+
+- [ ] 目前看起来 SSO 有多种实现方式（应该对）
+  有的方案好像会造成服务端压力很大
+- [ ] expire 参数和统一注销这个功能看起来是有冲突的（应该对）
+- [ ] jwt 方案能否通过非对称加密来缓解服务端压力（应该对）
+- [ ] XSS 攻击（不太了解）
+
+** oauth 几种实践方案
+*** 一个前后端分离项目的 oauth 实现方案
+1. 访问 http://A 时，前端检测是否有 token，没有 token 就重定向到 /oauth/authorize 页面
+2. 用户在 authorize 页面输入用户名和密码，如果验证成功，重定向到用户指定的 redirect_url 上。
+   比如 /oauth/callback 上（这个页面是前端的一个页面）。（此时，页面是有 grant_code 的）
+3. 前端用 grant_code 给后端，后端用这个 code 去 oauth 换 token。
+   换取成功后，后端把这个 token 保存起来。再把 token 返回给前端，前端存起来。
+4. 之后，后端每次都去校验前端传过来的 token
+
+*** 常见的 oauth 认证方案
+
+1. 设置 cookie（有安全风险）（好像比较传统）
+2. 在 localStorage 中保存
+
+3. [X] token 方案 vs session 方案
+token 提高了安全性，避免了额 CSRF 攻击
+但是认为可以修改 token，万一踩狗屎了呢？
+
+- [X] 传统 token 方案 vs JWT
+jwt 是个自包含的东西，服务端不需要去查数据库来验证这个东西是否正确。
+人为不方便修改 jwt。
+
+** SSO
+*** 一个 SSO 方案
+
+思路：[[https://segmentfault.com/a/1190000005357718]]
+
+A,B 是应用服务器。L 是认证服务器。
+客户端存一个 L 分发下去的 session_id。
+A 检测客户端是否有 session_id_a，没有让 L 去验证，验证完之后，设置一个 session_id_a。
+B 同理。
+
+
+
+*** 相关常见攻击手段
+
+- [[https://zh.wikipedia.org/wiki/%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0-][CSRF 跨站请求伪造]] -> 重要操作不要用 GET；CSRF 保护措施（cookie 和 query 参数中带 csrf_token）

@@ -12,6 +12,50 @@
 - [X] 大概懂了邻接表是个啥
 - [ ] 用 c 语言实现解决 pta 那个 [[https://pintia.cn/problem-sets/16/problems/708][问题]]
 
-*** 支持 HDFS  :work:
+*** 支持 HDFS                                                          :work:
 **** TODO CI 传输 s3 URL
-     CLOCK: [2017-12-04 Mon 14:12]
+     CLOCK: [2017-12-04 Mon 14:12]--[2017-12-04 Mon 15:00] =>  0:48
+
+**** DONE 研究容器 DNS 解析失败的问题
+     CLOCK: [2017-12-05 Tue 15:05]--[2017-12-05 Tue 20:05] =>  5:00
+1. 控制变量法
+2. route 的作用：route 是 IP 层面的东西；而 DNS 解析是 UDP 层面的东西。
+   - IP 是网络层：看 route
+   - TCP/UDP 是传输层：dns 解析等
+3. netstat 的一个应用
+   =udp    0      0 0.0.0.0:53    0.0.0.0:*   1434/dnsmasq=
+   好像没啥好说的
+
+*** DONE oauth 在前后端分离中的应用 [100%]                             :work:
+    CLOCK: [2017-12-04 Mon 22:48]--[2017-12-05 Tue 01:53] =>  3:05
+
+- [[https://zh.wikipedia.org/wiki/%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0-][CSRF 跨站请求伪造]] -> 重要操作不要用 GET；CSRF 保护措施（cookie 和 query 参数中带 csrf_token）
+
+
+**** DONE 目前例子中实现的方案
+1. 访问 http://A 时，前端检测是否有 token，没有 token 就重定向到 /oauth/authorize 页面
+2. 用户在 authorize 页面输入用户名和密码，如果验证成功，重定向到用户指定的 redirect_url 上。
+   比如 /oauth/callback 上（这个页面是前端的一个页面）。（此时，页面是有 grant_code 的）
+3. 前端用 grant_code 给后端，后端用这个 code 去 oauth 换 token。
+   换取成功后，后端把这个 token 保存起来。再把 token 返回给前端，前端存起来。
+4. 之后，后端每次都去校验前端传过来的 token
+
+**** DONE 一般的实现方案 [100%]
+1. 设置 cookie（有安全风险）（好像比较传统）
+2. 在 localStorage 中保存
+
+3. [X] token 方案 vs session 方案
+token 提高了安全性，避免了额 CSRF 攻击
+但是认为可以修改 token，万一踩狗屎了呢？
+
+- [X] 传统 token 方案 vs JWT
+jwt 是个自包含的东西，服务端不需要去查数据库来验证这个东西是否正确。
+人为不方便修改 jwt。
+
+**** DONE SSO 实现方案
+思路：[[https://segmentfault.com/a/1190000005357718]]
+
+A,B 是应用服务器。L 是认证服务器。
+客户端存一个 L 分发下去的 session_id。
+A 检测客户端是否有 session_id_a，没有让 L 去验证，验证完之后，设置一个 session_id_a。
+B 同理。
