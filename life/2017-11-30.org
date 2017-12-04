@@ -7,10 +7,10 @@
 *** review CI MR
     CLOCK: [2017-11-30 Thu 13:56]--[2017-11-30 Thu 14:02] =>  0:06
 
-[[https://git.in.zhihu.com/ep/lavie/merge_requests/310/diffs][MR by amy]]
+MR by amy
 
 *** DONE 修改 CANARY MR [2/2]
-    CLOCK: [2017-11-30 Thu 14:07]
+    CLOCK: [2017-11-30 Thu 14:07]--[2017-12-04 Mon 11:18] => 93:11
 - [X] 修改 MR 代码
 - [X] 等待 review
 
@@ -18,20 +18,8 @@
 - [X] 数据库 MR
 
 
-
-#+BEGIN: clocktable :maxlevel 2 :scope subtree
-#+CAPTION: Clock summary at [2017-12-01 Fri 12:04]
-| Headline     | Time   |
-|--------------+--------|
-| *Total time* | *2:57* |
-|--------------+--------|
-#+END:
-
-
 ** 2017-12-01
 
 *** DONE 让 A/S 类业务加上金丝雀2
 *** DONE 上线金丝雀修改的 MR
-*** DONE zae 应用级别修改限制
-    CLOCK: [2017-12-01 Fri 14:12]
-
+*** DONE 应用级别修改限制
