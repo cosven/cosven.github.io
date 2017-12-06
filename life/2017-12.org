@@ -12,8 +12,13 @@
 - [X] 大概懂了邻接表是个啥
 - [ ] 用 c 语言实现解决 pta 那个 [[https://pintia.cn/problem-sets/16/problems/708][问题]]
 
+**** TODO c 语言结构体
+1. 结构体怎样初始化
+
+
+
 *** 支持 HDFS                                                          :work:
-**** TODO CI 传输 s3 URL
+**** DONE CI 传输 s3 URL
      CLOCK: [2017-12-05 Tue 15:45]--[2017-12-05 Tue 17:59] =>  2:14
      CLOCK: [2017-12-05 Tue 10:49]--[2017-12-05 Tue 15:33] =>  4:44
      CLOCK: [2017-12-04 Mon 14:12]--[2017-12-04 Mon 15:00] =>  0:48
@@ -27,6 +32,22 @@
 3. netstat 的一个应用
    =udp    0      0 0.0.0.0:53    0.0.0.0:*   1434/dnsmasq=
    好像没啥好说的
+
+**** DONE 开发生产环境均可以访问 HDFS
+     CLOCK: [2017-12-06 Wed 14:00]--[2017-12-06 Wed 18:02] =>  4:02
+1. HTTP status code: 307 vs 303
+307 接受 POST/PUT 等请求
+303 会建议你转成 GET 请求
+
+2. Nginx 可以自动转发 307 请求吗？
+   可以，一种方案：https://serverfault.com/a/792035
+
+3. nginx 可以配置 standby upstream 吗？
+
+**** TODO 部署系统兼容 HDFS 方案 [/]
+     CLOCK: [2017-12-06 Wed 18:05]--[2017-12-06 Wed 19:23] =>  1:18
+
+[[https:https://mdn.mozillademos.org/files/13785/HTTPRedirect.png][redirect 流程图]]
 
 *** DONE oauth 在前后端分离中的应用 [100%]                             :work:
     CLOCK: [2017-12-04 Mon 22:48]--[2017-12-05 Tue 01:53] =>  3:05
@@ -87,3 +108,18 @@ B 同理。
 
 1. 为什么要用 evil？
    h/j/k/l 用起来爽
+
+*** TODO 迁徙事宜 [/]                                                  :self:
+
+**** TODO 杭州有哪些大的互联网公司？
+
+**** TODO 杭州有哪些 Python 牛人？
+
+**** TODO 杭州有哪些酷酷的公司？
+
+**** TODO 杭州有哪些 Python 大厂？
+
+**** TODO 杭州有什么搞物联网/机器人厂？
+
+**** TODO 网易杭州有哪些工作？
+**** TODO 阿里有哪些工作？
