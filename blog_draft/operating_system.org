@@ -1,0 +1,42 @@
+* Three Easy Pieces
+
+** DONE 第 26 章：Concurrency: An Introduction [3/3]
+
+[[http://pages.cs.wisc.edu/~remzi/OSTEP/threads-intro.pdf][参考链接]]
+
+从硬件到软件的角度看多线程，CPU 有 virtual CPU，一个进程有多个线程
+为啥要有多线程：IO(主) + 并行计算
+
+*** DONE 基本概念 [2/2]
+
+#+BEGIN_QUOTE
+Each thread has its own private set of registers it uses for computation。
+if there are two threads that are running on a single processor, when switching
+from running one (T1) to running the other (T2), a context switch must take place
+#+END_QUOTE
+
+同一进程中的多条线程将共享该进程中的全部系统资源，如虚拟地址空间，文件描述符和信号处理等等。
+但同一进程中的多个线程有各自的调用栈（call stack），自己的寄存器环境（register context），
+自己的线程本地存储（thread-local storage）
+个人理解：调用栈应该是存在于 thread-local storage 当中？
+
+- [X] reigster 是啥？
+  寄存器（Register），是中央处理器内的其中组成部分。
+  寄存器是有限存贮容量的高速存贮部件，它们可用来暂存指令、数据和地址。
+- [X] 进程地址空间（Address Spaces）是啥？
+  创建进程时，操作系统会分配一个虚拟进程地址（32位系统 4GB）。
+
+*** DONE 为啥要用多线程？
+- parallelization
+- IO overlap
+
+*** DONE 共享数据 [2/2]
+
+- [X] 什么是 critical section?
+  访问共享资源的程序片段
+- [X] 什么是 Race Condition 竞争条件？
+  多个线程同时进入 critical section
+- 不确定的程序包含一个或者多个 race condition.
+- 为避免以上问题，需要一些 =互斥= 机制
+
+联想概念：原子操作

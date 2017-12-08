@@ -45,7 +45,13 @@
 **** TODO 部署系统兼容 HDFS 方案
      CLOCK: [2017-12-06 Wed 18:05]--[2017-12-06 Wed 19:23] =>  1:18
 
-嗅觉：一个函数太长，应该有问题；引入的依赖太多或者太大，应该是有问题的。大概是这样吧...
+嗅觉：一个函数太长，应该有问题；引入的依赖太多或者太大，应该是有问题的。大概是这样吧...3
+
+1. 放在 model 下，要嵌套两层概念：
+artifact/storage: aws, hdfs
+artifact/type: static, tarball
+
+2. HDFS/AWS 保持相同的方法
 
 
 [[https:https://mdn.mozillademos.org/files/13785/HTTPRedirect.png][redirect 流程图]]
