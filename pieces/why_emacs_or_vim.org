@@ -1,0 +1,8 @@
+* Emacs vs Vim
+
+*** vim tabbar equivalent
+
+在 Vim 中，我使用 tabbar 保留一个特定的 window layout。
+自己常见的需求：测试 tab；写代码 tab。
+
+Emacs 推荐使用 buffer？
