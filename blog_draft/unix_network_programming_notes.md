@@ -1,3 +1,4 @@
+
 # unix 网络编程读书笔记
 
 ## 第一章 Introduction
@@ -86,3 +87,12 @@ TIME_WAIT 状态存在的[意义](http://blog.csdn.net/rain_qingtian/article/det
 然后看到一个解释是：
 
 > Also, the segments in Steps 2 and 3 are both from the end performing the passive close and could be combined into one segment
+
+
+## 第六章 I/O Multiplexing: The select and poll Functions
+
+### I/O 模型
+
+- blocking IO
+- non-blocking IO
+- IO
