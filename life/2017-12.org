@@ -166,10 +166,13 @@ B 同理。
 好处：路线还行，相比于哈尔滨，只需要抢一张票
 
 *** TODO 离线任务滚动部署
+    CLOCK: [2017-12-18 Mon 20:02]
     CLOCK: [2017-12-15 Fri 17:10]--[2017-12-15 Fri 20:03] =>  2:53
     CLOCK: [2017-12-14 Thu 17:00]--[2017-12-14 Thu 22:58] =>  5:58
     CLOCK: [2017-12-13 Wed 16:52]--[2017-12-13 Web 19:00] =>  2:08
     CLOCK: [2017-12-13 Wed 14:39]--[2017-12-13 Wed 16:40] =>  2:01
+
+- [ ] 允许一个 stage 对应多个 version
 
 ***** 一个 stage 对应多个 version
 1. 理论上可以
@@ -183,8 +186,10 @@ B 同理。
 *** Emacs 折腾
 **** DONE 折腾 Python IDE -> Elpy
     CLOCK: [2017-12-14 Thu 12:59]--[2017-12-14 Thu 23:00] => 10:01
-*** TODO feeluown-core 开发 [%]
+*** TODO feeluown-core 开发 [100%]
 
-**** TODO show handler 实现
-     CLOCK: [2017-12-15 Fri 20:04]
+**** DONE show handler 实现
+     CLOCK: [2017-12-18 Mon 20:00]--[2017-12-18 Mon 20:01] =>  0:01
+
+实现 show handler 的基础架构
 
