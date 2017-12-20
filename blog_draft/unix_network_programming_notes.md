@@ -1,4 +1,5 @@
 
+
 # unix 网络编程读书笔记
 
 ## 第一章 Introduction
@@ -93,6 +94,10 @@ TIME_WAIT 状态存在的[意义](http://blog.csdn.net/rain_qingtian/article/det
 
 ### I/O 模型
 
-- blocking IO
-- non-blocking IO
-- IO
+- blocking I/O
+- non-blocking I/O
+- I/O multiplexing (select and poll)
+- singal driven I/O (SIGIO)
+- asynchronous I/O (the POSIX aio_functions)
+
+### select and poll
