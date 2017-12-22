@@ -196,8 +196,75 @@ http://www.youxiake.com/lines.html?id=20514
     CLOCK: [2017-12-13 Wed 16:52]--[2017-12-13 Web 19:00] =>  2:08
     CLOCK: [2017-12-13 Wed 14:39]--[2017-12-13 Wed 16:40] =>  2:01
 
-**** TODO 滚动部署方案
-***** 一个 stage 对应多个 version
+**** DONE 滚动部署方案
+     CLOCK: [2017-12-22 Fri 11:00]--[2017-12-22 Fri 17:34] =>  6:34
+
+部署就是一个发布的过程。
+发包的过程，熟悉吗？发布和发包过程是不是比较类似呢？
+发布和代码变更过程是不是类似呢？也有点类似 Release/Canary/ReleaseCandidate
+
+***** 一些基本认识（基础逻辑）
+
+1. 一个版本的生命周期
+| 没上线    | 灰度中 | 上线了  | 下线了    |
+|-----------+--------+---------+-----------|
+| Candidate | Canary | Releasd | Destroyed |
+
+
+如果已经部署过 newbay 了
+|           | percent | t<10 gc | release canary | t>10 gc | total version |
+| --------  |  ------ | -----   | ------         | ------  |    ---------- |
+| initial   |       0 | Y       | N/A            | Y       |             1 |
+| releasing |   0-100 | N       | Y              | N       |             2 |
+| released  |   0-100 | N       | N              | N       |             2 |
+| obsolete  |       0 | N       | N/A            | Y       |             1 |
+
+
+构建 -> (Artifact) -> Candidate -> 测试环境 -> 办公室环境 -> 生产环境
+DEV -> Testing -> tarball -> alpha -> beta -> RC -> Release
+
+生产环境：-> 灰度 -> 上线。上线失败和成功
+
+1. *假设 Alpha 对应 Canary1，Beta 对应 Canary2*
+那么有三种环境：Testing/Office/Production
+每个版本有几个状态：Alpha(Canary1)/Beta(Canary2)/Release(Production) - RC(正在上线的版本)
+
+2. *canary 应该被看做百分比，而不应该看做 stage*
+看做 stage 有很多麻烦... 比如:
+set_stage_version('canary', 'xxx')  # 失败的设计
+set_version('Production', 'xxx', percent=20)  # 成功
+
+3. *一个 version 有多个 stage，stage 是 version 的属性*
+
+4. 上线状态和 Stage 概念是正交，还是咋样？
+
+一个版本需要状态有哪些： Ready -> Canary -> Releasing -> Released -> Outdated
+
+|            | 正在上线 | 已经上线   | 已经下线 |
+| production | RC       | Released   | Outdated |
+| canary     | ____     | Canary     | Outdated |
+| office     | ____     | office/(R) | Outdated |
+| testing    | ____     | testing(R) | Outdated |
+
+正交的缺点：
+1. 有些正交结果没有意义
+
+假设以后使用百分比：
+这种情况有点问题，不能判断哪个是生产环境。（没有办法明确的表明，当前处于灰度阶段）
+| v1 | PROD | 已经上线 | 20% |
+| v2 | PROD | 已经上线 | 80% |
+
+| v1 | PROD | 正在上线 | 30% |
+| v2 | PROD | 已经上线 | 70%  |
+
+假设
+| v1 | PROD | Canary   | 20% |
+| v2 | PROD | Released | 20% | 
+
+| v1 | PROD | Releasing | 20% |
+| v2 | PROD | Released  | 80% |
+
+***** TODO 一个 stage 对应多个 version
 1. 理论上可以
 2. stage_version_map 干了啥？
 3. 存在两个 production version -> 没办法判断金丝雀版本是否与生产环境版本一样，没办法回滚金丝雀
@@ -208,6 +275,9 @@ http://www.youxiake.com/lines.html?id=20514
 
 实际证明：不太可行。一个 stage 必须要有一个主版本，
 扩容的时候总不能两个都扩把？（其实两个都扩也没有多大问题把）
+
+**** 兼容滚动部署 -> nothing need to do
+**** TODO 实现离线任务滚动部署
 
 *** Emacs 折腾
 **** DONE 折腾 Python IDE -> Elpy
@@ -258,3 +328,8 @@ perspeen 代替以前的 iTerm2 + Vim + Tmux + shell 的工作模式
 **** 日志方向
 现在的日志是一个 process 对应一个日志
 但理论上应该是一个 deploy 对应一个日志，然后日志分 process
+**** 概念方向
+canary -> alpha
+canary2 -> beta
+**** TODO 部署卡顿的问题
+
