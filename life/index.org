@@ -365,5 +365,4 @@ perspeen 代替以前的 iTerm2 + Vim + Tmux + shell 的工作模式
 canary -> alpha
 canary2 -> beta
 **** TODO 部署卡顿的问题
-
-
+**** TODO bay 和 newbay 概念上的区别，流程也有区别
