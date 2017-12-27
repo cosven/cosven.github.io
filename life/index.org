@@ -366,3 +366,5 @@ canary -> alpha
 canary2 -> beta
 **** TODO 部署卡顿的问题
 **** TODO bay 和 newbay 概念上的区别，流程也有区别
+*** TODO 了解 Tox 工具
+*** TODO 调研 Python 大牛都在干嘛，能干嘛？

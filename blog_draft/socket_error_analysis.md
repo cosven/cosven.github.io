@@ -44,3 +44,5 @@ request.
 ### 503 Service Unavailable
 
 服务端超载了，或者拒绝连接
+
+### 哪些情况会导致出现 Connection Reset (by peer)？
