@@ -134,7 +134,8 @@ B 同理。
 **** TODO 网易杭州有哪些工作？
 **** TODO 阿里有哪些工作？
 *** DONE 补充金丝雀回滚文档
-*** TODO 东北行
+*** DONE 东北行调研
+    CLOSED: [2017-12-26 Tue 23:18]
 - *漠河总结* 如果有票，就可以去，前后两天假，住宿条件，游玩基本没有问题。价格大概 800 - 1000 - 1250 左右。
 - *雪乡总结* 看下面
 **** DONE 漠河行程方案 -> 放弃漠河
@@ -149,7 +150,7 @@ B 同理。
 
 1. 28号晚上火车去哈尔滨，29号早上到 --- 软：400，硬：260
 1. 哈尔滨停留半天
-2. 29号晚上火车去漠河，30 早上到 --- 
+2. 29号晚上火车去漠河，30 早上到 ---
 3. 在漠河睡一个晚上（玩一天半）
 4. 31号晚上火车去哈尔滨
 5. 1 号下午高铁回北京（这样子的话，回北京就晚上 11 点左右了
@@ -292,7 +293,7 @@ set_version('Production', 'xxx', percent=20)  # 成功
 
 假设
 | v1 | PROD | Canary   | 20% |
-| v2 | PROD | Released | 20% | 
+| v2 | PROD | Released | 20% |
 
 | v1 | PROD | Releasing | 20% |
 | v2 | PROD | Released  | 80% |
@@ -324,17 +325,17 @@ perspeen 代替以前的 iTerm2 + Vim + Tmux + shell 的工作模式
 **** DONE show handler 实现
      CLOCK: [2017-12-18 Mon 20:00]--[2017-12-18 Mon 20:01] =>  0:01
 
+实现 show handler 的基础架构
+
 **** TODO show artist 等功能
 **** TODO 确保 add/remove/list 等命令可用
-
-实现 show handler 的基础架构
 
 *** oauth2 杂事
     CLOCK: [2017-12-20 Wed 13:40]--[2017-12-20 Wed 21:09] =>  7:29
 **** DONE 发邮件失败
 **** DONE 同步信息时使用批量接口
 **** TODO oauth2 支持 redirect url wildcard
-*** TODO cousera 操作系统课程
+*** TODO coursera 操作系统课程
 **** DONE 第一章：操作系统概述
 操作系统特征：共享、并发、随机、虚拟
 
@@ -368,3 +369,4 @@ canary2 -> beta
 **** TODO bay 和 newbay 概念上的区别，流程也有区别
 *** TODO 了解 Tox 工具
 *** TODO 调研 Python 大牛都在干嘛，能干嘛？
+
