@@ -1,6 +1,6 @@
 #+SETUPFILE: ../theme-bigblow.setup
 
-* 12 月份全纪录
+* 懂事以来
 
 *** DONE 学习 org mode [100%]                                          :self:
     CLOCK: [2017-12-04 Mon 10:47]--[2017-12-04 Mon 12:14] =>  1:17
@@ -369,4 +369,15 @@ canary2 -> beta
 **** TODO bay 和 newbay 概念上的区别，流程也有区别
 *** TODO 了解 Tox 工具
 *** TODO 调研 Python 大牛都在干嘛，能干嘛？
+*** TODO 分布式任务队列 -> 了解分布式
+**** TODO Celery 的执行模型
 
+- [ ] 是 worker prefetch 了 task，还是 process prefetch 了？
+- [ ] after a task is prefetched, is it possible to re-schedule the task
+to other process or worker
+
+**** TODO 激发好奇心的问题
+***** TODO 单机并发和分布式是否矛盾，或者说它们是否有机结合？
+比如说，协程可以和分布式系统一起使用吗？推荐这么用吗？
+***** TODO 分布式任务队列最简单的起源在哪？
+***** TODO 了解 AMQP？

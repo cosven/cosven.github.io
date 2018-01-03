@@ -1,4 +1,4 @@
-# asyncio 学习及其应用
+* asyncio 学习及其应用
 
 - [ ] 为什么要学习 asyncio
 - [ ] asyncio vs goroutine？
@@ -12,11 +12,16 @@
 - [ ] select/poll, epoll？
 - [ ] 有了 asyncio 之后， python thread 还有任何优势吗？
 
-**教程们**
+*教程们*
 
-1. [一个演讲](https://www.youtube.com/watch?v=ZzfHjytDceU) 演讲者现场手写了一个 event loop 让你理解什么是 asyncio
+1. [[https://www.youtube.com/watch?v=ZzfHjytDceU][一个演讲]] 演讲者现场手写了一个 event loop 让你理解什么是 asyncio
 
-### yield from vs yield
+*** yield from vs yield
 yield from 相当于一个 delegator
 
 
+*** select/poll in practice
+
+
+#+BEGIN_SRC python
+#+END_SRC
