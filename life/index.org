@@ -3,9 +3,11 @@
 * 懂事以来
 
 *** DONE 学习 org mode [100%]                                          :self:
+    CLOCK: [2018-01-04 Thu 15:36]--[2018-01-04 Thu 16:06] =>  0:30
     CLOCK: [2017-12-04 Mon 10:47]--[2017-12-04 Mon 12:14] =>  1:17
 - [X] 了解时间管理的工作流程
 - [X] 看看能不能把一天的时线给打印出来
+- [ ] 把当前任务显示在 tmux 状态栏中
 
 *** TODO 了解邻接表，和学弟沟通 [100%]                                 :self:
     CLOCK: [2017-12-04 Mon 12:30]--[2017-12-04 Mon 13:00] =>  0:30
@@ -342,6 +344,11 @@ perspeen 代替以前的 iTerm2 + Vim + Tmux + shell 的工作模式
 **** TODO 第二章：操作系统运行环境
 *** TODO 《unix 网络编程》
 *** TODO 《operating system: three easy pieces》
+**** TODO 进程相关 [100%]
+    CLOCK: [2018-01-04 Thu 12:30]--[2018-01-04 Thu 14:00] =>  1:30
+- [X] 进程状态 -> 请见读书笔记 three easy pieces
+- [ ] PCB 是个啥？
+
 *** TODO gunicorn 模型
 **** TODO 当一个 worker timeout 之后，gunicorn 会干什么
 *** 个人反思：整理个人状态
@@ -381,3 +388,4 @@ to other process or worker
 比如说，协程可以和分布式系统一起使用吗？推荐这么用吗？
 ***** TODO 分布式任务队列最简单的起源在哪？
 ***** TODO 了解 AMQP？
+*** TODO 协程相关

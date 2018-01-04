@@ -18,3 +18,23 @@ PaaS、CI/CD
 ***** lavie 改进
 1. 运维有点问题，docker images 占用机器内存
 2. pipeline script 写起来很恶心
+
+** 工作备忘录
+
+**** DONE Performance Review
+     DEADLINE: <2018-01-03 Wed>
+     CLOCK: [2018-01-03 Wed 13:20]--[2018-01-03 Wed 13:52] =>  0:32
+
+**** DONE OKR Review
+     CLOSED: [2018-01-03 Wed 16:09] DEADLINE: <2018-01-03 Wed>
+确认一下 OKR 细节
+
+**** DONE 梳理机器人账号
+     CLOSED: [2018-01-04 Thu 15:24]
+     CLOCK: [2018-01-04 Thu 11:00]--[2018-01-04 Thu 12:00] =>  1:00
+ZAE-386
+
+**** TODO oauth 支持获取 client 下所有的用户
+**** TODO 计算 P95 of task reserved time
+     CLOCK: [2018-01-04 Thu 16:06]
+
