@@ -31,10 +31,13 @@ PaaS、CI/CD
 
 **** DONE 梳理机器人账号
      CLOSED: [2018-01-04 Thu 15:24]
+     CLOCK: [2018-01-04 Thu 15:00]--[2018-01-04 Thu 16:30] =>  1:30
      CLOCK: [2018-01-04 Thu 11:00]--[2018-01-04 Thu 12:00] =>  1:00
 ZAE-386
 
 **** TODO oauth 支持获取 client 下所有的用户
-**** TODO 计算 P95 of task reserved time
-     CLOCK: [2018-01-04 Thu 16:06]
+**** DONE 计算 P95 of task reserved time
+     CLOSED: [2018-01-04 Thu 21:04]
+     CLOCK: [2018-01-04 Thu 17:01]--[2018-01-04 Thu 21:03] =>  4:02
 
+percentileOfSeries 配合 gauge 使用

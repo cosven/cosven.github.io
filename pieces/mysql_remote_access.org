@@ -1,0 +1,16 @@
+* mysql remote access
+
+不知道从哪个版本之后，mysql 会限制只能从本地连接数据库。
+也就是说 mysql -uxxx -pxxx -h xx.xxx.xx.xx 会连接失败，典型报错：
+
+#+BEGIN_QUOTE
+ERROR 1130 (HY000): Host 'gw-cm.dev.rack.zhihu.com' is not allowed to connect to this MySQL server
+#+END_QUOTE
+
+这时，我们需要进行两部操作，以允许从远程连接该数据库
+
+1. 将 /etc/mysql/my.cnf (路径可能稍有差异) 的 bind-address 字段的值改成 0.0.0.0
+2. 第二步不能少，切记
+   GRANT ALL PRIVILEGES ON *.* TO <your-user-here>@'%' IDENTIFIED BY '<user-password-here>';
+   FLUSH PRIVILEGES;
+3. 然后重启
