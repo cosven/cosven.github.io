@@ -183,6 +183,8 @@ perspeen 代替以前的 iTerm2 + Vim + Tmux + shell 的工作模式
 1. 在终端启动一个 Daemon
 2. emacsclient -c 打开一个 frame 以使用 GUI
 
+更新：可以呀，而且简单的很 =(server-start)= 就搞定了
+
 *** TODO [#A] feeluown-core 开发 [75%]
 **** DONE show handler 实现
      CLOCK: [2017-12-18 Mon 20:00]--[2017-12-18 Mon 20:01] =>  0:01

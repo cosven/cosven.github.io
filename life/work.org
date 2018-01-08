@@ -20,13 +20,41 @@ PaaS、CI/CD
 2. pipeline script 写起来很恶心
 
 ** 工作备忘录
-**** DONE oauth 在前后端分离中的应用 [100%]                            :work:
+*** miller 一些疑问 [0/1]
+- [ ] Miller 每个任务是一个线程，还是一个进程，还是什么东东？
+  miller 会配合 gevent 来使用？
+
+*** 部署改进
+**** 日志方向
+现在的日志是一个 process 对应一个日志
+但理论上应该是一个 deploy 对应一个日志，然后日志分 process
+**** 概念方向
+canary -> alpha
+canary2 -> beta
+**** TODO 部署卡顿的问题
+**** TODO bay 和 newbay 概念上的区别，流程也有区别
+*** 个人反思：整理个人状态
+**** 2017-12-21
+
+*最近状态不好？不好在哪些方面？*
+
+1. 工作效率低
+2. 但是时间花费不少
+3. 烦恼
+
+效率为啥低 ->
+有段时间，上午自己会研究平时遇到的问题
+有段时间，花了一些在折腾 emacs 上
+另外，要甩锅的地方，就是提个 MR，但是流程长。另外方案也不一样
+*** 工作 tasks
+**** DONE oauth 在前后端分离中的应用 [100%]
     CLOCK: [2017-12-04 Mon 22:48]--[2017-12-05 Tue 01:53] =>  3:05
 
 - [[https://zh.wikipedia.org/wiki/%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0-][CSRF 跨站请求伪造]] -> 重要操作不要用 GET；CSRF 保护措施（cookie 和 query 参数中带 csrf_token）
 
 
 ***** DONE 目前例子中实现的方案
+      CLOSED: [2018-01-08 Mon 18:22]
 1. 访问 http://A 时，前端检测是否有 token，没有 token 就重定向到 /oauth/authorize 页面
 2. 用户在 authorize 页面输入用户名和密码，如果验证成功，重定向到用户指定的 redirect_url 上。
    比如 /oauth/callback 上（这个页面是前端的一个页面）。（此时，页面是有 grant_code 的）
@@ -68,16 +96,15 @@ B 同理。
      CLOCK: [2018-01-04 Thu 11:00]--[2018-01-04 Thu 12:00] =>  1:00
 ZAE-386
 
-**** TODO oauth 支持获取 client 下所有的用户
+**** TODO [#C] oauth 支持获取 client 下所有的用户
 **** DONE 计算 P95 of task reserved time
      CLOSED: [2018-01-04 Thu 21:04]
      CLOCK: [2018-01-04 Thu 17:01]--[2018-01-04 Thu 21:03] =>  4:02
 
 percentileOfSeries 配合 gauge 使用
-<<<<<<< Updated upstream
-**** TODO 明确资源出错方是否生效
-**** TODO 周报补一下 task 链接
-**** TODO 离线任务滚动部署
+**** DONE 周报补一下 task 链接
+     CLOSED: [2018-01-08 Mon 18:28]
+**** TODO [#A] 离线任务滚动部署
     CLOCK: [2017-12-19 Tue 14:11]--[2017-12-19 Tue 19:44] =>  5:33
     CLOCK: [2017-12-19 Tue 14:09]--[2017-12-19 Tue 14:11] =>  0:02
     CLOCK: [2017-12-18 Mon 20:02]--[2017-12-18 Tue 20:30] =>  0:28
@@ -103,7 +130,6 @@ percentileOfSeries 配合 gauge 使用
 
 如果已经部署过 newbay 了
 |           | percent | t<10 gc | release canary | t>10 gc | total version |
-| --------  |  ------ | -----   | ------         | ------  |    ---------- |
 | initial   |       0 | Y       | N/A            | Y       |             1 |
 | releasing |   0-100 | N       | Y              | N       |             2 |
 | released  |   0-100 | N       | N              | N       |             2 |
@@ -167,30 +193,11 @@ set_version('Production', 'xxx', percent=20)  # 成功
 扩容的时候总不能两个都扩把？（其实两个都扩也没有多大问题把）
 
 ***** 兼容滚动部署 -> nothing need to do
-***** TODO 实现离线任务滚动部署
-**** 部署改进
-***** 日志方向
-现在的日志是一个 process 对应一个日志
-但理论上应该是一个 deploy 对应一个日志，然后日志分 process
-***** 概念方向
-canary -> alpha
-canary2 -> beta
-***** TODO 部署卡顿的问题
-***** TODO bay 和 newbay 概念上的区别，流程也有区别
-**** 个人反思：整理个人状态
+***** DONE 实现离线任务滚动部署
+      CLOSED: [2018-01-08 Mon 17:08]
+***** TODO review+修改
+      CLOCK: [2018-01-08 Mon 16:08]--[2018-01-08 Mon 16:48] =>  0:40
 
-***** 2017-12-21
-
-*最近状态不好？不好在哪些方面？*
-
-1. 工作效率低
-2. 但是时间花费不少
-3. 烦恼
-
-效率为啥低 ->
-有段时间，上午自己会研究平时遇到的问题
-有段时间，花了一些在折腾 emacs 上
-另外，要甩锅的地方，就是提个 MR，但是流程长。另外方案也不一样
 **** DONE oauth2 杂事
      CLOSED: [2017-12-28 Thu 08:56]
     CLOCK: [2017-12-20 Wed 13:40]--[2017-12-20 Wed 21:09] =>  7:29
@@ -198,5 +205,9 @@ canary2 -> beta
 ***** DONE oauth2 支持 redirect url wildcard
       CLOSED: [2017-12-28 Thu 08:56]
 ***** DONE 同步信息时使用批量接口
-**** TODO python3.6 for jessie
-     CLOCK: [2018-01-05 Fri 15:36]
+**** TODO [#B] python3.6 for jessie
+     CLOCK: [2018-01-05 Fri 15:36]--[2018-01-05 Fri 18:30] =>  2:54
+**** TODO [#A] 部署出错，确认资源方
+**** DONE 容器组回收策略文档
+     CLOSED: [2018-01-08 Mon 15:43]
+     CLOCK: [2018-01-08 Mon 13:49]--[2018-01-08 Mon 15:43] =>  1:54
