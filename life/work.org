@@ -20,6 +20,39 @@ PaaS、CI/CD
 2. pipeline script 写起来很恶心
 
 ** 工作备忘录
+**** DONE oauth 在前后端分离中的应用 [100%]                            :work:
+    CLOCK: [2017-12-04 Mon 22:48]--[2017-12-05 Tue 01:53] =>  3:05
+
+- [[https://zh.wikipedia.org/wiki/%E8%B7%A8%E7%AB%99%E8%AF%B7%E6%B1%82%E4%BC%AA%E9%80%A0-][CSRF 跨站请求伪造]] -> 重要操作不要用 GET；CSRF 保护措施（cookie 和 query 参数中带 csrf_token）
+
+
+***** DONE 目前例子中实现的方案
+1. 访问 http://A 时，前端检测是否有 token，没有 token 就重定向到 /oauth/authorize 页面
+2. 用户在 authorize 页面输入用户名和密码，如果验证成功，重定向到用户指定的 redirect_url 上。
+   比如 /oauth/callback 上（这个页面是前端的一个页面）。（此时，页面是有 grant_code 的）
+3. 前端用 grant_code 给后端，后端用这个 code 去 oauth 换 token。
+   换取成功后，后端把这个 token 保存起来。再把 token 返回给前端，前端存起来。
+4. 之后，后端每次都去校验前端传过来的 token
+
+***** DONE 一般的实现方案 [100%]
+1. 设置 cookie（有安全风险）（好像比较传统）
+2. 在 localStorage 中保存
+
+3. [X] token 方案 vs session 方案
+token 提高了安全性，避免了额 CSRF 攻击
+但是认为可以修改 token，万一踩狗屎了呢？
+
+- [X] 传统 token 方案 vs JWT
+jwt 是个自包含的东西，服务端不需要去查数据库来验证这个东西是否正确。
+人为不方便修改 jwt。
+
+***** DONE SSO 实现方案
+思路：[[https://segmentfault.com/a/1190000005357718]]
+
+A,B 是应用服务器。L 是认证服务器。
+客户端存一个 L 分发下去的 session_id。
+A 检测客户端是否有 session_id_a，没有让 L 去验证，验证完之后，设置一个 session_id_a。
+B 同理。
 
 **** DONE Performance Review
      DEADLINE: <2018-01-03 Wed>
@@ -41,3 +74,126 @@ ZAE-386
      CLOCK: [2018-01-04 Thu 17:01]--[2018-01-04 Thu 21:03] =>  4:02
 
 percentileOfSeries 配合 gauge 使用
+**** TODO 明确资源出错方是否生效
+**** TODO 周报补一下 task 链接
+**** TODO 离线任务滚动部署
+    CLOCK: [2017-12-19 Tue 14:11]--[2017-12-19 Tue 19:44] =>  5:33
+    CLOCK: [2017-12-19 Tue 14:09]--[2017-12-19 Tue 14:11] =>  0:02
+    CLOCK: [2017-12-18 Mon 20:02]--[2017-12-18 Tue 20:30] =>  0:28
+    CLOCK: [2017-12-15 Fri 17:10]--[2017-12-15 Fri 20:03] =>  2:53
+    CLOCK: [2017-12-14 Thu 17:00]--[2017-12-14 Thu 22:58] =>  5:58
+    CLOCK: [2017-12-13 Wed 16:52]--[2017-12-13 Web 19:00] =>  2:08
+    CLOCK: [2017-12-13 Wed 14:39]--[2017-12-13 Wed 16:40] =>  2:01
+
+***** DONE 滚动部署方案
+     CLOCK: [2017-12-22 Fri 11:00]--[2017-12-22 Fri 17:34] =>  6:34
+
+部署就是一个发布的过程。
+发包的过程，熟悉吗？发布和发包过程是不是比较类似呢？
+发布和代码变更过程是不是类似呢？也有点类似 Release/Canary/ReleaseCandidate
+
+****** 一些基本认识（基础逻辑）
+
+1. 一个版本的生命周期
+| 没上线    | 灰度中 | 上线了  | 下线了    |
+|-----------+--------+---------+-----------|
+| Candidate | Canary | Releasd | Destroyed |
+
+
+如果已经部署过 newbay 了
+|           | percent | t<10 gc | release canary | t>10 gc | total version |
+| --------  |  ------ | -----   | ------         | ------  |    ---------- |
+| initial   |       0 | Y       | N/A            | Y       |             1 |
+| releasing |   0-100 | N       | Y              | N       |             2 |
+| released  |   0-100 | N       | N              | N       |             2 |
+| obsolete  |       0 | N       | N/A            | Y       |             1 |
+
+
+构建 -> (Artifact) -> Candidate -> 测试环境 -> 办公室环境 -> 生产环境
+DEV -> Testing -> tarball -> alpha -> beta -> RC -> Release
+
+生产环境：-> 灰度 -> 上线。上线失败和成功
+
+1. *假设 Alpha 对应 Canary1，Beta 对应 Canary2*
+那么有三种环境：Testing/Office/Production
+每个版本有几个状态：Alpha(Canary1)/Beta(Canary2)/Release(Production) - RC(正在上线的版本)
+
+2. *canary 应该被看做百分比，而不应该看做 stage*
+看做 stage 有很多麻烦... 比如:
+set_stage_version('canary', 'xxx')  # 失败的设计
+set_version('Production', 'xxx', percent=20)  # 成功
+
+3. *一个 version 有多个 stage，stage 是 version 的属性*
+
+4. 上线状态和 Stage 概念是正交，还是咋样？
+
+一个版本需要状态有哪些： Ready -> Canary -> Releasing -> Released -> Outdated
+
+|            | 正在上线 | 已经上线   | 已经下线 |
+| production | RC       | Released   | Outdated |
+| canary     | ____     | Canary     | Outdated |
+| office     | ____     | office/(R) | Outdated |
+| testing    | ____     | testing(R) | Outdated |
+
+正交的缺点：
+1. 有些正交结果没有意义
+
+假设以后使用百分比：
+这种情况有点问题，不能判断哪个是生产环境。（没有办法明确的表明，当前处于灰度阶段）
+| v1 | PROD | 已经上线 | 20% |
+| v2 | PROD | 已经上线 | 80% |
+
+| v1 | PROD | 正在上线 | 30% |
+| v2 | PROD | 已经上线 | 70%  |
+
+假设
+| v1 | PROD | Canary   | 20% |
+| v2 | PROD | Released | 20% |
+
+| v1 | PROD | Releasing | 20% |
+| v2 | PROD | Released  | 80% |
+
+***** TODO 一个 stage 对应多个 version
+1. 理论上可以
+2. stage_version_map 干了啥？
+3. 存在两个 production version -> 没办法判断金丝雀版本是否与生产环境版本一样，没办法回滚金丝雀
+    1. 如果只有离线任务的话，就无所谓
+    2. 不会滚，并进行提醒
+4. 存在两个 production 版本，部署金丝雀时，不知道该缩放哪个版本
+    1. 只增不减（如果只有离线任务，也不会有这个问题）
+
+实际证明：不太可行。一个 stage 必须要有一个主版本，
+扩容的时候总不能两个都扩把？（其实两个都扩也没有多大问题把）
+
+***** 兼容滚动部署 -> nothing need to do
+***** TODO 实现离线任务滚动部署
+**** 部署改进
+***** 日志方向
+现在的日志是一个 process 对应一个日志
+但理论上应该是一个 deploy 对应一个日志，然后日志分 process
+***** 概念方向
+canary -> alpha
+canary2 -> beta
+***** TODO 部署卡顿的问题
+***** TODO bay 和 newbay 概念上的区别，流程也有区别
+**** 个人反思：整理个人状态
+
+***** 2017-12-21
+
+*最近状态不好？不好在哪些方面？*
+
+1. 工作效率低
+2. 但是时间花费不少
+3. 烦恼
+
+效率为啥低 ->
+有段时间，上午自己会研究平时遇到的问题
+有段时间，花了一些在折腾 emacs 上
+另外，要甩锅的地方，就是提个 MR，但是流程长。另外方案也不一样
+**** DONE oauth2 杂事
+     CLOSED: [2017-12-28 Thu 08:56]
+    CLOCK: [2017-12-20 Wed 13:40]--[2017-12-20 Wed 21:09] =>  7:29
+***** DONE 发邮件失败
+***** DONE oauth2 支持 redirect url wildcard
+      CLOSED: [2017-12-28 Thu 08:56]
+***** DONE 同步信息时使用批量接口

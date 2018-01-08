@@ -1,6 +1,6 @@
 #+SETUPFILE: ../theme-bigblow.setup
 
-* 懂事以来
+* 懂事以来 - 自己推动的
 
 *** DONE 学习 org mode [100%]                                          :self:
     CLOCK: [2018-01-04 Thu 15:36]--[2018-01-04 Thu 16:06] =>  0:30
@@ -224,98 +224,6 @@ http://www.youxiake.com/lines.html?id=20514
 ***** 雪乡 - 卡兹户外 - 3 日游 - 拼炕 - 4 人 - 男女分开
 ***** 雪乡 - 北方假期 - 3 日游 - 已满
 
-*** TODO 离线任务滚动部署
-    CLOCK: [2017-12-19 Tue 14:11]--[2017-12-19 Tue 19:44] =>  5:33
-    CLOCK: [2017-12-19 Tue 14:09]--[2017-12-19 Tue 14:11] =>  0:02
-    CLOCK: [2017-12-18 Mon 20:02]--[2017-12-18 Tue 20:30] =>  0:28
-    CLOCK: [2017-12-15 Fri 17:10]--[2017-12-15 Fri 20:03] =>  2:53
-    CLOCK: [2017-12-14 Thu 17:00]--[2017-12-14 Thu 22:58] =>  5:58
-    CLOCK: [2017-12-13 Wed 16:52]--[2017-12-13 Web 19:00] =>  2:08
-    CLOCK: [2017-12-13 Wed 14:39]--[2017-12-13 Wed 16:40] =>  2:01
-
-**** DONE 滚动部署方案
-     CLOCK: [2017-12-22 Fri 11:00]--[2017-12-22 Fri 17:34] =>  6:34
-
-部署就是一个发布的过程。
-发包的过程，熟悉吗？发布和发包过程是不是比较类似呢？
-发布和代码变更过程是不是类似呢？也有点类似 Release/Canary/ReleaseCandidate
-
-***** 一些基本认识（基础逻辑）
-
-1. 一个版本的生命周期
-| 没上线    | 灰度中 | 上线了  | 下线了    |
-|-----------+--------+---------+-----------|
-| Candidate | Canary | Releasd | Destroyed |
-
-
-如果已经部署过 newbay 了
-|           | percent | t<10 gc | release canary | t>10 gc | total version |
-| --------  |  ------ | -----   | ------         | ------  |    ---------- |
-| initial   |       0 | Y       | N/A            | Y       |             1 |
-| releasing |   0-100 | N       | Y              | N       |             2 |
-| released  |   0-100 | N       | N              | N       |             2 |
-| obsolete  |       0 | N       | N/A            | Y       |             1 |
-
-
-构建 -> (Artifact) -> Candidate -> 测试环境 -> 办公室环境 -> 生产环境
-DEV -> Testing -> tarball -> alpha -> beta -> RC -> Release
-
-生产环境：-> 灰度 -> 上线。上线失败和成功
-
-1. *假设 Alpha 对应 Canary1，Beta 对应 Canary2*
-那么有三种环境：Testing/Office/Production
-每个版本有几个状态：Alpha(Canary1)/Beta(Canary2)/Release(Production) - RC(正在上线的版本)
-
-2. *canary 应该被看做百分比，而不应该看做 stage*
-看做 stage 有很多麻烦... 比如:
-set_stage_version('canary', 'xxx')  # 失败的设计
-set_version('Production', 'xxx', percent=20)  # 成功
-
-3. *一个 version 有多个 stage，stage 是 version 的属性*
-
-4. 上线状态和 Stage 概念是正交，还是咋样？
-
-一个版本需要状态有哪些： Ready -> Canary -> Releasing -> Released -> Outdated
-
-|            | 正在上线 | 已经上线   | 已经下线 |
-| production | RC       | Released   | Outdated |
-| canary     | ____     | Canary     | Outdated |
-| office     | ____     | office/(R) | Outdated |
-| testing    | ____     | testing(R) | Outdated |
-
-正交的缺点：
-1. 有些正交结果没有意义
-
-假设以后使用百分比：
-这种情况有点问题，不能判断哪个是生产环境。（没有办法明确的表明，当前处于灰度阶段）
-| v1 | PROD | 已经上线 | 20% |
-| v2 | PROD | 已经上线 | 80% |
-
-| v1 | PROD | 正在上线 | 30% |
-| v2 | PROD | 已经上线 | 70%  |
-
-假设
-| v1 | PROD | Canary   | 20% |
-| v2 | PROD | Released | 20% |
-
-| v1 | PROD | Releasing | 20% |
-| v2 | PROD | Released  | 80% |
-
-***** TODO 一个 stage 对应多个 version
-1. 理论上可以
-2. stage_version_map 干了啥？
-3. 存在两个 production version -> 没办法判断金丝雀版本是否与生产环境版本一样，没办法回滚金丝雀
-    1. 如果只有离线任务的话，就无所谓
-    2. 不会滚，并进行提醒
-4. 存在两个 production 版本，部署金丝雀时，不知道该缩放哪个版本
-    1. 只增不减（如果只有离线任务，也不会有这个问题）
-
-实际证明：不太可行。一个 stage 必须要有一个主版本，
-扩容的时候总不能两个都扩把？（其实两个都扩也没有多大问题把）
-
-**** 兼容滚动部署 -> nothing need to do
-**** TODO 实现离线任务滚动部署
-
 *** Emacs 折腾
 **** DONE 折腾 Python IDE -> Elpy
     CLOCK: [2017-12-14 Thu 12:59]--[2017-12-14 Thu 23:00] => 10:01
@@ -339,7 +247,7 @@ perspeen 代替以前的 iTerm2 + Vim + Tmux + shell 的工作模式
 
 *** feeluown 流水线
 **** TODO 本地播放列表
-     CLOCK: [2018-01-07 Sun 15:36]
+     CLOCK: [2018-01-07 Sun 15:36]--[2018-01-07 Mon 18:42] =>  3:06
 *** oauth2 杂事
     CLOCK: [2017-12-20 Wed 13:40]--[2017-12-20 Wed 21:09] =>  7:29
 **** DONE 发邮件失败
@@ -397,5 +305,5 @@ to other process or worker
 ***** TODO 分布式任务队列最简单的起源在哪？
 ***** TODO 了解 AMQP？
 *** TODO 协程相关
-*** TODO 从各大野生 App 中体现
+*** TODO 从各大野生 App 中提现
 主要是 mojoy 这个平台，其他就是自行车平台
