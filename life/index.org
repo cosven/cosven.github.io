@@ -176,6 +176,12 @@ http://www.youxiake.com/lines.html?id=20514
 **** DONE Emacs workspace 管理
      CLOCK: [2017-12-18 Tue 20:35]--[2017-12-18 Tue 22:00] =>  1:25
 perspeen 代替以前的 iTerm2 + Vim + Tmux + shell 的工作模式
+**** DONE Emacs GUI 可以作为 Daemon 吗？
+     CLOSED: [2018-01-08 Mon 11:29]
+目前结论，不能。
+正确的姿势可能是：
+1. 在终端启动一个 Daemon
+2. emacsclient -c 打开一个 frame 以使用 GUI
 
 *** TODO [#A] feeluown-core 开发 [75%]
 **** DONE show handler 实现

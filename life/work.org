@@ -74,6 +74,7 @@ ZAE-386
      CLOCK: [2018-01-04 Thu 17:01]--[2018-01-04 Thu 21:03] =>  4:02
 
 percentileOfSeries 配合 gauge 使用
+<<<<<<< Updated upstream
 **** TODO 明确资源出错方是否生效
 **** TODO 周报补一下 task 链接
 **** TODO 离线任务滚动部署
@@ -197,3 +198,5 @@ canary2 -> beta
 ***** DONE oauth2 支持 redirect url wildcard
       CLOSED: [2017-12-28 Thu 08:56]
 ***** DONE 同步信息时使用批量接口
+**** TODO python3.6 for jessie
+     CLOCK: [2018-01-05 Fri 15:36]
