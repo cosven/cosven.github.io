@@ -1,4 +1,4 @@
-#+SETUPFILE: ../theme-bigblow.setup
+#+SETUPFILE: ./theme-bigblow.setup
 
 * 懂事以来 - 自己推动的
 
