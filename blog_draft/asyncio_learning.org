@@ -1,7 +1,12 @@
 * asyncio 学习及其应用
 
+** Tasks
+   :PROPERTIES:
+   :CUSTOM_ID: tasks
+   :END:
 - [ ] 为什么要学习 asyncio
 - [ ] asyncio vs goroutine？
+- [ ] gevent 模型？
 - [ ] 异步、同步、阻塞、非阻塞
 - [ ] yield from 是啥？
   - [ ] 生成器是啥？
@@ -16,6 +21,8 @@
 - [ ] 协程目前的实际应用
 - [ ] 文章 [[https://link.zhihu.com/?target=http%3A//blog.youxu.info/2014/12/04/coroutine/][协程的历史，现在和未来]]
 - [ ] 关于协程的一个[[https://www.zhihu.com/question/32218874][知乎提问]]
+
+** Body
 
 *教程们*
 
