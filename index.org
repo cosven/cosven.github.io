@@ -233,3 +233,6 @@ to other process or worker
 *** TODO 协程相关
 [[file:../blog_draft/asyncio_learning.org][learning notes]]
 #+INCLUDE: "../blog_draft/asyncio_learning.org::#tasks" :only-contents t
+
+*** 神奇的歌曲
+Dirás Que Estoy Loco-Miguel Ángel Muñoz
