@@ -19,6 +19,7 @@ PaaS、CI/CD
 1. 运维有点问题，docker images 占用机器内存
 2. pipeline script 写起来很恶心
 
+
 ** 工作备忘录
 *** miller 一些疑问 [0/1]
 - [ ] Miller 每个任务是一个线程，还是一个进程，还是什么东东？
@@ -104,7 +105,8 @@ ZAE-386
 percentileOfSeries 配合 gauge 使用
 **** DONE 周报补一下 task 链接
      CLOSED: [2018-01-08 Mon 18:28]
-**** TODO [#A] 离线任务滚动部署
+**** DONE [#A] 离线任务滚动部署
+     CLOSED: [2018-01-11 Thu 18:11]
     CLOCK: [2017-12-19 Tue 14:11]--[2017-12-19 Tue 19:44] =>  5:33
     CLOCK: [2017-12-19 Tue 14:09]--[2017-12-19 Tue 14:11] =>  0:02
     CLOCK: [2017-12-18 Mon 20:02]--[2017-12-18 Tue 20:30] =>  0:28
@@ -180,7 +182,8 @@ set_version('Production', 'xxx', percent=20)  # 成功
 | v1 | PROD | Releasing | 20% |
 | v2 | PROD | Released  | 80% |
 
-***** TODO 一个 stage 对应多个 version
+***** DONE 一个 stage 对应多个 version
+      CLOSED: [2018-01-11 Thu 18:11]
 1. 理论上可以
 2. stage_version_map 干了啥？
 3. 存在两个 production version -> 没办法判断金丝雀版本是否与生产环境版本一样，没办法回滚金丝雀
@@ -195,7 +198,8 @@ set_version('Production', 'xxx', percent=20)  # 成功
 ***** 兼容滚动部署 -> nothing need to do
 ***** DONE 实现离线任务滚动部署
       CLOSED: [2018-01-08 Mon 17:08]
-***** TODO review+修改
+***** DONE review+修改
+      CLOSED: [2018-01-11 Thu 18:11]
       CLOCK: [2018-01-08 Mon 16:08]--[2018-01-08 Mon 16:48] =>  0:40
 
 **** DONE oauth2 杂事
@@ -205,8 +209,83 @@ set_version('Production', 'xxx', percent=20)  # 成功
 ***** DONE oauth2 支持 redirect url wildcard
       CLOSED: [2017-12-28 Thu 08:56]
 ***** DONE 同步信息时使用批量接口
-**** TODO [#B] python3.6 for jessie
+**** DONE [#B] python3.6 for jessie
+     CLOSED: [2018-01-11 Thu 17:16]
+     CLOCK: [2018-01-11 Thu 11:12]--[2018-01-11 Thu 15:55] =>  4:43
+     CLOCK: [2018-01-10 Wed 11:12]--[2018-01-10 Wed 20:24] =>  9:12
      CLOCK: [2018-01-05 Fri 15:36]--[2018-01-05 Fri 18:30] =>  2:54
+***** DONE python3.6-dev 包？
+      CLOSED: [2018-01-11 Thu 15:55]
+***** DONE 各种编译选项都有啥用？
+      CLOSED: [2018-01-11 Thu 15:13]
+
+- *--with-fpectl*
+
+#+BEGIN_QUOTE
+allowing the user to turn on the generation of SIGFPE whenever
+any of the IEEE-754 exceptions Division by Zero, Overflow,
+or Invalid Operation occurs
+#+END_QUOTE
+
+- *--enable-loadable-sqlite-extensions*
+enabled in other building
+
+- *--enable-shared*
+generate libpython3.6.so in /usr/lib path, which is need for
+compile other python packages
+
+- *--with-system-ffi*
+other building also enable this
+
+- *--enable-optimizations*
+https://github.com/python/cpython#id5
+
+- *--with-dbmliborder=bdb:gdbm* 
+- *--with-computed-gotos*
+
+***** DONE 搞清楚各大 python 包有什么用？
+      CLOSED: [2018-01-11 Thu 15:55]
+***** DONE 搞清楚官方包是怎样打的？
+      CLOSED: [2018-01-11 Thu 15:55]
+
+#+BEGIN_SRC shell
+gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
+&& ./configure \
+--build="$gnuArch" \
+--enable-loadable-sqlite-extensions \
+--enable-shared \
+--enable-ipv6 \
+--with-system-expat \
+--with-system-ffi \
+--without-ensurepip \
+--enable-optimizations
+
+make
+sudo make install DESTDIR=/tmp/py3tmp
+
+sudo fpm -s dir -t deb -n zhihu-python3.6 -v 3.6.3 -C /tmp/py3tmp \
+-p python3.6_VERSION_ARCH.deb \
+-d libreadline-dev \
+-d libffi-dev \
+-d libssl-dev \
+-d libexpat-dev \
+-d libsqlite3-dev \
+-d dpkg-dev \
+-d tcl-dev \
+-d tk-dev \
+-x usr/local/bin/2to3
++END_SRC
+
+*python2 和 python3 包的一些可执行文件有冲突*
+fpm 指定 conflicts：可以指定和某个包冲突，提示用户卸载那个包
+fpm 可以指定 exclude 某个文件 =-x= 选项
+
+*python shell 不能使用 C-a*
+预先安装 libreadline-dev 再 configure
+ps: libreadline-dev 依赖了 libreadline6-dev
+
+*PGO 编译选项*
+
 **** TODO [#A] 部署出错，确认资源方
 **** DONE 容器组回收策略文档
      CLOSED: [2018-01-08 Mon 15:43]
