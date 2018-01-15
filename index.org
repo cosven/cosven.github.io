@@ -185,11 +185,16 @@ perspeen 代替以前的 iTerm2 + Vim + Tmux + shell 的工作模式
 
 更新：可以呀，而且简单的很 =(server-start)= 就搞定了
 
-*** TODO [#A] feeluown-core 开发 [75%]
-**** DONE show handler 实现
+*** TODO [#A] feeluown-core 开发 [57%]
+
+- [ ] 某一首歌在哪个电影里面出现过
+- [ ] 展示评论
+- [ ] show handler 实现
      CLOCK: [2017-12-18 Mon 20:00]--[2017-12-18 Mon 20:01] =>  0:01
 
 实现 show handler 的基础架构
+
+- [ ] 通过 wikipedia 获取这首歌的相关 wiki？
 
 **** TODO show artist 等功能
 **** DONE 确保 add/remove/list 等命令可用
@@ -198,9 +203,8 @@ perspeen 代替以前的 iTerm2 + Vim + Tmux + shell 的工作模式
 **** DONE user 相关操作
      CLOSED: [2018-01-06 Sun 23:35]
      CLOCK: [2018-01-06 Sat 17:08]--[2018-01-06 Sun 23:35] => 22:27
-
-*** feeluown 流水线
-**** TODO 本地播放列表
+**** DONE 本地播放列表
+     CLOSED: [2018-01-14 Sun 19:14]
      CLOCK: [2018-01-07 Sun 15:36]--[2018-01-07 Mon 18:42] =>  3:06
 *** TODO coursera 操作系统课程
 **** DONE 第一章：操作系统概述
