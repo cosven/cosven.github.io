@@ -1,0 +1,17 @@
+#+OPTIONS: ^:{}
+
+* Python Packaging Tool Comparison
+
+常见的几个概念：
+
+#+BEGIN_QUOTE
+easy_install: Easy Install is a python module (easy_install) bundled with setuptools
+that lets you automatically download, build, install, and manage Python packages.
+
+
+#+END_QUOTE
+
+
+  
+** Python 代码打包分发工具
+   
