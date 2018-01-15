@@ -1,7 +1,8 @@
 * Three Easy Pieces
 
 ** TODO 第 4 章：Processes
-*** TODO 进程状态及其状态转换
+*** DONE 进程状态及其状态转换
+    CLOSED: [2018-01-12 Fri 11:56]
 - 就绪：当进程已分配到除CPU以外的所有必要的资源，只要获得处理机便可立即执行
 - 执行：正在执行
 - 阻塞：等待 IO 或者信号等（这几种状态中，从阻塞只能变成就绪状态
@@ -12,6 +13,22 @@ Linux进程状态：
 - D (TASK_UNINTERRUPTIBLE)，不可中断的睡眠状态（kill -9 也杀不掉的那种
 - T (TASK_STOPPED or TASK_TRACED)，暂停状态或跟踪状态（比如 Ctrl-Z suspend SIGSTOP
 - Z (TASK_DEAD - EXIT_ZOMBIE)，退出状态，进程成为僵尸进
+
+*** TODO 同步机制
+**** 互斥问题
+打印机问题
+
+**** 同步问题
+生产者消费者问题
+
+** TODO 第 7 章：CPU 调度
+*** 几种调度算法
+1. 最短时间优先
+2. FIFO
+3. 最高优先级（抢占式、非抢占式）
+4. 多层反馈队列
+5. 高响应比优先
+6. 时间片 RR
 
 ** DONE 第 26 章：Concurrency: An Introduction [3/3]
 

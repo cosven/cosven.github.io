@@ -21,8 +21,8 @@ PaaS、CI/CD
 
 
 ** 工作备忘录
-*** miller 一些疑问 [0/1]
-- [ ] Miller 每个任务是一个线程，还是一个进程，还是什么东东？
+*** miller 一些疑问 [1/1]
+- [X] Miller 每个任务是一个线程，还是一个进程，还是什么东东？
   miller 会配合 gevent 来使用？
 
 *** 部署改进
@@ -98,6 +98,7 @@ B 同理。
 ZAE-386
 
 **** TODO [#C] oauth 支持获取 client 下所有的用户
+**** TODO [#C] 把机器人账号单独放一个组
 **** DONE 计算 P95 of task reserved time
      CLOSED: [2018-01-04 Thu 21:04]
      CLOCK: [2018-01-04 Thu 17:01]--[2018-01-04 Thu 21:03] =>  4:02
@@ -286,6 +287,7 @@ ps: libreadline-dev 依赖了 libreadline6-dev
 
 *PGO 编译选项*
 
+**** TODO [#B] pipenv vs buildout vs ...
 **** TODO [#A] 部署出错，确认资源方
 **** DONE 容器组回收策略文档
      CLOSED: [2018-01-08 Mon 15:43]

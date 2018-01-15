@@ -239,4 +239,7 @@ to other process or worker
 #+INCLUDE: "../blog_draft/asyncio_learning.org::#tasks" :only-contents t
 
 *** 神奇的歌曲
-Dirás Que Estoy Loco-Miguel Ángel Muñoz
+- Dirás Que Estoy Loco-Miguel Ángel Muñoz
+
+*** 哲学问题
+**** 文学素养？ 
