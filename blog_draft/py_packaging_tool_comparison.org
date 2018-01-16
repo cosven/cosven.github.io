@@ -2,7 +2,21 @@
 
 * Python Packaging Tool Comparison
 
-常见的几个概念：
+** 常见的几组概念
+
+*** distutils 和 setuptools
+
+- distutils 实现了分发 Python 包、扩展的机制，并提供相应工具支持，
+存在于 Python 标准库中（现在我们一般不会直接使用这个包）
+- setuptools 在 distutils 的基础上进行了增强和改进，其实一个突出的
+能力是它允许用户定义包的依赖，依赖其它哪些包
+
+[[https://docs.python.org/3/distributing/index.html][For more details.]]
+
+*** egg 和 wheel
+
+wheel 和 egg 是 Python 两种不同的打包格式。
+
 
 #+BEGIN_QUOTE
 easy_install: Easy Install is a python module (easy_install) bundled with setuptools
@@ -12,6 +26,58 @@ that lets you automatically download, build, install, and manage Python packages
 #+END_QUOTE
 
 
-  
 ** Python 代码打包分发工具
-   
+
+----------------------
+
+** Related Peps
+*** PEP 376
+这个 PEP 目标是提供一个管理系统上安装的包发行版 =(distribution)= 的标准基础设施，
+让其他安装、卸载包的工具是可以相互协同工作的。
+:LOGBOOK:
+目前没有想到一个完美的词语来翻译 distribution。
+只可意会，不能言传的感觉。
+:END:
+
+为了实现这个目标，该 PEP 提出一种新的格式来描述一个安装在系统上的分发。
+该 PEP 也描述了标准库的参考实现。
+
+这个 PEP 结合了 PEP 345，可以取代 PEP 262。
+
+**** 基础原理
+目前 Python 安装包发行版的方式存在两个问题：
+1. 安装方式太多，标准不一，各种工具不能协同工作
+2. 没有 API 可以获取已经安装的包的信息
+
+***** 目前包发行版的安装方式
+当前，在安装一个包的发行版时，其每个元素（文件）可以被放到不同的目录下。
+
+例如， =Distutils= 会把 Python 代码放到 =purelib= 目录下，
+在 unix-like 和 osx 中，即 lib\python2.6\site-packages 目录；对于
+Windows 来说，就是 Lib/site-packages 目录。
+
+另外， =Distutils= 的安装子命令 =install_egg_info= 会给每个包发行版
+加一个 .egg-info 文件加入到 =purelib= 目录。 
+
+举个例子：对于 =docutils= 这个发行版，它包含以下内容
+
+- docutils: The docutils package
+- roman.py: An extra module used by docutils
+- docutils-0.5-py26.egg-info: A file containing the distribution
+ metadata as described in PEP 314 . This file corresponds to the file
+ called PKG-INFO, built by the sdist command.
+
+一些可执行脚本，比如 =rst2html.py= ，被放到 Python 的 bin 目录。
+
+另外一个项目， =setuptools= 它有两种其它的格式来安装包发行版，叫做 EggFormats。
+包含以下内容：
+
+- 一个自包含的 =.egg= 目录。它的子目录 =EGG-INFO= 中的 =PKG-INFO= 文件
+包含所有的发行文件和发行元信息。setuptools 会在 =.egg= 目录创建
+其它文件作为元信息的补充。
+- 一个安装在 =site-packages= 目录的 =.egg-info= 目录，这里面包含了同样
+的 =EGG-INFO= 目录。
+
+setuptools 还会在 easy-install.pth 文件中为该包发行版加一个引用。
+
+***** 卸载包发行版
