@@ -1,7 +1,6 @@
 #+OPTIONS: ^:{}
 
 * Python Packaging Tool Comparison
-
 ** 常见的几组概念
 
 *** distutils 和 setuptools
@@ -16,15 +15,10 @@
 *** egg 和 wheel
 
 wheel 和 egg 是 Python 两种不同的打包格式。
+[[HTTps://packaging.python.org/discussions/wheel-vs-egg/][For more details: Wheel vs Egg]]
 
-
-#+BEGIN_QUOTE
-easy_install: Easy Install is a python module (easy_install) bundled with setuptools
-that lets you automatically download, build, install, and manage Python packages.
-
-
-#+END_QUOTE
-
+Wheel 目前被认为是 Python 用来构建二进制包和二进制打包的标准 [[https://www.python.org/dev/peps/pep-0427/#abstract][PEP]]。
+Egg 只是 setuptools 里面实现的一种格式，没有官方 PEP。
 
 ** Python 代码打包分发工具
 
@@ -81,3 +75,24 @@ Windows 来说，就是 Lib/site-packages 目录。
 setuptools 还会在 easy-install.pth 文件中为该包发行版加一个引用。
 
 ***** 卸载包发行版
+
+Distutils 没有提供卸载的命令。要想卸载一个包，需要手动删除文件，编辑 .pth 文件。 
+手动卸载问题很多，省略之。
+
+但这些工具有个共同特性：它们安装一个包的发行版时，它们都可以记录这些文件，
+以后删除的时候，就知道需要删除哪些东西了。
+
+此外，Pip 项目后来增加了一个卸载功能。它可以记录所有安装的文件。
+
+***** 这个 PEP 提出的方案
+
+- 一个新的 =.dist-info= 目录结构，灵感来自于 EggFormats 标准
+- =pkgutils= 包含新的 API 可以查询已经安装的包发行版的信息
+- 在 distutils 中添加了 =uninstall= 函数和 =uninstall= 脚本
+
+**** One .dist-info directory per installed distribution 
+:LOGBOOK:
+主要介绍这个目录包含哪些文件，这些文件有什么样的标准。
+:END:
+     
+**** 实现细节

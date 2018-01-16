@@ -288,6 +288,9 @@ ps: libreadline-dev 依赖了 libreadline6-dev
 *PGO 编译选项*
 
 **** TODO [#B] pipenv vs buildout vs ...
+     CLOCK: [2018-01-16 Tue 13:00]--[2018-01-16 Tue 14:00] =>  1:00
+     CLOCK: [2018-01-15 Tue 11:00]--[2018-01-15 Tue 17:38] =>  6:38
+     
 **** TODO [#A] 部署出错，确认资源方
 **** DONE 容器组回收策略文档
      CLOSED: [2018-01-08 Mon 15:43]
@@ -296,3 +299,9 @@ ps: libreadline-dev 依赖了 libreadline6-dev
 **** DONE 让 A/S 类业务加上金丝雀2
 **** DONE 上线金丝雀修改的 MR
 **** DONE 应用级别修改限制
+**** DONE nami 打指标
+     CLOCK: [2018-01-16 Tue 17:07]--[2018-01-16 Tue 20:07] =>  3:00
+**** MR review: hashring 
+     CLOCK: [2018-01-16 Tue 15:29]--[2018-01-16 Tue 16:29] =>  1:00
+     CLOCK: [2018-01-16 Tue 12:10]--[2018-01-16 Tue 12:40] =>  0:30
+     

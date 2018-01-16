@@ -185,6 +185,12 @@ perspeen 代替以前的 iTerm2 + Vim + Tmux + shell 的工作模式
 
 更新：可以呀，而且简单的很 =(server-start)= 就搞定了
 
+**** DONE 滚动设置
+     CLOCK: [2018-01-16 Tue 10:34]--[2018-01-16 Tue 11:34] =>  1:00
+
+=(setq next-screen-scroll-context-lines 10)=
+但是这个设置貌似并没有用。
+
 *** TODO [#A] feeluown-core 开发 [57%]
 
 - [ ] 某一首歌在哪个电影里面出现过
