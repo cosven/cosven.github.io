@@ -290,7 +290,7 @@ ps: libreadline-dev 依赖了 libreadline6-dev
 **** TODO [#B] pipenv vs buildout vs ...
      CLOCK: [2018-01-16 Tue 13:00]--[2018-01-16 Tue 14:00] =>  1:00
      CLOCK: [2018-01-15 Tue 11:00]--[2018-01-15 Tue 17:38] =>  6:38
-     
+
 **** TODO [#A] 部署出错，确认资源方
 **** DONE 容器组回收策略文档
      CLOSED: [2018-01-08 Mon 15:43]
@@ -305,3 +305,10 @@ ps: libreadline-dev 依赖了 libreadline6-dev
      CLOCK: [2018-01-16 Tue 15:29]--[2018-01-16 Tue 16:29] =>  1:00
      CLOCK: [2018-01-16 Tue 12:10]--[2018-01-16 Tue 12:40] =>  0:30
      
+**** DONE 2018-1-17 一天折腾
+     CLOCK: [2018-01-17 Wed 12:30]--[2018-01-17 Wed 18:02] =>  5:32
+- 讨论 nami celery
+- CI 上传包出了问题
+- 部署打点图表
+- oncall
+
