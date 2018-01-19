@@ -1,6 +1,14 @@
+#+SETUPFILE: ../theme-bigblow.setup
 #+OPTIONS: ^:{}
 
 * Python Packaging Tool Comparison
+
+- [ ] 符合社区发展方向
+- [ ] 这项技术本身是有用的
+- [ ] 开发者操作简单
+- [ ] 可重复
+
+
 ** 常见的几组概念
 
 *** distutils 和 setuptools
@@ -13,16 +21,66 @@
 [[https://docs.python.org/3/distributing/index.html][For more details.]]
 
 *** egg 和 wheel
-
 wheel 和 egg 是 Python 两种不同的打包格式。
-[[HTTps://packaging.python.org/discussions/wheel-vs-egg/][For more details: Wheel vs Egg]]
-
+[[https://packaging.python.org/discussions/wheel-vs-egg/][For more details: Wheel vs Egg]]
+[[https://github.com/pypa/wheel#why-not-egg][Why not eggs?]]
 Wheel 目前被认为是 Python 用来构建二进制包和二进制打包的标准 [[https://www.python.org/dev/peps/pep-0427/#abstract][PEP]]。
 Egg 只是 setuptools 里面实现的一种格式，没有官方 PEP。
 
 ** Python 代码打包分发工具
+*** buildout
+**** 常见的 buildout 一些使用问题
+***** buildout 蜜汁失败
+:LOGBOOK:
+Got chardet 3.0.4.
+While:
+  Installing app.
+
+An internal error occurred due to a bug in either zc.buildout or in a
+recipe being used:
+Traceback (most recent call last):
+  File "build/bdist.macosx-10.11-x86_64/egg/zc/buildout/buildout.py", line 1992, in main
+    getattr(buildout, command)(args)
+  File "build/bdist.macosx-10.11-x86_64/egg/zc/buildout/buildout.py", line 666, in install
+    installed_files = self[part]._call(recipe.install)
+  File "build/bdist.macosx-10.11-x86_64/egg/zc/buildout/buildout.py", line 1407, in _call
+    return f()
+  File "/data/apps/fringe/eggs/zc.recipe.egg-2.0.5-py2.7.egg/zc/recipe/egg/egg.py", line 257, in install
+    relative_paths=self._relative_paths,
+  File "build/bdist.macosx-10.11-x86_64/egg/zc/buildout/easy_install.py", line 1078, in scripts
+    for name in pkg_resources.get_entry_map(dist, 'console_scripts'):
+  File "build/bdist.macosx-10.11-x86_64/egg/pkg_resources/__init__.py", line 553, in get_entry_map
+    return get_distribution(dist).get_entry_map(group)
+  File "build/bdist.macosx-10.11-x86_64/egg/pkg_resources/__init__.py", line 2550, in get_entry_map
+    self._get_metadata('entry_points.txt'), self
+  File "build/bdist.macosx-10.11-x86_64/egg/pkg_resources/__init__.py", line 2280, in parse_map
+    for group, lines in data:
+  File "build/bdist.macosx-10.11-x86_64/egg/pkg_resources/__init__.py", line 2851, in split_sections
+    for line in yield_lines(s):
+  File "build/bdist.macosx-10.11-x86_64/egg/pkg_resources/__init__.py", line 2147, in yield_lines
+    for ss in strs:
+  File "build/bdist.macosx-10.11-x86_64/egg/pkg_resources/__init__.py", line 2475, in _get_metadata
+    if self.has_metadata(name):
+  File "build/bdist.macosx-10.11-x86_64/egg/pkg_resources/__init__.py", line 1443, in has_metadata
+    return self.egg_info and self._has(self._fn(self.egg_info, name))
+  File "build/bdist.macosx-10.11-x86_64/egg/pkg_resources/__init__.py", line 1804, in _has
+    return zip_path in self.zipinfo or zip_path in self._index()
+  File "build/bdist.macosx-10.11-x86_64/egg/pkg_resources/__init__.py", line 1684, in zipinfo
+    return self._zip_manifests.load(self.loader.archive)
+  File "build/bdist.macosx-10.11-x86_64/egg/pkg_resources/__init__.py", line 1623, in load
+    path = os.path.normpath(path)
+  File "/usr/local/lib/python2.7/posixpath.py", line 342, in normpath
+    initial_slashes = path.startswith('/')
+AttributeError: 'NoneType' object has no attribute 'startswith'
+:END:
+如果你想在项目中使用某个版本的 setuptools，基本是不可能的
+***** 命令失败了，构建却成功啦？
+buildout 运行命令失败会返回 0
 
 ----------------------
+
+*** dh-virtualenv
+[[https://www.nylas.com/blog/packaging-deploying-python/][nylas use dh-virtualenv]]
 
 ** Related Peps
 *** PEP 376
@@ -97,6 +155,33 @@ Distutils 没有提供卸载的命令。要想卸载一个包，需要手动删�
      
 **** 实现细节
 
+*** PEP 427
+** pkg_resources 模块
+[[http://setuptools.readthedocs.io/en/latest/pkg_resources.html][ref docs]]
+
+=pkg_resources= 模块提供了用于查找，內省，激活和使用已安装的
+ Python 分发版的运行时工具。
+
+部分容易混淆概念：
+#+BEGIN_QUOTE
+- environment: A collection of distributions potentially available
+ for importing, but not necessarily active.
+- working set: A collection of distributions actually available
+ for importing, as on sys.path.
+- release: A snapshot of a project at a particular point in time, 
+ denoted by a version identifier.
+- distribution: A file or files that represent a particular release.
+- A namespace package is a package that only contains other packages 
+ and modules, with no direct contents of its own.
+#+END_QUOTE
+
 ** FQA
 *** 打包时需要需要把 pyc 带入包内？
-pyc 跨平台，不跨 python 版本 
+pyc 跨平台，不跨 python 版本
+eggs 是会带 pyc 的
+
+#+BEGIN_QUOTE
+Wheel archives do not include .pyc files. Therefore, when the distribution only
+ contains Python files (i.e. no compiled extensions), and is compatible with
+ Python 2 and 3, it’s possible for a wheel to be “universal”, similar to an sdist.
+#+END_QUOTE

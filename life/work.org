@@ -288,6 +288,7 @@ ps: libreadline-dev 依赖了 libreadline6-dev
 *PGO 编译选项*
 
 **** TODO [#B] pipenv vs buildout vs ...
+     CLOCK: [2018-01-19 Fri 16:16]
      CLOCK: [2018-01-16 Tue 13:00]--[2018-01-16 Tue 14:00] =>  1:00
      CLOCK: [2018-01-15 Tue 11:00]--[2018-01-15 Tue 17:38] =>  6:38
 
@@ -312,3 +313,9 @@ ps: libreadline-dev 依赖了 libreadline6-dev
 - 部署打点图表
 - oncall
 
+**** DONE 机器人账号单独分组
+     CLOSED: [2018-01-19 Fri 10:47]
+oauth2-5
+**** TODO 大概搞懂 buildout 的原理
+     CLOCK: [2018-01-19 Fri 11:26]--[2018-01-19 Fri 16:09] =>  4:43
+     CLOCK: [2018-01-18 Fri 10:26]--[2018-01-18 Fri 20:26] => 10:00
