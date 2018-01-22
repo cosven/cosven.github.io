@@ -4,8 +4,9 @@
 
 ** 工程效率
 
-PaaS、CI/CD
+PaaS、CI/CD、微服务、serverless
 
+*** TODO CI 文档优化
 *** TODO 推广新版本包困难
 *** TODO 提高部署稳定性
 *** TODO 构建系统运维自动化
@@ -19,6 +20,27 @@ PaaS、CI/CD
 1. 运维有点问题，docker images 占用机器内存
 2. pipeline script 写起来很恶心
 
+*** 微服务
+
+**** 文章 - The Death of Microservice Madness in 2018
+     CLOCK: [2018-01-22 Mon 11:00]--[2018-01-22 Mon 12:00] =>  1:00
+[[http://www.dwmkerr.com/the-death-of-microservice-madness-in-2018/]]
+
+*讲了什么是微服务，微服务为什么流行？*
+独立部署-独立开发-独立扩容-可复用
+
+*为啥微服务之前没流行？*
+基础设施健全了
+
+*微服务有什么问题？*
+开发复杂度-运维复杂度-devops 复杂度-需要这方面专家-实际系统之间边界模糊
+-服务有状态-服务之前有数据交换-版本管理-分布式事务-
+
+*避免盲目使用微服务*
+团队大小-服务是否有状态-服务解决的问题是否是多个-依赖是否复杂-团队是否有专家
+
+*微服务不是一种架构*
+Component 化的一种实现
 
 ** 工作备忘录
 *** miller 一些疑问 [1/1]
@@ -288,7 +310,7 @@ ps: libreadline-dev 依赖了 libreadline6-dev
 *PGO 编译选项*
 
 **** TODO [#B] pipenv vs buildout vs ...
-     CLOCK: [2018-01-19 Fri 16:16]
+     CLOCK: [2018-01-19 Fri 16:16]--[2018-01-19 Mon 20:56] =>  4:40
      CLOCK: [2018-01-16 Tue 13:00]--[2018-01-16 Tue 14:00] =>  1:00
      CLOCK: [2018-01-15 Tue 11:00]--[2018-01-15 Tue 17:38] =>  6:38
 

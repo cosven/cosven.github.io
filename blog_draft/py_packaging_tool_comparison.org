@@ -8,7 +8,6 @@
 - [ ] 开发者操作简单
 - [ ] 可重复
 
-
 ** 常见的几组概念
 
 *** distutils 和 setuptools
@@ -161,11 +160,14 @@ Distutils 没有提供卸载的命令。要想卸载一个包，需要手动删�
 
 *** PEP 427
 *** PEP 405 Python Virtual Environments
-
 **** yy
 - 能不能打 zip 包，以及为什么？
+  没有说。看起来可以，只要 Python 的 base_prefix 相同，也就是只要
+  编译参数相同就可以了。
 - 会有什么规则？
 - 重写 shebang 是什么回事？
+  没有提及。不过确实有，为啥哩？
+  -> [[https://github.com/python/cpython/blob/master/Lib/distutils/command/build_scripts.py#L53][见 distutils 相关实现]]
 
 python 关键组成部分就是：动态链接库 + 可执行文件 + site 模块
 
@@ -178,6 +180,37 @@ python 关键组成部分就是：动态链接库 + 可执行文件 + site 模�
   拷贝一份，并手动将千变万化的标准库链接/拷贝到虚拟环境中，这样才能
   优雅的启动
 - PYTHONHOME 环境变量
+
+**** Specification
+
+*prefix*: The main collection of Python library modules is installed in the directory
+ prefix/lib/pythonX.Y while the platform independent header files
+ (all except pyconfig.h) are stored in prefix/include/pythonX.Y, 
+where X.Y is the version number of Python, for example 3.2.
+
+Python Binary + pyvenv.cfg + site-packages directory 构成一个虚拟环境
+
+***** 和系统 site-packages 隔离开来
+***** 创建虚拟环境
+- 新增一个模块，通过该模块可以创建虚拟环境
+- 提供命令选项：是否包含系统 site-packages；是否清空目标目录；可以在多个 path 下创建 venv
+- 提供一个 active 脚本，将 bin (scripts)目录加入到 PATH
+  （没有这个脚本，虚拟环境仍然可以正常工作
+***** sysconfig install schemes and user-site
+这个方案通过修改 sys.prefix 来确保包可以正常的安装到虚拟环境中，
+安装方法同 Python 是一样的。
+***** copy vs symlinks
+推荐 symlinks，Windows 和 osx framework builds 除外。
+使用 =--symlink= 选项
+***** 头文件
+修改 sysconfig 方案，头文件从相对于 base_prefix 的路径中去查找，而不是相对于 prefix。
+***** API
+**** 向后兼容
+- It is preferable to err on the side of greater isolation of
+  the virtual environment.
+- Virtualenv already modifies sys.prefix to point at the virtual 
+  environment, and in practice this has not been a problem.
+- No modification is required to setuptools/distribute.
 
 ** pkg_resources 模块
 [[http://setuptools.readthedocs.io/en/latest/pkg_resources.html][ref docs]]
