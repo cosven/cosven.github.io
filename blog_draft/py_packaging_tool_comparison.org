@@ -29,6 +29,8 @@ Egg 只是 setuptools 里面实现的一种格式，没有官方 PEP。
 
 ** Python 代码打包分发工具
 *** buildout
+buildout 或许早于 easy_install/pip
+
 **** 常见的 buildout 一些使用问题
 ***** buildout 蜜汁失败
 :LOGBOOK:
@@ -82,6 +84,8 @@ buildout 运行命令失败会返回 0
 *** dh-virtualenv
 [[https://www.nylas.com/blog/packaging-deploying-python/][nylas use dh-virtualenv]]
 
+*** how venv work?
+PEP 405 
 ** Related Peps
 *** PEP 376
 这个 PEP 目标是提供一个管理系统上安装的包发行版 =(distribution)= 的标准基础设施，
@@ -156,6 +160,25 @@ Distutils 没有提供卸载的命令。要想卸载一个包，需要手动删�
 **** 实现细节
 
 *** PEP 427
+*** PEP 405 Python Virtual Environments
+
+**** yy
+- 能不能打 zip 包，以及为什么？
+- 会有什么规则？
+- 重写 shebang 是什么回事？
+
+python 关键组成部分就是：动态链接库 + 可执行文件 + site 模块
+
+**** 动机
+- 依赖管理、隔离；更容易的安装和使用 Python 包
+- 现在的虚拟环境工具缺乏 Python 原生支持
+  rvirtualenv 没有将 Python 可执行文件拷贝到虚拟环境中，不能与
+  系统 site 目录很可靠的隔离
+  virtualenv 虽然拷贝了 Python 二进制，但是它需要将 site 模块
+  拷贝一份，并手动将千变万化的标准库链接/拷贝到虚拟环境中，这样才能
+  优雅的启动
+- PYTHONHOME 环境变量
+
 ** pkg_resources 模块
 [[http://setuptools.readthedocs.io/en/latest/pkg_resources.html][ref docs]]
 
