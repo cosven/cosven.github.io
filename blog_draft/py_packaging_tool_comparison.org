@@ -1,6 +1,208 @@
 #+SETUPFILE: ../theme-bigblow.setup
 #+OPTIONS: ^:{}
 
+* Python3 构建部署 - Use venv in production
+** 摘要
+在日常的 Python 开发中，社区开发者倾向于用 venv 进行环境隔离，使用
+[[https://pip.pypa.io/en/stable/user_guide/#requirements-files][requirements.txt]] （后来有 [[https://github.com/pypa/pipfile][Pipfile & Pipfile.lock]]） 锁定项目依赖版本，
+相应的有 [[https://github.com/pypa/pipenv][pipenv]] 工具可以把整个开发流程给串连起来。那能否将其应用于我们
+生产环境的构建部署呢？我们调研了 [[https://github.com/pantsbuild/pex][pex]], [[https://github.com/spotify/dh-virtualenv][dh-virtualenv]] 等可以打包虚拟环境的工具，
+最后提出一种可以在生产环境使用 venv 工作流的方法：构建时使用 pipenv 在应用
+根目录下创建虚拟环境；并根据项目的 Pipfile、Pipfile.lock 安装依赖到该
+虚拟环境中；最后将虚拟环境与其代码一起（打 tar 包）发布，然后进行部署。
+
+** 动机
+之前我们依赖 [[https://git.in.zhihu.com/ep/buildoutz][zhihu-buildout]] 工具对开发环境进行隔离、依赖版本锁定、代码打包等。
+虽然 buildout 在绝大部分场景能够较好的满足我们的需求，然而在使用过程中，
+我们遇到了一下零碎问题：系统环境隔离不彻底、工具本身使用理解难度相对偏高、
+与各开发工具集成困难、新人对此工具不够熟悉等零碎[[#buildout-cons][小问题]]，这是一方面。
+
+另一方面，近些年，Python 虚拟环境生态得到了较好的发展。社区已经有多年的使用和维护
+经验，虚拟环境的机制和相关工作流已经普遍被社区所接受。Python3 更是在标准库中包含了 venv 模块，
+可以很方便的创建一个轻量级的虚拟环境；社区也推出了 Pipfile 可以更加科学的管理
+项目依赖，而 pipenv 工具正好可以将这些技术串连起来，为用户提供了非常好的开发
+工作流。
+
+所以，如果能使用和社区更加接轨的工作流，大家开发效率可以得到提高，开发体验
+也会更好。
+
+** 细节
+我们大部分开发者已经可以很熟练的在本地使用 venv，Python 社区也有丰富的[[https://github.com/pypa/pipenv][文档及教程]]，
+我们这里不赘述 venv 相关使用方法。
+在生产环境中，我们大部分服务跑在 Docker 上，少量服务运行
+在物理机上。当服务只跑在 Docker 上的时候，我们只需要为项目构建一个 Docker Image，
+然后项目就能在线上运行。构建 Docker Image 的过程：
+
+1. 根据开发者在 [[http://lavie.zhdocs.io/en/latest/user_guides/getting_started.html#joker-yml][ =joker.yml= ]]中指定的 base image，我们为其启动一个容器
+2. 在容器中安装 joker.yml 中指定的系统依赖
+3. 接着，将项目代码拷贝到 =/data/apps/<app_name>= 目录下
+4. 然后运行 joker.yml 中指定的 build 相关命令
+5. 将容器变更 commit 到镜像中
+
+而如果一个服务需要运行在物理机，我们需要为项目打包：
+
+- 将这个应用根目录打成一个 tarball，命名为
+   =<build_id>-<commit_sha>-<app_name>.tar.gz= 并上传到 HDFS。
+
+当项目进行物理机部署的时候，我们需要从 HDFS 下载该 tarball 到
+ =/data/data/pkgs/= 目录，并将其解压，然后软链接到
+ =/data/apps/<app_name>= 目录
+
+如果我们在一个项目中创建一个虚拟环境，它可以被完整的打包吗？
+答案是肯定的， *一个虚拟环境是可以打包的，
+同时，我们也可以让一个虚拟环境在不同的机器上正常工作。*
+
+*** 对 Python 虚拟环境进行打包
+一个 Python 虚拟环境由 Python Binary、pyvenv.cfg 和 site-packages 目录组成。
+使用 Python3.6.3 模块 venv 创建一个虚拟环境，我们可以看到它的基本目录结构如下：
+#+BEGIN_SRC
+.venv
+├── bin
+├── include
+├── lib
+├── lib64 -> lib
+└── pyvenv.cfg
+#+END_SRC
+默认情况下，当我们创建完一个虚拟环境之后，在 bin 目录会有 pip executable，我们
+可以使用 =bin/pip= 将包安装到 =lib/pythonX.Y/site-packages= 目录下、包对应的
+executables 安装到 =bin/= 目录。如果包需要安装一些头文件，头文件会被安装在 
+=include/site/pythonX.Y/= 目录下。也就是说，我们是可以对虚拟环境打包的。
+更多虚拟环境技术细节请参考 [[https://www.python.org/dev/peps/pep-0405][PEP 405]]。
+
+在实践中，我们会发现 =bin/pip= 它的 shebang 是一个绝对路径，会指向同一目录的
+=bin/python= ，这其实是 distutils 的行为，我们可以看 [[https://github.com/python/cpython/blob/018e1b7aad8d1a33ee14aae5c466d581d31e2369/Lib/distutils/command/build_scripts.py#L53][ref]] 。也就是说，
+当我们移动虚拟环境的时候， =bin= 目录下的一些包的 executable 可能无法执行。
+不过这个问题是很好解决的，如上所说，在我们的实际使用中，我们项目在构建的时候
+和运行的时候，路径其实是一样的。另外，我们也根据 [[https://github.com/pypa/virtualenv/blob/master/virtualenv.py#L1611][virutalenv relocatable 的实现]]，
+单独提供了一个脚本可以根据当前修改 shebang，见 [[#fix-shebang-script][shebang 修复脚本]]（不过目前没有看到此必要性）。
+
+*** 使用 Pipfile 进行依赖管理
+截止目前，只有 Pip 是不支持 Pipfile 的，只有 Pipenv 对 Pipfile 做了
+良好的支持。Pipenv 和 Pipfile 的使用方法及其相关文档可以在 Github 上看到。
+
+值得注意的是：Pipenv 目前使用 virtualenv 而非 venv 来对虚拟进行创建
+以及管理。但不久之后，Pipenv 是会迁移到 venv 的，详见 [[https://github.com/pypa/pipenv/issues/15][#pipenv-issue-15]]。
+
+** 附
+*** buildout 的一些小问题
+:PROPERTIES:
+:CUSTOM_ID: buildout-cons
+:END:
+**** 与系统环境隔离不彻底
+当系统中有 click 1.0.0，而你在某个项目中使用 click 1.1.0。
+这时候，我们只有两种选择，要么卸载系统 click 包，要么在项目中
+使用 1.0.0 版本的 click。
+
+**** 与各开发工具集成困难
+大家经常会使用 Vim + AutoCompletion/xxxCompletion 或者
+ Emacs + elpy/xxx 等进行开发，这些工具往往不会检测 buildout 环境。
+这时，这些工具给我们带来的用户体验会大大降低。
+
+**** 不时有 setuptools 相关奇怪的问题
+比如 CI 构建时出现有这种 traceback
+#+BEGIN_SRC
+While:
+  Installing app.
+
+An internal error occurred due to a bug in either zc.buildout or in a
+recipe being used:
+Traceback (most recent call last):
+  File "build/bdist.macosx-10.11-x86_64/egg/zc/buildout/buildout.py", line 1992, in main
+    getattr(buildout, command)(args)
+  File "build/bdist.macosx-10.11-x86_64/egg/zc/buildout/buildout.py", line 666, in install
+    installed_files = self[part]._call(recipe.install)
+  File "build/bdist.macosx-10.11-x86_64/egg/zc/buildout/buildout.py", line 1407, in _call
+    return f()
+  File "/data/apps/fringe/eggs/zc.recipe.egg-2.0.5-py2.7.egg/zc/recipe/egg/egg.py", line 257, in install
+    relative_paths=self._relative_paths,
+  File "build/bdist.macosx-10.11-x86_64/egg/zc/buildout/easy_install.py", line 1078, in scripts
+    for name in pkg_resources.get_entry_map(dist, 'console_scripts'):
+  File "build/bdist.macosx-10.11-x86_64/egg/pkg_resources/__init__.py", line 553, in get_entry_map
+    return get_distribution(dist).get_entry_map(group)
+  File "build/bdist.macosx-10.11-x86_64/egg/pkg_resources/__init__.py", line 2550, in get_entry_map
+    self._get_metadata('entry_points.txt'), self
+  File "build/bdist.macosx-10.11-x86_64/egg/pkg_resources/__init__.py", line 2280, in parse_map
+    for group, lines in data:
+  File "build/bdist.macosx-10.11-x86_64/egg/pkg_resources/__init__.py", line 2851, in split_sections
+    for line in yield_lines(s):
+  File "build/bdist.macosx-10.11-x86_64/egg/pkg_resources/__init__.py", line 2147, in yield_lines
+    for ss in strs:
+  File "build/bdist.macosx-10.11-x86_64/egg/pkg_resources/__init__.py", line 2475, in _get_metadata
+    if self.has_metadata(name):
+  File "build/bdist.macosx-10.11-x86_64/egg/pkg_resources/__init__.py", line 1443, in has_metadata
+    return self.egg_info and self._has(self._fn(self.egg_info, name))
+  File "build/bdist.macosx-10.11-x86_64/egg/pkg_resources/__init__.py", line 1804, in _has
+    return zip_path in self.zipinfo or zip_path in self._index()
+  File "build/bdist.macosx-10.11-x86_64/egg/pkg_resources/__init__.py", line 1684, in zipinfo
+    return self._zip_manifests.load(self.loader.archive)
+  File "build/bdist.macosx-10.11-x86_64/egg/pkg_resources/__init__.py", line 1623, in load
+    path = os.path.normpath(path)
+  File "/usr/local/lib/python2.7/posixpath.py", line 342, in normpath
+    initial_slashes = path.startswith('/')
+AttributeError: 'NoneType' object has no attribute 'startswith'
+#+END_SRC
+
+
+
+----------------
+*** 修正 shebang 的脚本
+:PROPERTIES:
+:CUSTOM_ID: fix-shebang-script
+:END:
+#+BEGIN_SRC
+"""
+Usage
+-----
+
+.. code::
+
+    cd <app_root>
+    .venv/bin/python fix_shebang.py
+"""
+
+import os
+import re
+import sys
+
+
+first_line_re = re.compile('^#!.*python[0-9.]*([ \t].*)?$')
+
+
+def update_shebang():
+    bin_dir = os.path.dirname(sys.executable)
+    new_shebang = f'#!{bin_dir}/python'
+
+    for filename in os.listdir(bin_dir):
+        filepath = os.path.join(bin_dir, filename)
+        if not os.path.isfile(filepath):
+            # ignore subdirs, e.g. .svn ones.
+            continue
+        with open(filepath, 'rb') as f:
+            try:
+                lines = f.read().decode('utf-8').splitlines()
+            except UnicodeDecodeError:
+                # This is probably a binary program instead
+                # of a script, so just ignore it.
+                continue
+        if not lines:
+            continue
+        first_line = lines[0]
+        match = first_line_re.match(first_line)
+        if not match:
+            continue
+        with open(filepath, 'w') as f:
+            f.write('\n'.join([new_shebang] + lines[1:]))
+
+
+def main():
+    update_shebang()
+
+
+if __name__ == '__main__':
+    assert not sys.executable.startswith('/usr/local')
+    main()
+
+#+END_SRC
 * Python Packaging Tool Comparison
 
 - [ ] 符合社区发展方向
@@ -84,7 +286,15 @@ buildout 运行命令失败会返回 0
 [[https://www.nylas.com/blog/packaging-deploying-python/][nylas use dh-virtualenv]]
 
 *** how venv work?
-PEP 405 
+PEP 405? 见下面的笔记
+
+#+BEGIN_VERSE
+*why not pipenv?*
+https://github.com/pypa/pipenv/issues/15
+*why virtualenv need to create so much sumlinks for various modules?*
+pyvenv.cfg matters.
+#+END_VERSE
+
 ** Related Peps
 *** PEP 376
 这个 PEP 目标是提供一个管理系统上安装的包发行版 =(distribution)= 的标准基础设施，
