@@ -309,8 +309,9 @@ ps: libreadline-dev 依赖了 libreadline6-dev
 
 *PGO 编译选项*
 
-**** TODO [#B] pipenv vs buildout vs ...
-     CLOCK: [2018-01-23 Tue 10:59]
+**** DONE [#B] pipenv vs buildout vs ...
+     CLOSED: [2018-01-25 Thu 13:48]
+     CLOCK: [2018-01-23 Tue 10:59]--[2018-01-25 Thu 10:48] => 47:49
      CLOCK: [2018-01-22 Mon 13:34]--[2018-01-22 Mon 20:34] =>  7:00
      CLOCK: [2018-01-19 Fri 16:16]--[2018-01-19 Mon 20:56] =>  4:40
      CLOCK: [2018-01-16 Tue 13:00]--[2018-01-16 Tue 14:00] =>  1:00
@@ -343,3 +344,10 @@ oauth2-5
 **** TODO 大概搞懂 buildout 的原理
      CLOCK: [2018-01-19 Fri 11:26]--[2018-01-19 Fri 16:09] =>  4:43
      CLOCK: [2018-01-18 Fri 10:26]--[2018-01-18 Fri 20:26] => 10:00
+**** TODO Python __setstate__ 是干啥用的？
+**** TODO 查金丝雀报警的问题
+     CLOCK: [2018-01-25 Thu 14:08]--[2018-01-25 Thu 15:43] =>  1:35
+创建报警有重复或者超时的时候，会漏记一些报警。
+**** TODO app 级别的环境变量
+     CLOCK: [2018-01-25 Thu 15:58]
+
