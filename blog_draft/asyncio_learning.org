@@ -1,3 +1,11 @@
+#+title:     asyncio 学习及其应用
+#+HTML_HEAD: <link rel="stylesheet" title="Standard" href="https://orgmode.org/worg/style/worg.css" type="text/css">
+#+HTML_HEAD: <link rel="alternate stylesheet" title="Zenburn" href="https://orgmode.org/worg/style/worg-zenburn.css" type="text/css">
+#+HTML_HEAD: <link rel="alternate stylesheet" title="Classic" href="https://orgmode.org/worg/style/worg-classic.css" type="text/css">
+#+startup:    align fold nodlcheck hidestars oddeven intestate
+#+options:    H:3 num:nil toc:t \n:nil ::t |:t ^:t -:t f:t *:t tex:t d:(HIDE) tags:not-in-toc
+
+
 * asyncio 学习及其应用
 
 ** Tasks
@@ -6,14 +14,18 @@
    :END:
 - [ ] 为什么要学习 asyncio
 - [ ] asyncio vs goroutine？
-- [ ] gevent 模型？
-- [ ] 异步、同步、阻塞、非阻塞
-- [ ] yield from 是啥？
-  - [ ] 生成器是啥？
-  - [ ] 生成器能做什么特殊的事情吗？
+- [-] gevent 模型？
+  - [X] greenlet 是个啥？ /greenlet 就是协程/
+  - [ ] greenlet vs coroutine in Python3?
+- [X] 异步、同步、阻塞、非阻塞？
+  /同步、异步是一种消息通信机制/
+  /阻塞、非阻塞强调等待结果时的状态/
+- [-] yield from 是啥？
+  - [X] 生成器是啥？ /对延迟操作提供了支持/
+  - [X] 生成器能做什么特殊的事情吗？ /典型的是：处理大数据节省内存/
   - [ ] 手写一个 contextmanage 试试？
-  - [ ] yield from vs yield?
-- [ ] 生成器 vs 迭代器？
+  - [ ] yield from vs yield? 
+  - [X] 生成器 vs 迭代器？ /满足一定需求的东西就是迭代器/
 - [ ] select/poll, epoll？
 - [ ] 有了 asyncio 之后， python thread 还有任何优势吗？
 - [ ] 协程的历史，协程很古老，他曾经存在于 windows 3.2 和 早期的 JVM
@@ -31,9 +43,7 @@
 *** yield from vs yield
 yield from 相当于一个 delegator
 
-
 *** select/poll in practice
-
 
 #+BEGIN_SRC python
 #+END_SRC

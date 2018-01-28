@@ -1,0 +1,57 @@
+* How venv works?
+
+Python3 的虚拟环境是怎样工作的呢？以前我从来没想过这个问题。。。
+
+** 先来看个简单有趣的现象
+
+1. 将 python3 binary 拷贝到任意一个目录，然后执行它
+#+BEGIN_SRC sh :exports both
+rm -rf /tmp/venv_test  # 谨慎使用 rm -rf
+venvPath="/tmp/venv_test/"
+venvBinPath="$venvPath/bin"
+mkdir -p $venvBinPath
+pythonPath=`which python3`
+cp $pythonPath $venvBinPath
+"$venvBinPath/python3" -c "import time; print ('{} we can use time library'.format(time.time()))"
+#+END_SRC
+
+#+RESULTS:
+: 1517109656.858121 we can use time library
+
+2. 我们在 venv_test 目录创建一个 os.py
+#+BEGIN_SRC sh :exports both
+venvPath="/tmp/venv_test"
+venvBinPath="$venvPath/bin"
+touch $venvBinPath/os.py
+"$venvBinPath/python3" <<EOF
+import time
+import sys
+print(sys.prefix, sys.base_prefix)
+print ('{} we can use time library, too'.format(time.time()))
+OEF
+#+END_SRC
+
+#+RESULTS:
+: 1517109852.522617 we can use time library
+
+3. 我们在 venv_test 目录创建 lib/python3.6/os.py
+#+BEGIN_SRC sh :exports both
+rm -rf /tmp/venv_test/lib
+venvPath="/tmp/venv_test"
+venvBinPath="$venvPath/bin"
+venvLibPath="$venvPath/lib/python3.6"
+mkdir -p $venvLibPath
+touch $venvLibPath/os.py
+"$venvBinPath/python3" <<EOF
+import sys
+import time
+print(sys.prefix, '\n', sys.base_prefix)
+print ('{} we can use time library, too'.format(time.time()))
+EOF
+#+END_SRC
+
+#+RESULTS:
+
+
+** Python 是怎样运行的？
+大家都知道，Python 解释器是用 c 语言撸出来的。

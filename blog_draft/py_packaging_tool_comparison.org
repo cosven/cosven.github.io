@@ -1,7 +1,7 @@
 #+SETUPFILE: ../theme-bigblow.setup
 #+OPTIONS: ^:{}
 
-* Python Packaging 零碎
+* Python Packaging
 ** 相关 PEP
 *** PEP 376 Notes
 这个 PEP 目标是提供一个管理系统上安装的包发行版 =(distribution)= 的标准基础设施，
@@ -75,25 +75,7 @@ Distutils 没有提供卸载的命令。要想卸载一个包，需要手动删�
      
 **** 实现细节
 
-*** PEP 427
-** pkg_resources 模块
-[[http://setuptools.readthedocs.io/en/latest/pkg_resources.html][ref docs]]
-
-=pkg_resources= 模块提供了用于查找，內省，激活和使用已安装的
- Python 分发版的运行时工具。
-
-部分容易混淆概念：
-#+BEGIN_QUOTE
-- environment: A collection of distributions potentially available
- for importing, but not necessarily active.
-- working set: A collection of distributions actually available
- for importing, as on sys.path.
-- release: A snapshot of a project at a particular point in time, 
- denoted by a version identifier.
-- distribution: A file or files that represent a particular release.
-- A namespace package is a package that only contains other packages 
- and modules, with no direct contents of its own.
-#+END_QUOTE
+*** PEP 427 Notes
 
 ** FQA
 *** 打包时需要需要把 pyc 带入包内？

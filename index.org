@@ -81,6 +81,8 @@ artifact/type: static, tarball
 **** TODO 杭州有什么搞物联网/机器人厂？
 
 **** TODO 网易杭州有哪些工作？
+- [[https://www.lagou.com/jobs/3943966.html][Python 游戏服务端 3-5 年工作经验]]
+
 **** TODO 阿里有哪些工作？
 *** DONE 补充金丝雀回滚文档
 *** DONE 东北行调研

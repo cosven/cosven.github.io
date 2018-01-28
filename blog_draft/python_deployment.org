@@ -97,6 +97,7 @@ pipenv lock
 但不久之后，Pipenv 是会迁移到 venv 的，详见 [[https://github.com/pypa/pipenv/issues/15][#pipenv-issue-15]]。
 venv 和 virtualenv 的区别，PEP 405 中也有比较详尽的描述。
 
+
 ** 附录
 *** buildout 的一些小问题
 :PROPERTIES:
@@ -155,6 +156,8 @@ Traceback (most recent call last):
     initial_slashes = path.startswith('/')
 AttributeError: 'NoneType' object has no attribute 'startswith'
 #+END_SRC
+
+#+RESULTS:
 
 
 
