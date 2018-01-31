@@ -56,7 +56,7 @@ lib/python3.6/os.py 这个文件有什么黑魔法么？？请看下文。
 ** 神奇的 lib/pythonX.Y/os.py
 既然 Google 搜不到相关问题，我们只能自己动手了。
 
-使用代码搜索工具在 [[https://github.com/python/cpython/][cpython]] 项目中 grep 一下 os.py，我们可以发现 
+使用代码搜索工具在 [[https://github.com/python/cpython/][cpython]] 项目中 grep 一下 os.py，我们可以发现
 [[https://github.com/python/cpython/blob/master/Modules/getpath.c][Modules/getpath.c]] 文件中有相关描述，打开这个文件，我们可以看到文件第一行
 写着『Return the initial module search path』，看起来这东西会影响 Python
 的 import 机制，我们能不能从中找到 encoding 模块 import 失败的原因呢？
@@ -153,7 +153,7 @@ Python 就可以找到这个模块了，证实了我们上面的推测。
 都有属于该环境的 Python Binary 和一系列包，它和系统中的 Python 共享
 标准库。
 
-由于 Python 以前没有好的内置相关机制支持虚拟环境，所以 virtualnev 
+由于 Python 以前没有好的内置相关机制支持虚拟环境，所以 virtualnev
 等库实现起来都很糟心。就拿 virtualenv 来说，它把所有的标准库都软链接
 到虚拟环境中，还修改了 site 模块。（在上面的实验中，我们也有把 encodings 模块
 软链接到我们的 venv_test 目录下。）
