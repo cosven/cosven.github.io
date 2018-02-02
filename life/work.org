@@ -355,8 +355,8 @@ oauth2-5
 **** TODO [#A] app 级别的环境变量
      CLOCK: [2018-01-29 Mon 14:18]--[2018-01-29 Mon 19:58] =>  5:40
      CLOCK: [2018-01-25 Thu 15:58]--[2018-01-25 Mon 20:54] =>  4:56
-     
-**** TODO [#B] 给外包同学新建账号
+**** DONE [#B] 给外包同学新建账号
+     CLOSED: [2018-02-01 Thu 14:14]
 我们主要要解决的问题是什么？是安全问题，还是外包同学
 访问内部系统是否方便的问题？
 如果是安全问题，新方案也没有解决。
@@ -374,3 +374,14 @@ oauth2-5
 
 **** TODO 2.9 号关闭部署，发邮件，channel 同步
 **** TODO 离线任务滚动部署灰度
+**** DONE 简单了解 redux 是个啥东西？
+     CLOSED: [2018-02-01 Thu 15:19]
+     CLOCK: [2018-02-01 Thu 14:19]--[2018-02-01 Thu 15:19] =>  1:00
+这狗东西硬要说自己 Simple，结果文档里面到处都要人去看 Flux...
+
+- =Actions= are payloads of information that send data from your application to your store.
+- =Action creators= functions that create actions.
+- =Reducers= specify how the application's state changes in response to actions sent to the store.
+- =Store= 把上面几个东西结合到一起 -> 项目代码中的 @connect 就是这个东西的运用
+
+（真的 hold 不住...）
