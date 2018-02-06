@@ -120,7 +120,10 @@ B 同理。
 ZAE-386
 
 **** TODO [#C] oauth 支持获取 client 下所有的用户
-**** TODO [#C] 把机器人账号单独放一个组
+正确的姿势应该是允许所有人登录，然后在系统里面对其进行更细的权限控制。
+
+**** DONE [#C] 把机器人账号单独放一个组
+     CLOSED: [2018-02-05 Mon 17:51]
 **** DONE 计算 P95 of task reserved time
      CLOSED: [2018-01-04 Thu 21:04]
      CLOCK: [2018-01-04 Thu 17:01]--[2018-01-04 Thu 21:03] =>  4:02
@@ -263,7 +266,7 @@ other building also enable this
 - *--enable-optimizations*
 https://github.com/python/cpython#id5
 
-- *--with-dbmliborder=bdb:gdbm* 
+- *--with-dbmliborder=bdb:gdbm*
 - *--with-computed-gotos*
 
 ***** DONE 搞清楚各大 python 包有什么用？
@@ -328,7 +331,7 @@ ps: libreadline-dev 依赖了 libreadline6-dev
 **** DONE nami 打指标
      CLOCK: [2018-01-16 Tue 17:07]--[2018-01-16 Tue 20:07] =>  3:00
 **** MR review
-***** hashring 
+***** hashring
      CLOCK: [2018-01-16 Tue 15:29]--[2018-01-16 Tue 16:29] =>  1:00
      CLOCK: [2018-01-16 Tue 12:10]--[2018-01-16 Tue 12:40] =>  0:30
 
@@ -352,7 +355,8 @@ oauth2-5
 **** TODO 查金丝雀报警的问题
      CLOCK: [2018-01-25 Thu 14:08]--[2018-01-25 Thu 15:43] =>  1:35
 创建报警有重复或者超时的时候，会漏记一些报警。
-**** TODO [#A] app 级别的环境变量
+**** DONE [#A] app 级别的环境变量
+     CLOSED: [2018-02-05 Mon 17:51]
      CLOCK: [2018-01-29 Mon 14:18]--[2018-01-29 Mon 19:58] =>  5:40
      CLOCK: [2018-01-25 Thu 15:58]--[2018-01-25 Mon 20:54] =>  4:56
 **** DONE [#B] 给外包同学新建账号
@@ -385,3 +389,10 @@ oauth2-5
 - =Store= 把上面几个东西结合到一起 -> 项目代码中的 @connect 就是这个东西的运用
 
 （真的 hold 不住...）
+**** TODO 协助 newbay 迁移
+
+假设一个 unit 在 newbay 上存在 1 个版本：那么，nami 不需要管它 。
+
+假设一个 unit 在 newbay 上存在多个版本：
+这个 unit 势必是走 nami 部署过，那么，nami 知道线上是哪个版本。
+这时，nami 从 bay 获取这个 unit 所有的容器组，将非线上版本干掉。
