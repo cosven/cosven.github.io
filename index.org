@@ -194,6 +194,7 @@ perspeen 代替以前的 iTerm2 + Vim + Tmux + shell 的工作模式
 但是这个设置貌似并没有用。
 
 *** TODO [#A] feeluown-core 开发 [57%]
+    CLOCK: [2018-02-07 Wed 20:03]
 
 - [ ] 某一首歌在哪个电影里面出现过
 - [ ] 展示评论

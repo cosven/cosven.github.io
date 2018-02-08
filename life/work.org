@@ -263,7 +263,7 @@ other building also enable this
 - *--enable-optimizations*
 https://github.com/python/cpython#id5
 
-- *--with-dbmliborder=bdb:gdbm* 
+- *--with-dbmliborder=bdb:gdbm*
 - *--with-computed-gotos*
 
 ***** DONE 搞清楚各大 python 包有什么用？
@@ -328,7 +328,7 @@ ps: libreadline-dev 依赖了 libreadline6-dev
 **** DONE nami 打指标
      CLOCK: [2018-01-16 Tue 17:07]--[2018-01-16 Tue 20:07] =>  3:00
 **** MR review
-***** hashring 
+***** hashring
      CLOCK: [2018-01-16 Tue 15:29]--[2018-01-16 Tue 16:29] =>  1:00
      CLOCK: [2018-01-16 Tue 12:10]--[2018-01-16 Tue 12:40] =>  0:30
 
@@ -374,6 +374,7 @@ oauth2-5
 
 **** TODO 2.9 号关闭部署，发邮件，channel 同步
 **** TODO 离线任务滚动部署灰度
+     CLOCK: [2018-02-07 Wed 11:03]--[2018-02-07 Wed 19:03] =>  8:00
 **** DONE 简单了解 redux 是个啥东西？
      CLOSED: [2018-02-01 Thu 15:19]
      CLOCK: [2018-02-01 Thu 14:19]--[2018-02-01 Thu 15:19] =>  1:00
