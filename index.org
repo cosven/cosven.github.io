@@ -262,3 +262,9 @@ to other process or worker
 **** TODO 点赞系统
 **** TODO pubsub 实现
 >>>>>>> 72fdab062ac22b921d24face1be018f08ac29c6d
+*** TODO 朋友兴趣爱好等备忘 2333
+好记性不如烂笔头
+
+- [ ] 带酒酿 + 糍粑 + 红薯片？
+- [ ] 坛子菜可以带么？
+- [ ] xxx 红色的口红？������
