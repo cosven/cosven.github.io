@@ -193,9 +193,7 @@ perspeen 代替以前的 iTerm2 + Vim + Tmux + shell 的工作模式
 =(setq next-screen-scroll-context-lines 10)=
 但是这个设置貌似并没有用。
 
-*** TODO [#A] feeluown-core 开发 [57%]
-    CLOCK: [2018-02-07 Wed 20:03]
-
+*** TODO [#A] feeluown-core 开发 [80%]
 - [ ] 某一首歌在哪个电影里面出现过
 - [ ] 展示评论
 - [X] show handler 实现
@@ -206,7 +204,8 @@ perspeen 代替以前的 iTerm2 + Vim + Tmux + shell 的工作模式
 
 - [ ] 通过 wikipedia 获取这首歌的相关 wiki？
 
-**** TODO show artist 等功能
+**** DONE show artist 等功能
+     CLOSED: [2018-02-20 Tue 21:01]
 **** DONE 确保 add/remove/list 等命令可用
      CLOSED: [2018-01-06 Sat 17:07]
 
@@ -216,6 +215,11 @@ perspeen 代替以前的 iTerm2 + Vim + Tmux + shell 的工作模式
 **** DONE 本地播放列表
      CLOSED: [2018-01-14 Sun 19:14]
      CLOCK: [2018-01-07 Sun 15:36]--[2018-01-07 Mon 18:42] =>  3:06
+**** TODO emacs-fuo 完善
+     CLOCK: [2018-02-26 Mon 10:35]--[2018-02-26 Mon 11:00] =>  0:25
+
+- update melpa:MR
+
 *** TODO coursera 操作系统课程
 **** DONE 第一章：操作系统概述
 操作系统特征：共享、并发、随机、虚拟
@@ -255,7 +259,6 @@ to other process or worker
 *** 碎碎念
     CLOCK: [2018-01-17 Wed 10:00]--[2018-01-17 Wed 12:00] =>  2:00
 *** TODO 常见系统设计
-<<<<<<< HEAD
 *** TODO Python 2to3
 **** TODO 了解 Tox 工具
 =======
@@ -268,3 +271,14 @@ to other process or worker
 - [ ] 带酒酿 + 糍粑 + 红薯片？
 - [ ] 坛子菜可以带么？
 - [ ] xxx 红色的口红？������
+*** 日常阅读
+***** 为什么现在又流行服务端渲染html？
+      CLOCK: [2018-02-26 Mon 11:54]--[2018-02-26 Mon 12:04] =>  0:10
+
+为什么现在又流行服务端渲染html？ - 方应杭的回答 - 知乎
+https://www.zhihu.com/question/59578433/answer/326694511
+
+SSR(Server side rendering) 主要有两个好处：SEO 和首屏渲染。
+*** 超级碎碎念
+***** 资源收费
+谷歌云提供按秒计算的能力。另外，在它的价格文档里面，它会告诉用户一台虚拟机一个小时要收多少钱。
