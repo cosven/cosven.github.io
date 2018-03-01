@@ -119,9 +119,6 @@ B 同理。
      CLOCK: [2018-01-04 Thu 11:00]--[2018-01-04 Thu 12:00] =>  1:00
 ZAE-386
 
-**** TODO [#C] oauth 支持获取 client 下所有的用户
-正确的姿势应该是允许所有人登录，然后在系统里面对其进行更细的权限控制。
-
 **** DONE [#C] 把机器人账号单独放一个组
      CLOSED: [2018-02-05 Mon 17:51]
 **** DONE 计算 P95 of task reserved time
@@ -131,8 +128,7 @@ ZAE-386
 percentileOfSeries 配合 gauge 使用
 **** DONE 周报补一下 task 链接
      CLOSED: [2018-01-08 Mon 18:28]
-**** DONE [#A] 离线任务滚动部署
-     CLOSED: [2018-01-11 Thu 18:11]
+**** TODO [#A] 离线任务滚动部署
     CLOCK: [2017-12-19 Tue 14:11]--[2017-12-19 Tue 19:44] =>  5:33
     CLOCK: [2017-12-19 Tue 14:09]--[2017-12-19 Tue 14:11] =>  0:02
     CLOCK: [2017-12-18 Mon 20:02]--[2017-12-18 Tue 20:30] =>  0:28
@@ -140,29 +136,21 @@ percentileOfSeries 配合 gauge 使用
     CLOCK: [2017-12-14 Thu 17:00]--[2017-12-14 Thu 22:58] =>  5:58
     CLOCK: [2017-12-13 Wed 16:52]--[2017-12-13 Web 19:00] =>  2:08
     CLOCK: [2017-12-13 Wed 14:39]--[2017-12-13 Wed 16:40] =>  2:01
+    CLOCK: [2018-02-07 Wed 11:03]--[2018-02-07 Wed 19:03] =>  8:00
 
-***** DONE 滚动部署方案
-     CLOCK: [2017-12-22 Fri 11:00]--[2017-12-22 Fri 17:34] =>  6:34
-
-部署就是一个发布的过程。
-发包的过程，熟悉吗？发布和发包过程是不是比较类似呢？
-发布和代码变更过程是不是类似呢？也有点类似 Release/Canary/ReleaseCandidate
-
-****** 一些基本认识（基础逻辑）
+***** 一些基本认识（基础逻辑）
 
 1. 一个版本的生命周期
 | 没上线    | 灰度中 | 上线了  | 下线了    |
 |-----------+--------+---------+-----------|
 | Candidate | Canary | Releasd | Destroyed |
 
-
 如果已经部署过 newbay 了
-|           | percent | t<10 gc | release canary | t>10 gc | total version |
-| initial   |       0 | Y       | N/A            | Y       |             1 |
-| releasing |   0-100 | N       | Y              | N       |             2 |
-| released  |   0-100 | N       | N              | N       |             2 |
-| obsolete  |       0 | N       | N/A            | Y       |             1 |
-
+|          | percent | t<10 gc | release canary | t>10 gc |
+| initial  |       0 | Y       | N/A            | Y       |
+| rolling  |   0-100 | N       | Y              | N       |
+| released |   0-100 | N       | N              | N       |
+| obsolete |       0 | N       | N/A            | Y       |
 
 构建 -> (Artifact) -> Candidate -> 测试环境 -> 办公室环境 -> 生产环境
 DEV -> Testing -> tarball -> alpha -> beta -> RC -> Release
@@ -208,6 +196,13 @@ set_version('Production', 'xxx', percent=20)  # 成功
 | v1 | PROD | Releasing | 20% |
 | v2 | PROD | Released  | 80% |
 
+***** DONE 滚动部署方案
+     CLOCK: [2017-12-22 Fri 11:00]--[2017-12-22 Fri 17:34] =>  6:34
+
+部署就是一个发布的过程。
+发包的过程，熟悉吗？发布和发包过程是不是比较类似呢？
+发布和代码变更过程是不是类似呢？也有点类似 Release/Canary/ReleaseCandidate
+
 ***** DONE 一个 stage 对应多个 version
       CLOSED: [2018-01-11 Thu 18:11]
 1. 理论上可以
@@ -221,12 +216,17 @@ set_version('Production', 'xxx', percent=20)  # 成功
 实际证明：不太可行。一个 stage 必须要有一个主版本，
 扩容的时候总不能两个都扩把？（其实两个都扩也没有多大问题把）
 
-***** 兼容滚动部署 -> nothing need to do
 ***** DONE 实现离线任务滚动部署
       CLOSED: [2018-01-08 Mon 17:08]
 ***** DONE review+修改
       CLOSED: [2018-01-11 Thu 18:11]
       CLOCK: [2018-01-08 Mon 16:08]--[2018-01-08 Mon 16:48] =>  0:40
+
+***** 讨论旧版本只 scale down
+      CLOCK: [2018-02-26 Mon 11:36]--[2018-02-26 Mon 12:04] =>  0:28
+
+***** DONE 新的滚动部署策略实现
+      CLOCK: [2018-02-27 Tue 14:05]--[2018-02-27 Tue 23:00] =>  8:55
 
 **** oauth2 杂事
      CLOCK: [2018-02-26 Mon 11:22]--[2018-02-26 Mon 11:32] =>  0:10
@@ -350,9 +350,11 @@ ps: libreadline-dev 依赖了 libreadline6-dev
 **** DONE 机器人账号单独分组
      CLOSED: [2018-01-19 Fri 10:47]
 oauth2-5
-**** TODO 大概搞懂 buildout 的原理
+**** DONE 大概搞懂 buildout 的原理
      CLOCK: [2018-01-19 Fri 11:26]--[2018-01-19 Fri 16:09] =>  4:43
      CLOCK: [2018-01-18 Fri 10:26]--[2018-01-18 Fri 20:26] => 10:00
+基于 setuptools 重写了 easy_install
+
 **** TODO Python __setstate__ 是干啥用的？
 **** DONE 查金丝雀报警的问题并修复
      CLOSED: [2018-02-26 Mon 15:27]
@@ -380,12 +382,6 @@ oauth2-5
 会议结论：目前主要是要解决外包同学的使用问题。另外，使用每个外包同学
 使用各自的账号，出了问题，也更方便排查。其它的安全问题暂时没办法解决。
 
-**** TODO 2.9 号关闭部署，发邮件，channel 同步
-**** TODO 离线任务滚动部署灰度
-     CLOCK: [2018-02-07 Wed 11:03]--[2018-02-07 Wed 19:03] =>  8:00
-***** 旧版本只 scale down
-      CLOCK: [2018-02-26 Mon 11:36]--[2018-02-26 Mon 12:04] =>  0:28
-
 **** DONE 简单了解 redux 是个啥东西？
      CLOSED: [2018-02-01 Thu 15:19]
      CLOCK: [2018-02-01 Thu 14:19]--[2018-02-01 Thu 15:19] =>  1:00
@@ -397,7 +393,7 @@ oauth2-5
 - =Store= 把上面几个东西结合到一起 -> 项目代码中的 @connect 就是这个东西的运用
 
 （真的 hold 不住...）
-**** TODO 协助 newbay 迁移
+**** DONE 协助 newbay 迁移
 
 假设一个 unit 在 newbay 上存在 1 个版本：那么，nami 不需要管它 。
 

@@ -1,0 +1,65 @@
+* 偶尔会听说的编程语言的一些概念
+
+** 反射
+*** 概念定义
+reflection is the ability of a computer program to examine,
+ introspect, and modify its own structure and behavior at runtime.
+-- wikipedia
+
+*** 应用
+比如 Python 中：type, issubclass, getattr 等方法都是
+反射功能的体现。可以在运行时查看一个类、一个对象有什么属性和方法。
+使用 setattr 方法可以给一个对象增加一个方法。
+
+Java 中 Class.forName 方法也都是反射功能的体现。
+
+** 泛型
+*** 概念定义
+=泛型= 允许程序员在强类型程序设计语言中编写代码时使用一些以后才指定的类型，
+在实例化时作为参数指明这些类型。
+-- wikipedia
+
+比如 C++ 中有模板
+
+** 鸭子类型
+*** 概念定义
+duck typing is an application of the duck test in type safety.
+-- wikipedia
+
+鸭子测试：“当看到一只鸟走起来像鸭子、游泳起来像鸭子、叫起来也像鸭子，
+那么这只鸟就可以被称为鸭子。”
+
+*** 应用
+静态语言 Java 的反射机制可以达到鸭子类型的效果，[[https://stackoverflow.com/questions/1079785/whats-an-example-of-duck-typing-in-java][例子]]
+
+** lambda 表达式
+*** 概念理解
+我们把“一块代码”赋给了一个变量。而“这块代码”，或者说“这个被赋给一个变量的函数”，
+就是一个Lambda表达式。
+-- zhihu
+
+编程中提到的 lambda 表达式，通常是在需要一个函数，但是又不想费神去
+命名一个函数的场合下使用，也就是指匿名函数。
+-- zhihu
+
+** 闭包
+在计算机科学中，闭包（Closure）是词法闭包（Lexical Closure）的简称，
+是引用了自由变量的函数。这个被引用的自由变量将和这个函数一同存在，
+*即使已经离开了创造它的环境也不例外* 。所以，有另一种说法认为闭包是由
+函数和与其相关的引用环境组合而成的实体。
+-- wikipedia
+
+*** 应用
+1. 闭包使得局部变量在函数外被访问成为可能
+2. 闭包可以帮助避免了使用全局变量
+
+用 Python 举个例子：
+
+#+BEGIN_SRC python
+def a(x):
+    i = 0
+    def b():
+        print(i)
+    return b
+b()  # 输出 0
+#+END_SRC

@@ -220,6 +220,8 @@ perspeen 代替以前的 iTerm2 + Vim + Tmux + shell 的工作模式
 
 - update melpa:MR
 
+**** TODO pubsub 实现
+
 *** TODO coursera 操作系统课程
 **** DONE 第一章：操作系统概述
 操作系统特征：共享、并发、随机、虚拟
@@ -247,7 +249,7 @@ to other process or worker
 比如说，协程可以和分布式系统一起使用吗？推荐这么用吗？
 ***** TODO 分布式任务队列最简单的起源在哪？
 ***** TODO 了解 AMQP？
-*** TODO 协程相关
+*** TODO [#A] 协程相关
 [[file:../blog_draft/asyncio_learning.org][learning notes]]
 #+INCLUDE: "./blog_draft/asyncio_learning.org::#tasks" :only-contents t
 
@@ -259,17 +261,18 @@ to other process or worker
 *** 碎碎念
     CLOCK: [2018-01-17 Wed 10:00]--[2018-01-17 Wed 12:00] =>  2:00
 *** TODO 常见系统设计
-*** TODO Python 2to3
-**** TODO 了解 Tox 工具
-=======
 **** TODO 点赞系统
-**** TODO pubsub 实现
->>>>>>> 72fdab062ac22b921d24face1be018f08ac29c6d
+
+*** TODO [#A] Python 2to3
+    CLOCK: [2018-03-01 Thu 10:59]
+
+#+INCLUDE: "./blog_draft/python_2to3.org::#tasks" :only-contents t
+
 *** TODO 朋友兴趣爱好等备忘 2333
 好记性不如烂笔头
 
-- [ ] 带酒酿 + 糍粑 + 红薯片？
-- [ ] 坛子菜可以带么？
+- [X] 带酒酿 + 糍粑 + 红薯片？
+- [X] 坛子菜可以带么？
 - [ ] xxx 红色的口红？������
 *** 日常阅读
 ***** 为什么现在又流行服务端渲染html？
@@ -279,6 +282,34 @@ to other process or worker
 https://www.zhihu.com/question/59578433/answer/326694511
 
 SSR(Server side rendering) 主要有两个好处：SEO 和首屏渲染。
+
 *** 超级碎碎念
 ***** 资源收费
 谷歌云提供按秒计算的能力。另外，在它的价格文档里面，它会告诉用户一台虚拟机一个小时要收多少钱。
+*** 杂碎记录
+**** 朋友无脑沟通？
+***** 围观高老板面试
+      CLOCK: [2018-02-27 Tue 10:44]--[2018-02-27 Tue 11:44] =>  1:00
+**** aha，聊人生？
+***** 工作生活 with amy
+     CLOCK: [2018-02-27 Tue 12:10]--[2018-02-27 Tue 12:47] =>  1:47
+***** 生活工作 with 高老板
+     CLOCK: [2018-02-27 Tue 13:00]--[2018-02-27 Tue 13:50] =>  0:50
+*** 部署系统
+**** 一些概念
+- 金丝雀 /发布/ 是测试新代码是否正常工作的手段，对于比一次性全量上线。
+- 滚动 /部署/ 是是上线新代码的一种部署策略，对比于蓝绿部署。
+
+**** 关于部署的一些设计上的疑问？
+***** 如果线上存在多个版本，在进行下一次部署之前，是否需要将多余的版本清除？
+进行金丝雀发布时，我们需要让线上生产环境只保留一个版本。我们应该是需要
+保证线上的保留的这个版本是能正常工作的版本。
+但如果线上没有版本能正常工作呢（对于一个成熟的项目，基本不可能发生）？
+*** 构建系统
+**** Context
+build_id: app
+**** 关于 PaaS 是传元信息过来还是构建参数
+其实传元信息就意味着构建系统需要理解 PaaS
+
+现在实现方式是：传元信息。原因是 Jenkins 自带的 rebuild 功能
+没有走 API。

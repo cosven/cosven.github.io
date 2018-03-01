@@ -1,1 +1,61 @@
 * Python 2to3
+
+- 不要写不兼容 py4k 的代码
+
+** Tasks
+   :PROPERTIES:
+   :CUSTOM_ID: tasks
+   :END:
+
+- [ ] 了解 Tox 工具，是否适用于 Buildout
+- [ ] 能否保证新加入的代码是支持 Python3 的？
+
+** 迁移流程
+下面一段摘自 [[https://docs.python.org/3/howto/pyporting.html][官方文档]] ，中文部分是补充说明。
+#+BEGIN_SRC quote
+To make your project be single-source Python 2/3 compatible, the basic steps are:
+
+1. Only worry about supporting Python 2.7
+   我们应该都是 py27 的项目
+2. Make sure you have good test coverage (coverage.py can help; pip install coverage)
+   可以从 ZAE 上看到自己的项目测试覆盖率
+3. Learn the differences between Python 2 & 3
+   可以看这本书 -> http://python3porting.com/
+4. Use Futurize (or Modernize) to update your code (e.g. pip install future)
+   使用 __future__，不要用 six
+5. Use Pylint to help make sure you don’t regress on your Python 3 support (pip install pylint)
+   没什么好说的
+6. Use caniusepython3 to find out which of your dependencies are blocking your use of Python 3 (pip install caniusepython3)
+   使用这个工具检查自己依赖的库是否支持 py3k
+7. Once your dependencies are no longer blocking you, use continuous integration to make sure you stay compatible with Python 2 & 3 (tox can help test against multiple versions of Python; pip install tox)
+   在测试中集成 Tox 工具，让代码在 py27 和 py3k 环境下都能通过测试
+8. Consider using optional static type checking to make sure your type usage works in both Python 2 & 3 (e.g. use mypy to check your typing under both Python 2 & Python 3).
+   （可选）类型检查，进一步保证代码运行符合预期
+#+END_SRC
+
+
+
+** FAQ
+*** import 问题
+
+1. 在每个文件的上面都写这样一行代码
+   [[https://github.com/dropbox/stone/search?utf8=%E2%9C%93&q=mock&type=]]
+
+#+BEGIN_SRC python
+try:
+    # Works for Py 3.3+
+    from unittest.mock import Mock
+except ImportError:
+    # See https://github.com/python/mypy/issues/1153#issuecomment-253842414
+    from mock import Mock  # type: ignore
+#+END_SRC
+
+2. 写一个类似 base.py/helper.py
+   [[https://github.com/Supervisor/supervisor/blob/master/supervisor/tests/base.py]]
+
+*** future vs six?
+我们项目都是使用 Python2.7，所以使用 python-futurize。
+ref: [[http://python-future.org/faq.html#what-is-the-relationship-between-future-and-six][future 的 FAQ 里面有说]]。
+
+*** 什么时候可以从用 Python3 跑？
+测试覆盖率达到一定程度，并且能通过 2&3 测试。
