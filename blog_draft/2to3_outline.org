@@ -1,0 +1,33 @@
+* 2to3 大纲
+
+Python 2 一用就是 7 年，再过两年，Python 2 就会在全世界范围内退休。
+我们也是时候考虑宠幸下 Python 3 这个快 10 岁的宝宝了。
+
+在 Python 的官方文档中，其中有一页文档：[[https://docs.python.org/3/howto/pyporting.html][Porting Python 2 Code to Python 3]]，
+它专门介绍了怎样将代码从 Python 2 移植到 Python 3。它描述了迁移的基本流程，
+并且对迁移流程的每个步骤做了一些解释，推荐大家先去扫一眼。
+我们这个大纲则是结合官方迁移文档，根据我乎的具体情况，一方面，
+对官方推荐流程简化；另一方面，对官方写的比较抽象或者模棱两可的东西进行具体化，
+并提供相关参考资料。
+
+** 移植的一般步骤
+我们用的是 2.7，迁移对我们来说是一件非常容易的事情。
+我们在社区或者一些个人博客上，能看到许多 Python3porting 的资料，
+其中很大部分都会考虑一个假设：读者仍然在使用 Python 2.5 或者
+以下版本，于是，它可能会讲很多复杂奇怪的 case，讲的你头大，
+也许它还会给你推荐 [[http://six.readthedocs.org/][six]] 库。这些都不是给我们看的，我们只需要把下面几步做做好就行了。
+
+*** 一、提高测试覆盖率
+如果应用已经接入了 CI 测试覆盖率，那么你可以在 ZAE 上了解应用的单元测试覆盖率。
+如果还没有接入，可以参考 [[http://lavie.zhdocs.io/en/latest/user_guides/customize_jokeryml.html#id2][CI 测试覆盖率文档]]，进行接入。
+使用 Boring 测试框架的项目，可以参考 [[https://git.in.zhihu.com/zhihu/question-and-answer][QA 项目]] 的配置，方便的接入。
+另外，也可以考虑使用 [[https://coverage.readthedocs.io/en/coverage-4.5.1/][coverage.py]]。
+
+*** 二、学习 Python 2&3 之间的区别
+从这一秒开始，我们在添加或者修改代码的时候就可以注意，尽量让新增的代码
+在 2&3 环境下都能正常 work。
+
+一些关于 Python 2&3 区别的参考资料：
+
+
+- 《Supporting Python 3: An in-depth guide》 [[http://python3porting.com/]]

@@ -1,16 +1,6 @@
 * Python 2to3
 
-- 不要写不兼容 py4k 的代码
-
-** Tasks
-   :PROPERTIES:
-   :CUSTOM_ID: tasks
-   :END:
-
-- [ ] 了解 Tox 工具，是否适用于 Buildout
-- [ ] 能否保证新加入的代码是支持 Python3 的？
-
-** 迁移流程
+** 迁移大纲
 下面一段摘自 [[https://docs.python.org/3/howto/pyporting.html][官方文档]] ，中文部分是补充说明。
 #+BEGIN_SRC quote
 To make your project be single-source Python 2/3 compatible, the basic steps are:
@@ -33,7 +23,9 @@ To make your project be single-source Python 2/3 compatible, the basic steps are
    （可选）类型检查，进一步保证代码运行符合预期
 #+END_SRC
 
+** 本地开发
 
+** 构建部署
 
 ** FAQ
 *** import 问题
@@ -59,3 +51,12 @@ ref: [[http://python-future.org/faq.html#what-is-the-relationship-between-future
 
 *** 什么时候可以从用 Python3 跑？
 测试覆盖率达到一定程度，并且能通过 2&3 测试。
+
+** Tasks
+   :PROPERTIES:
+   :CUSTOM_ID: tasks
+   :END:
+
+- [ ] [#A] 迁移到底需要哪些方面的问题？
+- [ ] 了解 Tox 工具，是否适用于 Buildout
+- [ ] 能否保证新加入的代码是支持 Python3 的？

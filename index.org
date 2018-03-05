@@ -2,6 +2,13 @@
 
 * 懂事以来 - 自己推动的
 
+*** 学习姿势
+1. python dev mail-list
+2. python pep
+3. paper
+4. hackernews and github trending
+5. best practices
+
 *** DONE 学习 org mode [100%]                                          :self:
     CLOCK: [2018-01-04 Thu 15:36]--[2018-01-04 Thu 16:06] =>  0:30
     CLOCK: [2017-12-04 Mon 10:47]--[2017-12-04 Mon 12:14] =>  1:17
@@ -264,7 +271,7 @@ to other process or worker
 **** TODO 点赞系统
 
 *** TODO [#A] Python 2to3
-    CLOCK: [2018-03-01 Thu 10:59]
+    CLOCK: [2018-03-01 Thu 10:59]--[2018-03-01 Mon 18:32] =>  7:33
 
 #+INCLUDE: "./blog_draft/python_2to3.org::#tasks" :only-contents t
 
@@ -313,3 +320,11 @@ build_id: app
 
 现在实现方式是：传元信息。原因是 Jenkins 自带的 rebuild 功能
 没有走 API。
+**** TODO pip 的缓存逻辑
+*** 功能开关、配置、A/B 测试
+
+facebook 那篇文章最主要的还是配置，关于 A/B Test 涉及比较少。关于 A/B Test 目前多是参考 google 这篇论文
+https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/36500.pdf
+
+ABTest / 配置管理 / 功能开关体系这篇 paper 写的最好
+http://sigops.org/sosp/sosp15/current/2015-Monterey/printable/008-tang.pdf
