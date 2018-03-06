@@ -1,3 +1,6 @@
+#+TITLE: 2to3 大纲
+#+OPTIONS: ^:{}, num:nil
+
 * 2to3 大纲
 
 Python 2 一用就是 7 年，再过两年，Python 2 就会在全世界范围内退休。
@@ -11,11 +14,12 @@ Python 2 一用就是 7 年，再过两年，Python 2 就会在全世界范围�
 并提供相关参考资料。
 
 ** 移植的一般步骤
-我们用的是 2.7，迁移对我们来说是一件非常容易的事情。
-我们在社区或者一些个人博客上，能看到许多 Python3porting 的资料，
+我们用的是 Python 2.7，迁移对我们来说是一件非常容易的事情。
+
+注：我们在社区或者一些个人博客上，能看到许多 Python3porting 的资料，
 其中很大部分都会考虑一个假设：读者仍然在使用 Python 2.5 或者
-以下版本，于是，它可能会讲很多复杂奇怪的 case，讲的你头大，
-也许它还会给你推荐 [[http://six.readthedocs.org/][six]] 库。这些都不是给我们看的，我们只需要把下面几步做做好就行了。
+以下版本。于是，它可能会讲很多复杂奇怪的 case；它可能还会给你推荐 [[http://six.readthedocs.org/][six]] 库等。
+这些资料我们很大可能是用不上的。
 
 *** 一、提高测试覆盖率
 如果应用已经接入了 CI 测试覆盖率，那么你可以在 ZAE 上了解应用的单元测试覆盖率。
@@ -29,5 +33,12 @@ Python 2 一用就是 7 年，再过两年，Python 2 就会在全世界范围�
 
 一些关于 Python 2&3 区别的参考资料：
 
+- 1 分钟了解 Python3 和 Python2 最大区别系列（理论篇）
+  - [[https://wiki.python.org/moin/Python2orPython3#What_are_the_differences.3F][Python2orPython3#What_are_the_differences]]
+  - [[https://snarky.ca/why-python-3-exists/][Why Python3 Exists]]
 
-- 《Supporting Python 3: An in-depth guide》 [[http://python3porting.com/]]
+- 从现在开始写 2&3 兼容的代码（实践篇）
+  - [[http://python-future.org/compatible_idioms.html][Writing Python 2-3 compatible code]]
+
+- 常见 2&3 不兼容的地方（实践篇）
+  - [[http://python3porting.com/problems.html][Common migration problems]]
