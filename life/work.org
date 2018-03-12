@@ -291,7 +291,7 @@ gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
 make
 sudo make install DESTDIR=/tmp/py3tmp
 
-sudo fpm -s dir -t deb -n zhihu-python3.6 -v 3.6.3 -C /tmp/py3tmp \
+sudo fpm -s dir -t deb -n python3.6 -v 3.6.3 -C /tmp/py3tmp \
 -p python3.6_VERSION_ARCH.deb \
 -d libreadline-dev \
 -d libffi-dev \
@@ -451,3 +451,11 @@ artifact/type: static, tarball
 
 
 [[https:https://mdn.mozillademos.org/files/13785/HTTPRedirect.png][redirect 流程图]]
+**** 超级碎碎念
+***** 资源收费
+谷歌云提供按秒计算的能力。另外，在它的价格文档里面，它会告诉用户一台虚拟机
+一个小时要收多少钱。
+
+***** Oauth2 创建账号 + lens 问题
+      CLOCK: [2018-03-12 Mon 14:50]--[2018-03-12 Mon 15:33] =>  0:43
+https://xxx.slack.com/archives/D5EK0EQTX/p1520836061000112
