@@ -408,3 +408,46 @@ oauth2-5
 
 缓存机制好像没有生效，但是构建速度非常快。
 现在都是用 wheel，从 HDFS 或者 pypi 上拉，已经差不多了。
+
+**** TODO oauth-LDAP posixAccount
+**** TODO oauth 修改密码，不能重复
+**** DONE 支持 HDFS [4/4]                                              :work:
+***** DONE CI 传输 s3 URL
+     CLOCK: [2017-12-05 Tue 15:45]--[2017-12-05 Tue 17:59] =>  2:14
+     CLOCK: [2017-12-05 Tue 10:49]--[2017-12-05 Tue 15:33] =>  4:44
+     CLOCK: [2017-12-04 Mon 14:12]--[2017-12-04 Mon 15:00] =>  0:48
+
+***** DONE 研究容器 DNS 解析失败的问题
+     CLOCK: [2017-12-05 Tue 15:05]--[2017-12-05 Tue 20:05] =>  5:00
+1. 控制变量法
+2. route 的作用：route 是 IP 层面的东西；而 DNS 解析是 UDP 层面的东西。
+   - IP 是网络层：看 route
+   - TCP/UDP 是传输层：dns 解析等
+3. netstat 的一个应用
+   =udp    0      0 0.0.0.0:53    0.0.0.0:*   1434/dnsmasq=
+   好像没啥好说的
+
+***** DONE 开发生产环境均可以访问 HDFS
+     CLOCK: [2017-12-06 Wed 14:00]--[2017-12-06 Wed 18:02] =>  4:02
+1. HTTP status code: 307 vs 303
+307 接受 POST/PUT 等请求
+303 会建议你转成 GET 请求
+
+2. Nginx 可以自动转发 307 请求吗？
+   可以，一种方案：https://serverfault.com/a/792035
+
+3. nginx 可以配置 standby upstream 吗？
+
+***** DONE 部署系统兼容 HDFS 方案
+     CLOCK: [2017-12-06 Wed 18:05]--[2017-12-06 Wed 19:23] =>  1:18
+
+嗅觉：一个函数太长，应该有问题；引入的依赖太多或者太大，应该是有问题的。大概是这样吧...3
+
+1. 放在 model 下，要嵌套两层概念：
+artifact/storage: aws, hdfs
+artifact/type: static, tarball
+
+2. HDFS/AWS 保持相同的方法
+
+
+[[https:https://mdn.mozillademos.org/files/13785/HTTPRedirect.png][redirect 流程图]]

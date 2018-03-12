@@ -9,6 +9,25 @@
 4. hackernews and github trending
 5. best practices
 
+*** 神奇的歌曲
+- Dirás Que Estoy Loco-Miguel Ángel Muñoz
+
+*** 日常阅读
+**** 为什么现在又流行服务端渲染html？
+      CLOCK: [2018-02-26 Mon 11:54]--[2018-02-26 Mon 12:04] =>  0:10
+
+为什么现在又流行服务端渲染html？ - 方应杭的回答 - 知乎
+https://www.zhihu.com/question/59578433/answer/326694511
+
+SSR(Server side rendering) 主要有两个好处：SEO 和首屏渲染。
+
+**** 微服务和 SOA 的区别
+SOA 强调服务重用；多个服务可能会共享存储。
+微服务强调解耦；互不影响，存储独立。
+
+
+---------------------
+
 *** DONE 学习 org mode [100%]                                          :self:
     CLOCK: [2018-01-04 Thu 15:36]--[2018-01-04 Thu 16:06] =>  0:30
     CLOCK: [2017-12-04 Mon 10:47]--[2017-12-04 Mon 12:14] =>  1:17
@@ -28,47 +47,6 @@
      CLOCK: [2017-12-13 Wed 11:05]--[2017-12-13 Wed 11:10] =>  0:05
 用 c 语言实现解决 pta 那个 [[https://pintia.cn/problem-sets/16/problems/708][问题]]
 
-*** DONE 支持 HDFS [4/4]                                               :work:
-**** DONE CI 传输 s3 URL
-     CLOCK: [2017-12-05 Tue 15:45]--[2017-12-05 Tue 17:59] =>  2:14
-     CLOCK: [2017-12-05 Tue 10:49]--[2017-12-05 Tue 15:33] =>  4:44
-     CLOCK: [2017-12-04 Mon 14:12]--[2017-12-04 Mon 15:00] =>  0:48
-
-**** DONE 研究容器 DNS 解析失败的问题
-     CLOCK: [2017-12-05 Tue 15:05]--[2017-12-05 Tue 20:05] =>  5:00
-1. 控制变量法
-2. route 的作用：route 是 IP 层面的东西；而 DNS 解析是 UDP 层面的东西。
-   - IP 是网络层：看 route
-   - TCP/UDP 是传输层：dns 解析等
-3. netstat 的一个应用
-   =udp    0      0 0.0.0.0:53    0.0.0.0:*   1434/dnsmasq=
-   好像没啥好说的
-
-**** DONE 开发生产环境均可以访问 HDFS
-     CLOCK: [2017-12-06 Wed 14:00]--[2017-12-06 Wed 18:02] =>  4:02
-1. HTTP status code: 307 vs 303
-307 接受 POST/PUT 等请求
-303 会建议你转成 GET 请求
-
-2. Nginx 可以自动转发 307 请求吗？
-   可以，一种方案：https://serverfault.com/a/792035
-
-3. nginx 可以配置 standby upstream 吗？
-
-**** DONE 部署系统兼容 HDFS 方案
-     CLOCK: [2017-12-06 Wed 18:05]--[2017-12-06 Wed 19:23] =>  1:18
-
-嗅觉：一个函数太长，应该有问题；引入的依赖太多或者太大，应该是有问题的。大概是这样吧...3
-
-1. 放在 model 下，要嵌套两层概念：
-artifact/storage: aws, hdfs
-artifact/type: static, tarball
-
-2. HDFS/AWS 保持相同的方法
-
-
-[[https:https://mdn.mozillademos.org/files/13785/HTTPRedirect.png][redirect 流程图]]
-
 *** DONE emacs 进入 evil 时代
     CLOCK: [2017-12-05 Tue 15:35]--[2017-12-05 Tue 15:45] =>  0:10
 
@@ -76,7 +54,6 @@ artifact/type: static, tarball
    h/j/k/l 用起来爽
 
 *** TODO 迁徙事宜 [/]                                                  :self:
-
 **** TODO 杭州有哪些大的互联网公司？
 
 **** TODO 杭州有哪些 Python 牛人？
@@ -91,7 +68,6 @@ artifact/type: static, tarball
 - [[https://www.lagou.com/jobs/3943966.html][Python 游戏服务端 3-5 年工作经验]]
 
 **** TODO 阿里有哪些工作？
-*** DONE 补充金丝雀回滚文档
 *** DONE 东北行调研
     CLOSED: [2017-12-26 Tue 23:18]
 - *漠河总结* 如果有票，就可以去，前后两天假，住宿条件，游玩基本没有问题。价格大概 800 - 1000 - 1250 左右。
@@ -179,27 +155,6 @@ http://www.youxiake.com/lines.html?id=20514
 ***** 雪乡 - 卡兹户外 - 3 日游 - 拼炕 - 4 人 - 男女分开
 ***** 雪乡 - 北方假期 - 3 日游 - 已满
 
-*** Emacs 折腾
-**** DONE 折腾 Python IDE -> Elpy
-    CLOCK: [2017-12-14 Thu 12:59]--[2017-12-14 Thu 23:00] => 10:01
-**** DONE Emacs workspace 管理
-     CLOCK: [2017-12-18 Tue 20:35]--[2017-12-18 Tue 22:00] =>  1:25
-perspeen 代替以前的 iTerm2 + Vim + Tmux + shell 的工作模式
-**** DONE Emacs GUI 可以作为 Daemon 吗？
-     CLOSED: [2018-01-08 Mon 11:29]
-目前结论，不能。
-正确的姿势可能是：
-1. 在终端启动一个 Daemon
-2. emacsclient -c 打开一个 frame 以使用 GUI
-
-更新：可以呀，而且简单的很 =(server-start)= 就搞定了
-
-**** DONE 滚动设置
-     CLOCK: [2018-01-16 Tue 10:34]--[2018-01-16 Tue 11:34] =>  1:00
-
-=(setq next-screen-scroll-context-lines 10)=
-但是这个设置貌似并没有用。
-
 *** TODO [#A] feeluown-core 开发 [80%]
 - [ ] 某一首歌在哪个电影里面出现过
 - [ ] 展示评论
@@ -260,16 +215,8 @@ to other process or worker
 [[file:../blog_draft/asyncio_learning.org][learning notes]]
 #+INCLUDE: "./blog_draft/asyncio_learning.org::#tasks" :only-contents t
 
-*** 神奇的歌曲
-- Dirás Que Estoy Loco-Miguel Ángel Muñoz
-
-*** 哲学问题
-**** 文学素养？
-*** 碎碎念
-    CLOCK: [2018-01-17 Wed 10:00]--[2018-01-17 Wed 12:00] =>  2:00
 *** TODO 常见系统设计
 **** TODO 点赞系统
-
 *** TODO [#A] Python 2to3
     CLOCK: [2018-03-01 Thu 10:59]--[2018-03-01 Mon 18:32] =>  7:33
 
@@ -281,18 +228,31 @@ to other process or worker
 - [X] 带酒酿 + 糍粑 + 红薯片？
 - [X] 坛子菜可以带么？
 - [ ] xxx 红色的口红？������
-*** 日常阅读
-***** 为什么现在又流行服务端渲染html？
-      CLOCK: [2018-02-26 Mon 11:54]--[2018-02-26 Mon 12:04] =>  0:10
+*** Emacs 折腾
+**** DONE 折腾 Python IDE -> Elpy
+    CLOCK: [2017-12-14 Thu 12:59]--[2017-12-14 Thu 23:00] => 10:01
+**** DONE Emacs workspace 管理
+     CLOCK: [2017-12-18 Tue 20:35]--[2017-12-18 Tue 22:00] =>  1:25
+perspeen 代替以前的 iTerm2 + Vim + Tmux + shell 的工作模式
+**** DONE Emacs GUI 可以作为 Daemon 吗？
+     CLOSED: [2018-01-08 Mon 11:29]
+目前结论，不能。
+正确的姿势可能是：
+1. 在终端启动一个 Daemon
+2. emacsclient -c 打开一个 frame 以使用 GUI
 
-为什么现在又流行服务端渲染html？ - 方应杭的回答 - 知乎
-https://www.zhihu.com/question/59578433/answer/326694511
+更新：可以呀，而且简单的很 =(server-start)= 就搞定了
 
-SSR(Server side rendering) 主要有两个好处：SEO 和首屏渲染。
+**** DONE 滚动设置
+     CLOCK: [2018-01-16 Tue 10:34]--[2018-01-16 Tue 11:34] =>  1:00
+
+=(setq next-screen-scroll-context-lines 10)=
+但是这个设置貌似并没有用。
 
 *** 超级碎碎念
 ***** 资源收费
-谷歌云提供按秒计算的能力。另外，在它的价格文档里面，它会告诉用户一台虚拟机一个小时要收多少钱。
+谷歌云提供按秒计算的能力。另外，在它的价格文档里面，它会告诉用户一台虚拟机
+一个小时要收多少钱。
 *** 杂碎记录
 **** 朋友无脑沟通？
 ***** 围观高老板面试
