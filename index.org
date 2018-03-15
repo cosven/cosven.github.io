@@ -228,6 +228,10 @@ to other process or worker
 - [X] 带酒酿 + 糍粑 + 红薯片？
 - [X] 坛子菜可以带么？
 - [ ] xxx 红色的口红？������
+*** TODO 计算机原理
+**** TODO Python 是怎样实现 int 的？
+[[https://stackoverflow.com/questions/21871829/twos-complement-of-numbers-in-python][two's complement in python]]
+
 *** Emacs 折腾
 **** DONE 折腾 Python IDE -> Elpy
     CLOCK: [2017-12-14 Thu 12:59]--[2017-12-14 Thu 23:00] => 10:01

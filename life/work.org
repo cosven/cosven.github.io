@@ -128,7 +128,8 @@ ZAE-386
 percentileOfSeries 配合 gauge 使用
 **** DONE 周报补一下 task 链接
      CLOSED: [2018-01-08 Mon 18:28]
-**** TODO [#A] 离线任务滚动部署
+**** DONE [#A] 离线任务滚动部署
+     CLOSED: [2018-03-15 Thu 16:48]
     CLOCK: [2017-12-19 Tue 14:11]--[2017-12-19 Tue 19:44] =>  5:33
     CLOCK: [2017-12-19 Tue 14:09]--[2017-12-19 Tue 14:11] =>  0:02
     CLOCK: [2017-12-18 Mon 20:02]--[2017-12-18 Tue 20:30] =>  0:28
@@ -228,6 +229,9 @@ set_version('Production', 'xxx', percent=20)  # 成功
 ***** DONE 新的滚动部署策略实现
       CLOCK: [2018-02-27 Tue 14:05]--[2018-02-27 Tue 23:00] =>  8:55
 
+***** DONE 新版本 scale 的时候，不要超过目标值
+      CLOSED: [2018-03-15 Thu 16:56]
+jira:NAMI-93
 **** oauth2 杂事
      CLOCK: [2018-02-26 Mon 11:22]--[2018-02-26 Mon 11:32] =>  0:10
      CLOCK: [2017-12-20 Wed 13:40]--[2017-12-20 Wed 21:09] =>  7:29
@@ -313,6 +317,18 @@ fpm 可以指定 exclude 某个文件 =-x= 选项
 ps: libreadline-dev 依赖了 libreadline6-dev
 
 *PGO 编译选项*
+
+***** DONE 尝试 backporting 官方的 Python 3 包
+      CLOCK: [2018-03-13 Thu 10:00]--[2018-03-13 Thu 18:00] =>  8:00
+按照 [[https://wiki.debian.org/SimpleBackportCreation][Debian backporting 教程]] 指导，尝试 backport Debian buster Python3.6。
+
+实践会遇到两个问题：
+
+- jessie 中 libmpdec2 版本是 2.4.1，而 Python3.6 会 Breaks << 2.4.2 的 libmpdec2，
+这是一个问题，但是它是可以被解决的。libmpdec2 2.4.2 相对于 2.4.1 只有几个 bugfix，
+理论上可以比较安全将 libmpdec2 也 backport 一下，实践证明确实可以比较轻松的 backporting 2.4.2。
+- 第二个问题目前还没有方法可以解决。在 buster 中，Python3.6 和 Python3-distutils 是循环依赖的。
+目前没有什么简单的办法可以 backport 这两个东西，可能需要一些更加专业的手段才能完成这两个包的 backporting...
 
 **** DONE [#B] pipenv vs buildout vs ...
      CLOSED: [2018-01-25 Thu 13:48]
@@ -459,3 +475,6 @@ artifact/type: static, tarball
 ***** Oauth2 创建账号 + lens 问题
       CLOCK: [2018-03-12 Mon 14:50]--[2018-03-12 Mon 15:33] =>  0:43
 https://xxx.slack.com/archives/D5EK0EQTX/p1520836061000112
+**** DONE redis 迁移
+     CLOCK: [2018-03-14 Thu 15:57]--[2018-03-15 Thu 16:57] => 25:00
+线上不推荐用多 db

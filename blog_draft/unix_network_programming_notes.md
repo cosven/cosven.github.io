@@ -1,5 +1,3 @@
-
-
 # unix 网络编程读书笔记
 
 ## 第一章 Introduction
@@ -21,8 +19,6 @@
 * 网络模型简介：4 层和 7 层
 * POSIX 简介
 * 有些关于网络拓扑的简介
-
-
 
 
 ## 第二章 Transport Layer: TCP/UDP/SCTP
