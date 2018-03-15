@@ -24,12 +24,14 @@
   - [X] 生成器是啥？ /对延迟操作提供了支持/
   - [X] 生成器能做什么特殊的事情吗？ /典型的是：处理大数据节省内存/
   - [ ] 手写一个 contextmanage 试试？
-  - [ ] yield from vs yield? 
+  - [ ] yield from vs yield?
   - [X] 生成器 vs 迭代器？ /满足一定需求的东西就是迭代器/
 - [ ] select/poll, epoll？
 - [ ] 有了 asyncio 之后， python thread 还有任何优势吗？
 - [ ] 协程的历史，协程很古老，他曾经存在于 windows 3.2 和 早期的 JVM
   去了解下为什么现在的 windows 和 jvm 不采用协程的模型
+- [ ] 怎样实现连接复用？
+- [ ] connect 也可以是非阻塞操作？
 - [ ] 协程目前的实际应用
 - [ ] 文章 [[https://link.zhihu.com/?target=http%3A//blog.youxu.info/2014/12/04/coroutine/][协程的历史，现在和未来]]
 - [ ] 关于协程的一个[[https://www.zhihu.com/question/32218874][知乎提问]]
