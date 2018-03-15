@@ -20,5 +20,9 @@ ad-hoc scripts: 这类脚本往往有这些特性：不通用、不幂等、临�
 https://www.zhihu.com/question/25347164/answer/90224221
 
 *** 怎样从一个 SourcePackge 打一个 deb 包？
-- [[https://wiki.debian.org/SimpleBackportCreation][Backporting]] 最简单的 backporting 方法
+- [[https://wiki.debian.org/SimpleBackportCreation][Backporting]] 最简单的 backporting 方法（超好用）
 - [[https://backports.debian.org/news/jessie_released_-_backports_related_changes/][Versioning]] -> 使用 ~bpo8+1 for jessie
+
+*** 一些常见命令
+
+- apt-cache policy xxx  # 查看一个包的版本信息
