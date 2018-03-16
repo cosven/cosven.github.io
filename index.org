@@ -46,6 +46,9 @@ SOA 强调服务重用；多个服务可能会共享存储。
 3. kafka 支持持久化
 4. kafka pub/sub 有 ack 机制
 
+**** Python method 和 function 小讨论
+     CLOCK: [2018-03-16 Fri 11:00]--[2018-03-16 Fri 11:56] =>  0:56
+[[https://www.zhihu.com/question/268842195/answer/342894622][问题链接]]
 *** DONE 学习 org mode [100%]                                          :self:
     CLOCK: [2018-01-04 Thu 15:36]--[2018-01-04 Thu 16:06] =>  0:30
     CLOCK: [2017-12-04 Mon 10:47]--[2017-12-04 Mon 12:14] =>  1:17
