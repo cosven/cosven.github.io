@@ -56,39 +56,6 @@ SOA 强调服务重用；多个服务可能会共享存储。
 - [X] 看看能不能把一天的时线给打印出来
 - [ ] 把当前任务显示在 tmux 状态栏中
 
-*** TODO 了解邻接表，和学弟沟通 [50%]                                  :self:
-    CLOCK: [2017-12-04 Mon 12:30]--[2017-12-04 Mon 13:00] =>  0:30
-- [X] 大概懂了邻接表是个啥
-- [ ] 实现 pta 某个题
-
-**** DONE c 语言结构体
-1. 结构体怎样初始化
-
-**** TODO 用 c 语言实现一把拓扑排序
-     CLOCK: [2017-12-13 Wed 11:05]--[2017-12-13 Wed 11:10] =>  0:05
-用 c 语言实现解决 pta 那个 [[https://pintia.cn/problem-sets/16/problems/708][问题]]
-
-*** DONE emacs 进入 evil 时代
-    CLOCK: [2017-12-05 Tue 15:35]--[2017-12-05 Tue 15:45] =>  0:10
-
-1. 为什么要用 evil？
-   h/j/k/l 用起来爽
-
-*** TODO 迁徙事宜 [/]                                                  :self:
-**** TODO 杭州有哪些大的互联网公司？
-
-**** TODO 杭州有哪些 Python 牛人？
-
-**** TODO 杭州有哪些酷酷的公司？
-
-**** TODO 杭州有哪些 Python 大厂？
-
-**** TODO 杭州有什么搞物联网/机器人厂？
-
-**** TODO 网易杭州有哪些工作？
-- [[https://www.lagou.com/jobs/3943966.html][Python 游戏服务端 3-5 年工作经验]]
-
-**** TODO 阿里有哪些工作？
 *** DONE 东北行调研
     CLOSED: [2017-12-26 Tue 23:18]
 - *漠河总结* 如果有票，就可以去，前后两天假，住宿条件，游玩基本没有问题。价格大概 800 - 1000 - 1250 左右。
@@ -175,7 +142,39 @@ http://www.youxiake.com/lines.html?id=20514
 ***** 雪乡 - 天狼户外旅行 - 3 日游（哈尔滨晚上酒店他们订好了） - 双人坑（两晚总共 600 块钱）- 1580 每个人
 ***** 雪乡 - 卡兹户外 - 3 日游 - 拼炕 - 4 人 - 男女分开
 ***** 雪乡 - 北方假期 - 3 日游 - 已满
+*** DONE emacs 进入 evil 时代
+    CLOCK: [2017-12-05 Tue 15:35]--[2017-12-05 Tue 15:45] =>  0:10
 
+1. 为什么要用 evil？
+   h/j/k/l 用起来爽
+
+*** TODO 了解邻接表，和学弟沟通 [50%]                                  :self:
+    CLOCK: [2017-12-04 Mon 12:30]--[2017-12-04 Mon 13:00] =>  0:30
+- [X] 大概懂了邻接表是个啥
+- [ ] 实现 pta 某个题
+
+**** DONE c 语言结构体
+1. 结构体怎样初始化
+
+**** TODO 用 c 语言实现一把拓扑排序
+     CLOCK: [2017-12-13 Wed 11:05]--[2017-12-13 Wed 11:10] =>  0:05
+用 c 语言实现解决 pta 那个 [[https://pintia.cn/problem-sets/16/problems/708][问题]]
+
+*** TODO 迁徙事宜 [/]                                                  :self:
+**** TODO 杭州有哪些大的互联网公司？
+
+**** TODO 杭州有哪些 Python 牛人？
+
+**** TODO 杭州有哪些酷酷的公司？
+
+**** TODO 杭州有哪些 Python 大厂？
+
+**** TODO 杭州有什么搞物联网/机器人厂？
+
+**** TODO 网易杭州有哪些工作？
+- [[https://www.lagou.com/jobs/3943966.html][Python 游戏服务端 3-5 年工作经验]]
+
+**** TODO 阿里有哪些工作？
 *** TODO [#A] feeluown-core 开发 [80%]
 - [ ] 某一首歌在哪个电影里面出现过
 - [ ] 展示评论
@@ -249,6 +248,10 @@ to other process or worker
 - [X] 带酒酿 + 糍粑 + 红薯片？
 - [X] 坛子菜可以带么？
 - [ ] xxx 红色的口红？������
+- [ ] 木质调 - 星光 - 香水
+- [ ] 珍珠
+- [ ] 某妹子：运动鞋39、皮鞋38
+
 *** TODO 计算机原理
 **** TODO Python 是怎样实现 int 的？
 [[https://stackoverflow.com/questions/21871829/twos-complement-of-numbers-in-python][two's complement in python]]

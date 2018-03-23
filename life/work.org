@@ -10,8 +10,9 @@ PaaS、CI/CD、微服务、serverless
 *** TODO 推广新版本包困难
 *** TODO 提高部署稳定性
 *** TODO 构建系统运维自动化
+
 *** PaaS
-*** 构建 and 部署
+*** 开发 and 构建 and 部署
 **** 部署
 ***** 灰度部署 - 解决发布稳定性问题
 ***** 分支部署 - 解决线上测试、联调、验收等问题
@@ -19,6 +20,61 @@ PaaS、CI/CD、微服务、serverless
 ***** lavie 改进
 1. 运维有点问题，docker images 占用机器内存
 2. pipeline script 写起来很恶心
+
+**** 开发
+***** 解决主站部署失败的感悟
+      CLOCK: [2018-03-21 Thu 14:50]--[2018-03-21 Thu 18:50] =>  4:00
+
+:LOGBOOK:
+星期三的时候，和 jych 一起解决 zhihu-web 部署物理机失败的问题。
+
+问题大概描述：zhihu-web 新加了一个 Pillow 的依赖包，这是一个 C 扩展。
+jych 提了 MR，构建成功，但是在测试环境部署物理机的时候，发现失败。
+失败日志少的可怜：（jych 于上午 11 左右 oncall）
+
+#+BEGIN_SRC quote
+部署物理机 (devservice01.dev.rack.zhihu.com)
+开始于 2018-03-21 13:04:09，耗时 35 秒
+
+[13:04:08] Usopp 任务 601dd7b8-b76f-49d9-abab-71e1f7b49a46 开始执行。
+[13:04:44] check health failed, deploy ended.
+#+END_SRC
+
+jych 看了这东西一脸蒙蔽，我也是...
+上机器看日志，发现是找不到 libjpeg.so.8
+
+1. 于是让 jych 在物理机上安装 - 不行
+2. google + 看 Pillow 文档发现 5.0.0 版本不支持 jessie，回复 jych
+   jych 接着试了 3.4、3.1，2.8 等版本，都不行。
+   （其中大概花了个把小时，于是下午就坐一起 debug）
+3. 之后发现在物理机上手动构建可以成功
+   zhihu-web 构建的镜像是 Debian 7，而物理机是 Debian 8
+   确认是环境不一致导致的失败。
+4. 尝试使用 wheel 包，避免环境问题。
+5. zhihu-web 必须使用缓存
+5. buildout.wheel 依赖 pip
+6. hack + hack 没啥好记录的
+:END:
+
+- （根本原因）物理机环境和容器不一样 -> 如果能一样的话，万事大吉。新方案？
+- （直接原因）试错周期太长：mr，构建，部署
+  - 本地不能复现，zae-cli -> 还是要尽量尝试这个工具，良性循环
+  - 部署不稳定（体现在速度，可用性上） -> 整改
+- 主站依赖包版本太老：项目年久失修 -> （好像无懈可击）
+- buildout-wheel 使用经验不足：没有负责这个东西的的专家，没有充分测试
+- buildout 安装一些包有奇怪的错误： 同样，没有真正非常了解 buildout 这个工具的，
+  而且这东西还不是社区主流
+  https://git/snippets/597
+
+***** 构建部署失败
+      CLOCK: [2018-03-22 Thu 10:51]--[2018-03-22 Thu 13:51] =>  3:00
+
+- 构建和部署都会依赖第三方 -> 一定要对第三方服务做良好的监控
+- 一次构建和部署做的事情，如果说错误不能避免，那能对某一个步骤进行重试，
+  将会大大提高效率
+- 对于更加底层的依赖，比如网络（502，504）等，能否更快的定位
+  举个例子：依赖方会让你提供复现问题的方法，比如 python-requests -> curl
+- 静态资源部署失败：权限问题没日志；磁盘满了，也不知道咋回事，痛苦
 
 *** 微服务
 
@@ -41,6 +97,7 @@ PaaS、CI/CD、微服务、serverless
 
 *微服务不是一种架构*
 Component 化的一种实现
+
 
 ** 工作备忘录
 *** miller 一些疑问 [1/1]
@@ -245,15 +302,6 @@ set_version('Production', 'xxx', percent=20)  # 成功
 ***** DONE 新版本 scale 的时候，不要超过目标值
       CLOSED: [2018-03-15 Thu 16:56]
 jira:NAMI-93
-**** oauth2 杂事
-     CLOCK: [2018-02-26 Mon 11:22]--[2018-02-26 Mon 11:32] =>  0:10
-     CLOCK: [2017-12-20 Wed 13:40]--[2017-12-20 Wed 21:09] =>  7:29
-- 将 xxx 加到 cxo list 里面
-
-***** DONE 发邮件失败
-***** DONE oauth2 支持 redirect url wildcard
-      CLOSED: [2017-12-28 Thu 08:56]
-***** DONE 同步信息时使用批量接口
 **** DONE [#B] python3.6 for jessie
      CLOSED: [2018-01-11 Thu 17:16]
      CLOCK: [2018-01-11 Thu 11:12]--[2018-01-11 Thu 15:55] =>  4:43
@@ -343,6 +391,11 @@ ps: libreadline-dev 依赖了 libreadline6-dev
 - 第二个问题目前还没有方法可以解决。在 buster 中，Python3.6 和 Python3-distutils 是循环依赖的。
 目前没有什么简单的办法可以 backport 这两个东西，可能需要一些更加专业的手段才能完成这两个包的 backporting...
 
+***** DONE 关于 Python 3 镜像的问题
+      CLOCK: [2018-03-20 Tue 11:20]--[2018-03-20 Tue 14:39] =>  3:19
+1. 升级 python3/jessie，将 Python 3 的版本升级到 3.6.4
+   镜像没版本绝对是个 bad idea.
+
 **** DONE [#B] pipenv vs buildout vs ...
      CLOSED: [2018-01-25 Thu 13:48]
      CLOCK: [2018-01-23 Tue 10:59]--[2018-01-25 Thu 10:48] => 47:49
@@ -351,7 +404,6 @@ ps: libreadline-dev 依赖了 libreadline6-dev
      CLOCK: [2018-01-16 Tue 13:00]--[2018-01-16 Tue 14:00] =>  1:00
      CLOCK: [2018-01-15 Tue 11:00]--[2018-01-15 Tue 17:38] =>  6:38
 
-**** TODO [#A] 部署出错，确认资源方
 **** DONE 容器组回收策略文档
      CLOSED: [2018-01-08 Mon 15:43]
      CLOCK: [2018-01-08 Mon 13:49]--[2018-01-08 Mon 15:43] =>  1:54
@@ -359,14 +411,6 @@ ps: libreadline-dev 依赖了 libreadline6-dev
 **** DONE 应用级别修改限制
 **** DONE nami 打指标
      CLOCK: [2018-01-16 Tue 17:07]--[2018-01-16 Tue 20:07] =>  3:00
-**** MR review
-***** hashring
-     CLOCK: [2018-01-16 Tue 15:29]--[2018-01-16 Tue 16:29] =>  1:00
-     CLOCK: [2018-01-16 Tue 12:10]--[2018-01-16 Tue 12:40] =>  0:30
-
-***** logging
-      CLOCK: [2018-01-30 Tue 10:37]--[2018-01-30 Tue 10:51] =>  0:14
-
 **** DONE 2018-1-17 一天折腾
      CLOCK: [2018-01-17 Wed 12:30]--[2018-01-17 Wed 18:02] =>  5:32
 - 讨论 nami celery
@@ -382,7 +426,6 @@ oauth2-5
      CLOCK: [2018-01-18 Fri 10:26]--[2018-01-18 Fri 20:26] => 10:00
 基于 setuptools 重写了 easy_install
 
-**** TODO Python __setstate__ 是干啥用的？
 **** DONE [#A] app 级别的环境变量
      CLOSED: [2018-02-05 Mon 17:51]
      CLOCK: [2018-01-29 Mon 14:18]--[2018-01-29 Mon 19:58] =>  5:40
@@ -422,17 +465,6 @@ oauth2-5
 假设一个 unit 在 newbay 上存在多个版本：
 这个 unit 势必是走 nami 部署过，那么，nami 知道线上是哪个版本。
 这时，nami 从 bay 获取这个 unit 所有的容器组，将非线上版本干掉。
-**** TODO Python3 App 示例
-     CLOCK: [2018-03-05 Mon 13:44]--[2018-03-05 Mon 15:16] =>  1:32
-     CLOCK: [2018-03-05 Mon 10:50]--[2018-03-05 Mon 12:00] =>  1:10
-
-- Python3 应用的缓存 -> pip 的缓存机制
-
-缓存机制好像没有生效，但是构建速度非常快。
-现在都是用 wheel，从 HDFS 或者 pypi 上拉，已经差不多了。
-
-**** TODO oauth-LDAP posixAccount
-**** TODO oauth 修改密码，不能重复
 **** DONE 支持 HDFS [4/4]                                              :work:
 ***** DONE CI 传输 s3 URL
      CLOCK: [2017-12-05 Tue 15:45]--[2017-12-05 Tue 17:59] =>  2:14
@@ -473,6 +505,46 @@ artifact/type: static, tarball
 
 
 [[https:https://mdn.mozillademos.org/files/13785/HTTPRedirect.png][redirect 流程图]]
+**** DONE redis 迁移
+     CLOCK: [2018-03-14 Thu 15:57]--[2018-03-15 Thu 16:57] => 25:00
+线上不推荐用多 db
+**** TODO Python3 App 示例
+     CLOCK: [2018-03-05 Mon 13:44]--[2018-03-05 Mon 15:16] =>  1:32
+     CLOCK: [2018-03-05 Mon 10:50]--[2018-03-05 Mon 12:00] =>  1:10
+
+- Python3 应用的缓存 -> pip 的缓存机制
+
+缓存机制好像没有生效，但是构建速度非常快。
+现在都是用 wheel，从 HDFS 或者 pypi 上拉，已经差不多了。
+
+**** TODO oauth-LDAP posixAccount
+**** TODO oauth 修改密码，不能重复
+**** TODO 迁移 Oauth2 到 Python 3
+     CLOCK: [2018-03-20 Tue 21:00]--[2018-03-20 Tue 22:00] =>  0:00
+     CLOCK: [2018-03-19 Mon 11:52]--[2018-03-19 Mon 16:00] =>  4:08
+1. 加上 tox 工具
+   - tox 没办法识别 versions.cfg
+   - 在 buildout 里面跑 tox 显得毫无意义
+   - 在 tox 里面跑 buildout 呢？
+2. 移除部分依赖
+   - buildout 缓存的坑（six 库）
+3. 删除无用代码
+3. str/bytes/unicode
+4. object
+5. 'miao {}'.format(b'')
+5. hashlib -> 用 bytes
+6. sql -> largebinary/blob -> bytes
+
+**** TODO [#A] 部署出错，确认资源方
+**** TODO Python __setstate__ 是干啥用的？
+**** MR review
+***** hashring
+     CLOCK: [2018-01-16 Tue 15:29]--[2018-01-16 Tue 16:29] =>  1:00
+     CLOCK: [2018-01-16 Tue 12:10]--[2018-01-16 Tue 12:40] =>  0:30
+
+***** logging
+      CLOCK: [2018-01-30 Tue 10:37]--[2018-01-30 Tue 10:51] =>  0:14
+
 **** 超级碎碎念
 ***** 资源收费
 谷歌云提供按秒计算的能力。另外，在它的价格文档里面，它会告诉用户一台虚拟机
@@ -481,12 +553,15 @@ artifact/type: static, tarball
 ***** Oauth2 创建账号 + lens 问题
       CLOCK: [2018-03-12 Mon 14:50]--[2018-03-12 Mon 15:33] =>  0:43
 https://xxx.slack.com/archives/D5EK0EQTX/p1520836061000112
-**** DONE redis 迁移
-     CLOCK: [2018-03-14 Thu 15:57]--[2018-03-15 Thu 16:57] => 25:00
-线上不推荐用多 db
-**** TODO 迁移 Oauth2 到 Python 3
-     CLOCK: [2018-03-19 Mon 11:52]--[2018-03-19 Mon 16:00] =>  4:08
-1. 加上 tox 工具
-   - tox 没办法识别 versions.cfg
-   - 在 buildout 里面跑 tox 显得毫无意义
-   - 在 tox 里面跑 buildout 呢？
+
+**** oauth2 杂事
+     CLOCK: [2018-02-26 Mon 11:22]--[2018-02-26 Mon 11:32] =>  0:10
+     CLOCK: [2017-12-20 Wed 13:40]--[2017-12-20 Wed 21:09] =>  7:29
+- 将 xxx 加到 cxo list 里面
+
+***** DONE 发邮件失败
+***** DONE oauth2 支持 redirect url wildcard
+      CLOSED: [2017-12-28 Thu 08:56]
+***** DONE 同步信息时使用批量接口
+***** DONE oauth2 移除 cfbclient 等依赖
+      CLOCK: [2018-03-20 Tue 15:00]--[2018-03-20 Tue 20:44] =>  5:44
