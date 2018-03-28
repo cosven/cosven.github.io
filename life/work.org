@@ -9,7 +9,8 @@ PaaS、CI/CD、微服务、serverless
 *** TODO CI 文档优化
 *** TODO 推广新版本包困难
 *** TODO 提高部署稳定性
-*** TODO 构建系统运维自动化
+*ems）
+** TODO 构建系统运维自动化
 
 *** PaaS
 *** 开发 and 构建 and 部署
@@ -519,9 +520,12 @@ artifact/type: static, tarball
 
 **** TODO oauth-LDAP posixAccount
 **** TODO oauth 修改密码，不能重复
-**** TODO 迁移 Oauth2 到 Python 3
+**** DONE 迁移 Oauth2 到 Python 3
+     CLOSED: [2018-03-27 Tue 10:51]
+     CLOCK: [2018-03-26 Mon 10:51]--[2018-03-26 Mon 22:51] => 12:00
      CLOCK: [2018-03-20 Tue 21:00]--[2018-03-20 Tue 22:00] =>  0:00
      CLOCK: [2018-03-19 Mon 11:52]--[2018-03-19 Mon 16:00] =>  4:08
+
 1. 加上 tox 工具
    - tox 没办法识别 versions.cfg
    - 在 buildout 里面跑 tox 显得毫无意义
@@ -534,6 +538,8 @@ artifact/type: static, tarball
 5. 'miao {}'.format(b'')
 5. hashlib -> 用 bytes
 6. sql -> largebinary/blob -> bytes
+7. 脚本 + template（典型的比如：iteritems）
+8. hasattr
 
 **** TODO [#A] 部署出错，确认资源方
 **** TODO Python __setstate__ 是干啥用的？
