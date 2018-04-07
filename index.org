@@ -257,8 +257,8 @@ to other process or worker
 [[https://stackoverflow.com/questions/21871829/twos-complement-of-numbers-in-python][two's complement in python]]
 
 *** TODO mysql/redis 等存储系统
-**** TODO mysql 索引的原理
-     SCHEDULED: <2018-03-19 Mon 23:00>
+**** DONE mysql 索引的原理
+     CLOSED: [2018-03-19 一 17:00] SCHEDULED: <2018-03-19 Mon 23:00>
 
 *** Emacs 折腾
 **** DONE 折腾 Python IDE -> Elpy

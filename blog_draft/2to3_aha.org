@@ -1,0 +1,260 @@
+#+TITLE: Python 3 porting - quickstart
+#+OPTIONS: ^:{}, num:nil
+
+在 [[http://wiki.in.zhihu.com/pages/viewpage.action?pageId=38832334][Python 3 porting 大纲]] 中，我们简单的描述了 porting 的几个基本步骤：
+
+1. 提高项目测试覆盖率，推荐超过 80%
+2. 学习 Python 2 和 Python 3 之间的差异
+3. 检测项目依赖是否 2&3 兼容
+4. 修改代码，让其兼容 Python 3
+5. 让测试在 Python 2 和 Python 3 两个环境下进行
+
+在这篇文档中，我们会对每个步骤的细节进行适当分析，给出简单示例。
+并会对很容易陷入的坑进行提示。
+
+** 提高项目测试覆盖率
+关于如何提高项目测试覆盖率，想必不用多说。
+
+如果项目还没有接入任何测试覆盖率评测工具，我们推荐使用 [[https://coverage.readthedocs.io][coverage.py]]。
+
+下面我们会简单介绍 nose 和 pytest 接入测试覆盖率报告的方法。
+
+*** 使用 nose 测试框架的老项目
+#+BEGIN_QUOTE
+Nose has been in maintenance mode for the past several years and will
+ likely cease without a new person/team to take over maintainership.
+New projects should consider using Nose2, py.test, or just plain unittest/unittest2.
+#+END_QUOTE
+根据 [[http://nose.readthedocs.io/en/latest/#note-to-users][nose]] 项目官方文档中的叙述，推荐迁移到 nose2, pytest。
+
+#+BEGIN_QUOTE
+However, given the current climate, with much more interest accruing around pytest,
+ nose2 is prioritizing bugfixes and maintenance ahead of new feature development.
+#+END_QUOTE
+
+而根据 [[https://github.com/nose-devs/nose2#current-goals][nose2]] readme 的描述，推荐迁移到 pytest。
+*总而言之，如果还有在用 nose 测试框架的项目，赶紧迁移到 pytest 吧。*
+然后再接入测试覆盖率报告，2333。
+
+*** 使用 pytest 测试框架的项目
+一个 [[https://docs.pytest.org/en/latest/][pytest]] + [[https://pytest-cov.readthedocs.io/en/latest/][pytest-cov]]。 使用示例：
+
+#+BEGIN_SRC
+> py.test --cov-report term-missing --cov=clouda_oauth2 tests/
+
+----------- coverage: platform linux, python 3.5.2-final-0 -----------
+Name                                                Stmts   Miss  Cover   Missing
+---------------------------------------------------------------------------------
+clouda_oauth2/__init__.py                              42      2    95%   35, 55
+clouda_oauth2/acl.py                                   16      3    81%   16, 23-24
+clouda_oauth2/blueprints.py                            10      0   100%
+-----------------------------------------------------------------------
+TOTAL                                                1866    988    87%
+#+END_SRC
+
+从上面的图表中，我们可以看到哪个模块的哪一行没有被测试覆盖到。
+也可以看到项目总的测试覆盖率。
+
+** 让测试可以在 2/3 两个环境下进行
+根据过去的实践经验，我们推荐在 porting 初期就让项目接入 tox 工具，
+让测试在两个环境中运行。这时候，可能会有有大量的测试在 Python 3 中不能通过，
+这没关系， *我们可以配置在 Python 3 环境中先忽略一部分测试* 。
+当测试全部可以在 Python 3 中通过时，迁移就算基本结束了。
+
+以 tox + pytest + buildout 为例
+ps: 这个配置可以合理的利用 CI 缓存机制，让我们的测试以最快的速度跑完。
+
+#+BEGIN_SRC ini
+# tox.ini 配置文件
+[tox]
+envlist = {py27,py36}-{test}
+indexserver =
+    default = https://mirror.in.zhihu.com/simple
+recreate=false
+
+[testenv]
+commands =
+    py27: {envbindir}/buildout -c {toxinidir}/buildout.cfg buildout:directory={toxworkdir}/.buildout-py27 buildout:develop={toxinidir} install pytest
+    py36: {envbindir}/buildout -c {toxinidir}/buildout.cfg buildout:directory={toxworkdir}/.buildout-py36 buildout:develop={toxinidir} install pytest
+    py27-test: {toxworkdir}/.buildout-py27/bin/pytest {posargs: --cov=clouda_oauth2 tests}
+    py36-test: {toxworkdir}/.buildout-py36/bin/pytest {posargs: --cov=clouda_oauth2 tests}
+
+deps =
+    setuptools==33.1.1
+    zc.buildout
+skip_install = true
+
+#+END_SRC
+
+joker.yml 示例
+
+#+BEGIN_SRC yaml
+version: 2.0
+base_image: python2to3/jessie
+
+build:
+  # Do not install tox or any other third-party package before buildout
+  - pip3 install zc.buildout pip setuptools --upgrade
+  - buildout
+  - pip3 install tox
+  - tox -e py27
+  - tox -e py36
+
+test:
+  unittest:
+    - cp joker_config.py test_config.py
+    - bin/pylint --py3k --disable=no-absolute-import clouda_oauth2/
+    - tox -e py27-test
+    - tox -e py36-test
+
+  coverage_test:
+    report_fpath: coverage.xml
+
+cache:
+  directories:
+    - eggs
+    - .tox/.buildout-py27/eggs
+    - .tox/.buildout-py36/eggs
+
+#+END_SRC
+
+** 学习 Python 2 和 Python 3 之间的差异
+我们可以根据迁移自动程度将 2/3 差异分为两类：可以被工具自动识别的差异和不能被工具自动识别的差异。
+大部分差异都可以被工具（2to3,futurize）自动检测出来啊，我们只需要手动处理一小部分。
+
+在后面我们会把一些需要手动处理的 case 单独列出来（欢迎大家补充）。
+
+这里，我们会分析一下 Python 2/3 差异最大的地方：处理字符的方式。
+
+*** unicode、str 和 bytes
+
+下面我们通过代码来看一些典型的栗子：
+
+#+BEGIN_SRC python2 :exports both
+# -*- coding: utf-8 -*-
+
+### no bytes in py2, str is bytes
+##  unicode.encode -> bytes
+##  str.decode -> unicode
+##  str.encode -> str.decode('ascii').encode('ascii')
+
+a = 'aha'   # str, py2 do not have bytes
+b = b'aha'  # str, ignore in py2
+c = u'aha'  # unicode
+print a == b == c
+
+### implicit unicode convension (awesome or wtf
+
+'haha'.encode('utf-8')  # => 'haha'.decode('utf-8', 'ascii').encode('utf-8')
+try:
+    '哈哈'.encode('utf-8')
+except UnicodeDecodeError:
+    u'哈哈'.encode('utf-8')
+print '呵呵' == u'呵呵'  # False, converting failed.
+print 'aha' == u'aha'  # True, converting success.
+
+### bytes format
+print('miao, {}'.format(b'aha'))
+
+#+END_SRC
+
+#+RESULTS:
+: True
+: False
+: True
+: miao, aha
+
+#+begin_src python3 :exports both
+
+### str is unicode (maybe
+a = 'aha'   # str
+b = b'aha'  # bytes
+c = u'aha'  # unicode
+print(a == b, a == c, b == c, u'哈哈' == '哈哈')
+
+### bytes format
+print(b'aha', 'miao, {}'.format(b'aha'))
+
+#+end_src
+
+#+RESULTS:
+: False True False True
+: b'aha' miao, b'aha'
+
+
+1. 简单理解：Python 2 中，str 是 bytes；Python 3 中，str 是 unicode
+2. Python 2 在很多场景会隐式将 str 转换成 unicode
+3. 迁移相关代码时， *最重要的就是知道你的函数接收什么类型，返回什么类型*
+3. 如果出现奇怪错误，检查系统的 locale 是否为 \*.UTF-8
+
+顺手推荐一篇关于 python unicode 的经典文章：[[https://nedbatchelder.com/text/unipain.html]]
+（就和这个讲协程的 [[y][视频]] 一样经典
+
+*** 一些不常被提起的 case
+
+- hasattr [[https://hynek.me/articles/hasattr/][ref]]
+- round [[https://stackoverflow.com/questions/21839140/python-3-rounding-behavior-in-python-2][ref]]
+
+** 检测项目依赖是否 2&3 兼容
+这个步骤比较简单，就是使用 caniusepython3 检测一下依赖是否兼容 2&3。
+
+举个栗子：
+
+#+BEGIN_SRC sh
+# buildout 项目
+cat versions.cfg | grep -Ev '#|\[versions\]|^$' | awk '{print $1}' | xargs caniusepython3 -p
+
+# 正常项目
+python setup.py caniusepython3
+#+END_SRC
+
+** 修改代码，让其兼容 Python 3
+修改代码，非常简单，我们只要深刻把握“三步走”的思想方针。
+1. 删除无用代码
+2. 使用 futurize 脚本，检测并修改相应代码，并在 IDE 或者编辑器中集成 pylint，
+防止走回头路。
+3. 逐个修复测试用力，让测试能够全部通过。
+
+对于大部分场景，参考这个 [[http://python-future.org/compatible_idioms.html#essential-syntax-differences][文档]] 即可，下面我们对一些没有提及到的或者有异议的场景进行补充。
+
+*** 关于 import
+1. 模块 import 路径不一样
+#+BEGIN_SRC python
+try:
+    from urllib.parse import urlparse  # Python 3 style
+except ImportError:
+    from urlparse import urlparse  # Python 2 style
+#+END_SRC
+python-future 的文档上提供了多种方法，我们推荐这种。
+
+2. 使用 absolute_import
+#+BEGIN_SRC python
+from __future__ import absolute_import
+#+END_SRC
+
+*** unicode, str, bytes
+1. 如果一个库的函数在 Python 2 的年代，返回了一个 unicode；在
+Python 3 年代，却返回一个 bytes。这会让我们感到特别头疼，可以使用
+下面这个函数。（在 six 的 [[https://github.com/benjaminp/six/commit/db3d0d678b422614d5de0f9ed76a2112a28c7b19][master 分支]] 中也有类似的函数）
+
+#+BEGIN_SRC python
+from builtins import bytes
+
+
+def ensure_text(s, encoding='utf-8', errors='strict'):
+    if isinstance(s, bytes):
+        return s.decode(encoding, errors)
+    return s
+#+END_SRC
+
+2. 代码里面出现 encode/decode 的地方，迁移时候都要特别注意。
+推荐给这些地方全部加上测试。
+3. 如果使用加密、签名算法等相关的库，在 Python 3 中，这些库往往是
+只接受 bytes，吐出 bytes。而在 Python 2 中，它可以使用 unicode
+作为参数。
+
+比如这样的代码在 Python 3 中就会挂掉。
+#+BEGIN_SRC python
+import hashlib
+hashlib.md5(u'haha').hexdigest()
+#+END_SRC
