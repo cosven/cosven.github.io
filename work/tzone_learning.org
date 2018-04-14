@@ -1,0 +1,44 @@
+* 学习 TZone
+
+** 疑惑
+
+** Thrift
+
+> Thrift is a lightweight, language-independent software stack with
+ an associated code generation mechanism for RPC
+
+大部分中文教程描述为： Thrift 是一个跨语言的 RPC 框架
+
+主要学习资料：
+
+1. [[http://thrift-tutorial.readthedocs.io/en/latest/][thrift tutorial]]
+2. [[https://thrift.apache.org/static/files/thrift-20070401.pdf][thrift whitepaper]]
+
+*** Thrift 协议栈
+
+1. Protocol Layer
+2. Transport Layer
+3. Precessor（调用用户定义的 handler）
+4. Servers
+
+*** Thrift 有哪些类型？
+1. bool/byte(An 8-bit signed integer)/i(16,32,64)/double/string
+2. binary (bytes)
+3. Structs (类似 C 语言的 Struct)
+4. Containers (list, set, map)
+5. Exceptions
+6. Services (类似 C++ 的类)
+
+*** 自己的一些疑惑解答
+
+1. TSocket 是基于 TCP 的
+
+*** Thrift 学习总结（自己的理解）
+
+Thrift 是一个 RPC 生态系统。它主要包括几个部分：
+- 自己的接口定义语言
+- RPC 服务端和客户端代码自动生成
+
+是一个 RPC 框架，用户只需要编写一个 thrift 文件，它就可以生成相应的 Server 和 Client 代码。
+它支持众多语言，比如 Java,Python 等。以 Python 为例，它自带基于 select/thread_pool/process_pool
+的 server。
