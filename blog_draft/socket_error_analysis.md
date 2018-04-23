@@ -46,3 +46,8 @@ request.
 服务端超载了，或者拒绝连接
 
 ### 哪些情况会导致出现 Connection Reset (by peer)？
+Connection Reset 出现的直接原因是一端发送了 RST 包。
+常见情况：一端重启了，另一端仍然在发送数据包。因为它们还没有进行三次握手
+就开始传数据。
+
+注：如果一端死掉了，错误会是 Connection Refused。此时一端的端口并未被监听。
