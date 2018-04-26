@@ -10,8 +10,7 @@ PaaS、CI/CD、微服务、serverless
 *** TODO 推广新版本包困难
 *** TODO 提高部署稳定性
 *ems）
-** TODO 构建系统运维自动化
-
+** 构建系统运维自动化
 *** PaaS
 *** 开发 and 构建 and 部署
 **** 部署
@@ -99,7 +98,6 @@ jych 看了这东西一脸蒙蔽，我也是...
 *微服务不是一种架构*
 Component 化的一种实现
 
-
 ** 工作备忘录
 *** miller 一些疑问 [1/1]
 - [X] Miller 每个任务是一个线程，还是一个进程，还是什么东东？
@@ -141,6 +139,35 @@ canary2 -> beta
      CLOCK: [2018-03-19 Mon 17:43]--[2018-03-19 Mon 20:43] =>  3:00
 不要既触发回滚，又触发上线。
 *** 工作 tasks
+**** MR review
+***** hashring
+     CLOCK: [2018-01-16 Tue 15:29]--[2018-01-16 Tue 16:29] =>  1:00
+     CLOCK: [2018-01-16 Tue 12:10]--[2018-01-16 Tue 12:40] =>  0:30
+
+***** logging
+      CLOCK: [2018-01-30 Tue 10:37]--[2018-01-30 Tue 10:51] =>  0:14
+
+**** 超级碎碎念
+***** 资源收费
+谷歌云提供按秒计算的能力。另外，在它的价格文档里面，它会告诉用户一台虚拟机
+一个小时要收多少钱。
+
+***** Oauth2 创建账号 + lens 问题
+      CLOCK: [2018-03-12 Mon 14:50]--[2018-03-12 Mon 15:33] =>  0:43
+https://xxx.slack.com/archives/D5EK0EQTX/p1520836061000112
+
+**** oauth2 杂事
+     CLOCK: [2018-02-26 Mon 11:22]--[2018-02-26 Mon 11:32] =>  0:10
+     CLOCK: [2017-12-20 Wed 13:40]--[2017-12-20 Wed 21:09] =>  7:29
+- 将 xxx 加到 cxo list 里面
+
+***** DONE 发邮件失败
+***** DONE oauth2 支持 redirect url wildcard
+      CLOSED: [2017-12-28 Thu 08:56]
+***** DONE 同步信息时使用批量接口
+***** DONE oauth2 移除 cfbclient 等依赖
+      CLOCK: [2018-03-20 Tue 15:00]--[2018-03-20 Tue 20:44] =>  5:44
+
 **** DONE oauth 在前后端分离中的应用 [100%]
     CLOCK: [2017-12-04 Mon 22:48]--[2017-12-05 Tue 01:53] =>  3:05
 
@@ -509,17 +536,7 @@ artifact/type: static, tarball
 **** DONE redis 迁移
      CLOCK: [2018-03-14 Thu 15:57]--[2018-03-15 Thu 16:57] => 25:00
 线上不推荐用多 db
-**** TODO Python3 App 示例
-     CLOCK: [2018-03-05 Mon 13:44]--[2018-03-05 Mon 15:16] =>  1:32
-     CLOCK: [2018-03-05 Mon 10:50]--[2018-03-05 Mon 12:00] =>  1:10
-
-- Python3 应用的缓存 -> pip 的缓存机制
-
-缓存机制好像没有生效，但是构建速度非常快。
-现在都是用 wheel，从 HDFS 或者 pypi 上拉，已经差不多了。
-
-**** TODO oauth-LDAP posixAccount
-**** TODO oauth 修改密码，不能重复
+**** DONE oauth 修改密码，不能重复
 **** DONE 迁移 Oauth2 到 Python 3
      CLOSED: [2018-03-27 Tue 10:51]
      CLOCK: [2018-03-26 Mon 10:51]--[2018-03-26 Mon 22:51] => 12:00
@@ -541,33 +558,24 @@ artifact/type: static, tarball
 7. 脚本 + template（典型的比如：iteritems）
 8. hasattr
 
-**** TODO [#A] 部署出错，确认资源方
+**** DONE [#A] 部署出错，确认资源方
+     CLOSED: [2018-04-16 一 14:06]
+**** DONE readthedocs bugfix
+     CLOSED: [2018-04-16 一 14:12]
+=--use-wheel= flags are remove from pip install/wheel command
+
+**** DONE Python 3 App 示例
+     CLOCK: [2018-03-05 Mon 13:44]--[2018-03-05 Mon 15:16] =>  1:32
+     CLOCK: [2018-03-05 Mon 10:50]--[2018-03-05 Mon 12:00] =>  1:10
+
+- Python3 应用的缓存 -> pip 的缓存机制
+
+缓存机制好像没有生效，但是构建速度非常快。
+现在都是用 wheel，从 HDFS 或者 pypi 上拉，已经差不多了。
+
+**** DONE master build - less call to gitlab
+     CLOSED: [2018-04-26 四 14:28]
+- [X] master build get_mr
+
+**** TODO oauth-LDAP posixAccount
 **** TODO Python __setstate__ 是干啥用的？
-**** MR review
-***** hashring
-     CLOCK: [2018-01-16 Tue 15:29]--[2018-01-16 Tue 16:29] =>  1:00
-     CLOCK: [2018-01-16 Tue 12:10]--[2018-01-16 Tue 12:40] =>  0:30
-
-***** logging
-      CLOCK: [2018-01-30 Tue 10:37]--[2018-01-30 Tue 10:51] =>  0:14
-
-**** 超级碎碎念
-***** 资源收费
-谷歌云提供按秒计算的能力。另外，在它的价格文档里面，它会告诉用户一台虚拟机
-一个小时要收多少钱。
-
-***** Oauth2 创建账号 + lens 问题
-      CLOCK: [2018-03-12 Mon 14:50]--[2018-03-12 Mon 15:33] =>  0:43
-https://xxx.slack.com/archives/D5EK0EQTX/p1520836061000112
-
-**** oauth2 杂事
-     CLOCK: [2018-02-26 Mon 11:22]--[2018-02-26 Mon 11:32] =>  0:10
-     CLOCK: [2017-12-20 Wed 13:40]--[2017-12-20 Wed 21:09] =>  7:29
-- 将 xxx 加到 cxo list 里面
-
-***** DONE 发邮件失败
-***** DONE oauth2 支持 redirect url wildcard
-      CLOSED: [2017-12-28 Thu 08:56]
-***** DONE 同步信息时使用批量接口
-***** DONE oauth2 移除 cfbclient 等依赖
-      CLOCK: [2018-03-20 Tue 15:00]--[2018-03-20 Tue 20:44] =>  5:44

@@ -260,6 +260,13 @@ to other process or worker
 **** DONE mysql 索引的原理
      CLOSED: [2018-03-19 一 17:00] SCHEDULED: <2018-03-19 Mon 23:00>
 
+*** TODO graphviz algorithm
+*** TODO Connection Pool blog
+*** TODO 基于文件的缓存系统或者数据库
+- tinydb
+- mmap'ed files
+- BerkeleyDB
+
 *** Emacs 折腾
 **** DONE 折腾 Python IDE -> Elpy
     CLOCK: [2017-12-14 Thu 12:59]--[2017-12-14 Thu 23:00] => 10:01
@@ -408,3 +415,5 @@ for the frontend PHP products.
 - Distributing Large Configs through PackageVessel
 - Improving Commit Throughput（多个同时更改（同一个）配置）
 - Fault Tolerance
+***
+*** 我是谁？我在哪里？
