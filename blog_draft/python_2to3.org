@@ -1,6 +1,5 @@
 * Python 2to3
 
-
 ** tlcache
 
 - [ ] pickle CPU 密集型？这是类似的缓存系统都有的弊病么
@@ -52,3 +51,16 @@ io.open 来开。在 Python 3 中，两者是一样的作用。在 Python 2 中�
 的 open 函数功能没有 io.open 强大（看函数参数多少可知），另外，builtins 的
 open 函数返回的总是 str(bytes)（就算是 mode 是 r），而 io.open 表现则不一样，
 在 r mode 下会返回 unicode。
+** tzone
+*** tracing
+
+
+*Why tracing?* That said, once a production system contends with real
+concurrency or splits into many services, crucial (and formerly easy)
+tasks become difficult: user-facing latency optimization, root-cause
+analysis of backend errors, communication about distinct pieces of
+ a now-distributed system, etc.
+
+*Why opentracing?* Zipkin, Dapper, HTrace, X-Trace 等东西的使用会让应用
+紧耦合（没太懂）。
+opentracing offering consistent, expressive, vendor-neutral APIs for popular platforms.

@@ -1,0 +1,34 @@
+* (Macbook Pro) 安装 Ubuntu 的一些坑
+
+尝试过安装 16.04 和 Ubuntu 18.04，安装好了就基本能用。但有不少 corner case。
+
+Ubuntu 18.04 使用 Gnome 3.28，可以使用 wayland 以支持低分辨率扩展屏。
+
+** 常见问题
+*** dns 解析失败
+Ubuntu 18.04 默认使用 systemd-resolved 用来做一些 dns 解析相关的事情。
+在 Ubuntu 16.04 以及之前，默认是用 dnsmasq 的。
+
+systemd-resolved 对于 [[http://smallbusiness.chron.com/single-label-domain-name-73404.html][Single-label names]] 的处理和 dnsmasq 不一样。举个例子：
+=nslookup gw= 这个时候，systemd-resolved 不会尝试去 dns server 那里去解析
+ gw 这个域名。它会通过 LLMNR 技术来解析（具体不太懂， [[https://www.freedesktop.org/software/systemd/man/systemd-resolved.service.html][参考这里]]）。
+
+禁用 systemd-resolved，使用 dnsmasq 的[[https://askubuntu.com/a/907249][教程]]。
+
+*** 卸载 ibus，安装 fcitx
+
+*** 打字的时候，不显示 panel
+fcitx 一出问题，首先重启它试试。给 fcitx 安装插件之后，也需要重启 fcitx。
+
+=pkill fcitx= 然后运行 fcitx。
+
+*** Gnome 3.28 没有 indicator 了
+开启 ubuntu-appindicator 插件
+
+*** Emacs GUI 不能输入中文
+设置 LC_CTYPE 环境变量能 *一定程度* 解决问题。举个例子，修改
+=/usr/share/applications/emacs25-lucid.desktop= 文件的 Exec 这一行：
+
+#+BEGIN_SRC
+Exec=env LC_CTYPE=zh_CN.UTF-8 /usr/bin/emacs25 %F
+#+END_SRC

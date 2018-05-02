@@ -6,3 +6,5 @@
 3. timestamper
 4. AnsiColor
 5. HTTP Request
+6. LDAP
+7. Rebuilder
