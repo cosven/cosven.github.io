@@ -175,7 +175,7 @@ http://www.youxiake.com/lines.html?id=20514
 - [[https://www.lagou.com/jobs/3943966.html][Python 游戏服务端 3-5 年工作经验]]
 
 **** TODO 阿里有哪些工作？
-*** TODO [#A] feeluown-core 开发 [80%]
+*** TODO feeluown-core 开发 [80%]
 - [ ] 某一首歌在哪个电影里面出现过
 - [ ] 展示评论
 - [X] show handler 实现

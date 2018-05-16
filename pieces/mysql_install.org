@@ -1,4 +1,4 @@
-* mysql remote access
+** mysql remote access
 
 不知道从哪个版本之后，mysql 会限制只能从本地连接数据库。
 也就是说 mysql -uxxx -pxxx -h xx.xxx.xx.xx 会连接失败，典型报错：
@@ -14,3 +14,11 @@ ERROR 1130 (HY000): Host 'gw-cm.dev.rack.zhihu.com' is not allowed to connect to
    GRANT ALL PRIVILEGES ON *.* TO <your-user-here>@'%' IDENTIFIED BY '<user-password-here>';
    FLUSH PRIVILEGES;
 3. 然后重启
+
+** mysql installation
+
+Ubuntu 18.04 用户名和密码保存在 =/etc/mysql/debian.cnf=
+
+1. 添加用户： =create user cosven identified by '';=
+2. 给用户添加数据库权限： =grant all privileges on *.* to cosven@'%' identified by '';=
+3. =flush privileges;=

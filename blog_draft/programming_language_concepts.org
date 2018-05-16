@@ -49,6 +49,8 @@ duck typing is an application of the duck test in type safety.
 函数和与其相关的引用环境组合而成的实体。
 -- wikipedia
 
+> 闭包就是把函数以及变量包起来，使得变量的生存周期延长。
+
 *** 应用
 1. 闭包使得局部变量在函数外被访问成为可能
 2. 闭包可以帮助避免了使用全局变量

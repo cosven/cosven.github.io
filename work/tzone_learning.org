@@ -1,7 +1,6 @@
 * 学习 TZone
 
 ** 疑惑
-
 ** Thrift
 
 > Thrift is a lightweight, language-independent software stack with
@@ -42,3 +41,10 @@ Thrift 是一个 RPC 生态系统。它主要包括几个部分：
 是一个 RPC 框架，用户只需要编写一个 thrift 文件，它就可以生成相应的 Server 和 Client 代码。
 它支持众多语言，比如 Java,Python 等。以 Python 为例，它自带基于 select/thread_pool/process_pool
 的 server。
+
+*** Thrift 代码生成的时候需要保证 compiler 版本吗？
+
+thrift 理论上是向后兼容的
+
+** TZone
+*** HAProxy check health 返回 401 是什么鬼？

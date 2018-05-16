@@ -1,0 +1,201 @@
+# http://www.graphviz.org/content/cluster
+
+digraph G {
+    rankdir=LR;
+
+	subgraph cluster_12 {
+	    label = "Refactor";
+	    style=dashed;
+		color=lightgrey;
+
+		refactor;
+	}
+
+    subgraph cluster_13 {
+        label = "Data Structure";
+	    style=dashed;
+		color=lightgrey;
+
+        ds -> tree;
+
+        tree -> bplustree;
+    }
+
+	subgraph cluster_8 {
+	    label = "Networking";
+	    style=dashed;
+		color=lightgrey;
+
+		network -> tcp;
+		network -> dns;
+		network -> socket;
+
+		tcp -> http;
+        dns -> dnsmasq;
+	}
+
+	subgraph cluster_1 {
+	    label = "Isolation";
+	    style=dashed;
+		color=lightgrey;
+
+	    isolation -> iso_dependency;
+	    isolation -> iso_phisical;
+	}
+
+	subgraph cluster_2 {
+	    label = "Operating System";
+	    style=dashed;
+		color=lightgrey;
+
+		os -> thread;
+        os -> filesystem -> bplustree;
+		os -> lock [style="dashed"];
+		thread -> lock [style="dashed"];
+	}
+
+	subgraph cluster_3 {
+	    label="Python 3";
+	    style=dashed;
+		color=lightgrey;
+		# node [style=filled];
+
+		python_lowlevel;
+		python_3 -> deployment;
+		python_3 -> asyncio;
+		python_3 -> venv -> python_lowlevel;
+		python_3 -> pyc -> python_lowlevel;
+		python_3 -> py_magic;
+
+		py_magic -> metaclass;
+		py_magic -> decorator;
+		py_magic -> generator;
+		py_magic -> list_comprehension;
+		py_magic -> contextmanager;
+		py_magic -> lambda;
+		py_magic -> closure;
+		py_magic -> str;
+		py_magic -> ducktype [style="dashed"];
+
+		venv -> iso_dependency;
+
+		deployment -> iso_dependency;
+	}
+
+	subgraph cluster_6 {
+	    label = "MySQL";
+	    style=dashed;
+		color=lightgrey;
+
+		mysql -> index -> bplustree;
+		mysql -> transaction;
+		mysql -> lock;
+	}
+
+	subgraph cluster_4 {
+	    label="Feeluown";
+	    style=dashed;
+		color=lightgrey;
+
+		feeluown -> asyncio;
+		feeluown -> pyqt;
+		feeluown -> pubsub [style="dashed"];
+		feeluown -> tcp;
+		feeluown -> unix_philosophy;
+		feeluown -> refactor;
+
+		asyncio -> thread;
+		asyncio -> tcp;
+		pyqt -> model_view;
+	}
+
+	subgraph cluster_5 {
+	    label = "Video";
+	    style=dashed;
+		color=lightgrey;
+
+		video -> mysql;
+		video -> resumable_upload;
+		video -> http;
+		video -> cdn;
+	}
+	subgraph cluster_0 {
+	    label = "CI";
+		style=dashed;
+		color=lightgrey;
+		# node [style=filled,color=white];
+
+		ci -> jenkins;
+		ci -> lavie;
+		ci -> gitlab;
+
+		cluster -> scalability;
+		cluster -> usability;
+		cluster -> maintainability;
+		cluster -> isolation;
+
+		scalability -> horizontal;
+		scalability -> vertical;
+
+		usability -> backup;
+		usability -> master_slave;
+		usability -> multi_master;
+		usability -> replica_set;
+
+		jenkins -> cluster;
+		jenkins -> pipeline_as_code;
+
+		gitlab -> version_control;
+
+		maintainability -> automation_ops;
+	}
+
+	subgraph cluster_11 {
+	    label = "CD";
+	    style=dashed;
+        color=lightgrey;
+
+        cd -> deployment;
+        cd -> celery;
+
+        deployment -> rolling;
+        deployment -> canary;
+        deployment -> autorevert;
+    }
+
+	subgraph cluster_10 {
+	    label = "PaaS";
+	    style=dashed;
+		color=lightgrey;
+
+		paas -> ci;
+		paas -> cd;
+		paas -> app;
+		paas -> monitoring;
+		paas -> log;
+		paas -> dev_env;
+		paas -> billing;
+		paas -> config -> config_as_code;
+		paas -> resources;
+		paas -> env_vars;
+
+        log -> elk [style="dashed"];
+	}
+
+	# devops
+	devops -> dev;
+	devops -> ops;
+
+	dev -> feeluown;
+	dev -> python_3;
+	dev -> video;
+	ops -> cluster;
+
+	# lowlevel
+	python_lowlevel -> lowlevel;
+	network-> lowlevel;
+	os -> lowlevel;
+    ds -> lowlevel;
+    unix_philosophy -> lowlevel;
+    refactor -> lowlevel;
+}

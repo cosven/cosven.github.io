@@ -54,7 +54,6 @@ open 函数返回的总是 str(bytes)（就算是 mode 是 r），而 io.open �
 ** tzone
 *** tracing
 
-
 *Why tracing?* That said, once a production system contends with real
 concurrency or splits into many services, crucial (and formerly easy)
 tasks become difficult: user-facing latency optimization, root-cause
