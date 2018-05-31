@@ -70,3 +70,17 @@ from running one (T1) to running the other (T2), a context switch must take plac
 - 为避免以上问题，需要一些 =互斥= 机制
 
 联想概念：原子操作
+** DONE 第 30 章：Condition Variables
+
+A condition variable is an explicit queue that threads can
+put themselves on when some state of execution
+(i.e., some condition) is not as desired (by waiting on the condition);
+some other thread, when it changes said state, can then wake one (or
+more) of those waiting threads and thus allow them to continue (by signaling
+on the condition).
+
+*** 生产者消费者问题（有限缓冲问题）
+*** 编程注意的两个点
+
+1. 判断条件使用 while
+2. 推荐持有锁时才 wait/signal

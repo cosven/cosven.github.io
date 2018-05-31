@@ -2,7 +2,7 @@
 #+HTML_HEAD: <link rel="stylesheet" title="Standard" href="https://orgmode.org/worg/style/worg.css" type="text/css">
 #+HTML_HEAD: <link rel="alternate stylesheet" title="Zenburn" href="https://orgmode.org/worg/style/worg-zenburn.css" type="text/css">
 #+HTML_HEAD: <link rel="alternate stylesheet" title="Classic" href="https://orgmode.org/worg/style/worg-classic.css" type="text/css">
-#+startup:    align fold nodlcheck hidestars oddeven intestate
+#+startup:    align fold nodlcheck oddeven intestate
 #+options:    H:3 num:nil toc:t \n:nil ::t |:t ^:t -:t f:t *:t tex:t d:(HIDE) tags:not-in-toc
 
 
@@ -30,6 +30,7 @@
 - [ ] 有了 asyncio 之后， python thread 还有任何优势吗？
 - [ ] 协程的历史，协程很古老，他曾经存在于 windows 3.2 和 早期的 JVM
   去了解下为什么现在的 windows 和 jvm 不采用协程的模型
+- [ ] 并发编程范式
 - [ ] 怎样实现连接复用？
 - [ ] connect 也可以是非阻塞操作？
 - [ ] 协程目前的实际应用
@@ -49,3 +50,9 @@ yield from 相当于一个 delegator
 
 #+BEGIN_SRC python
 #+END_SRC
+
+** Greenlet
+Greenlet 实际上就是协程，应该也是利用 generator 来实现的。
+不过 Greenlet 自己实现了 Generator。
+
+** gevent from the ground up

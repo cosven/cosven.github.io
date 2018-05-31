@@ -1,3 +1,6 @@
+#+options:    H:3 num:nil toc:t \n:nil ::t |:t ^:t -:t f:t *:t tex:t d:(HIDE) tags:not-in-toc
+#+OPTIONS: ^:nil*
+
 * 学习 TZone
 
 ** 疑惑
@@ -48,3 +51,133 @@ thrift 理论上是向后兼容的
 
 ** TZone
 *** HAProxy check health 返回 401 是什么鬼？
+@tuyu
+
+
+** TZone 兼容 Python 3 遇到的瓶颈
+
+由于 TZone 依赖 thrift，而我们使用的 thrift 版本(0.9.3) 不兼容 Python 3。
+在尝试使用新版本 thrift(0.10.0 和 0.11.0) 兼容 Python 3 的工作中，遇到了下面两个问题：
+
+1. 老版本 thrift-compiler 生成的代码不兼容 Python 3
+2. 新版本 thrift 不兼容老版本生成的代码
+3. 新版本 thrift 的 TMultiplexedProtocol 会有一些 bug
+
+*** 为什么 thrift 不兼容老版本 thrift-compiler 生成的代码？
+**** 原因一
+thrift 中有一个 Protocol 是 TBinaryProtocol，相应的有一个加速版 TBinaryProtocolAccelerated。
+加速版有两个方法 =encode_binary= / =decode_binary= 是调用 fastbinary.c 扩展模块。
+
+在 0.9.3 版本中， =encode_binary= 的函数签名是
+#+begin_src python
+(object, transport, (object_class_name, thrift_spec))
+#+end_src
+
+而在 0.10.0 版本中， [[https://issues.apache.org/jira/browse/THRIFT-3612][为了实现 TCompatProtocol 的加速]] ，官方将这个函数签名改成了
+#+begin_src python
+(object, protocol, (object_class_name, thrift_spec))
+#+end_src
+
+在 0.11.0 版本中， [[https://issues-test.apache.org/jira/browse/THRIFT-2642][为了支持了 recursive structs]] ，官方再次修改这个函数签名，改成了
+#+begin_src python
+(object, protocol, [object_class_name, thrift_spec])
+#+end_src
+
+thrift-compiler 中生成的代码也使用了上述两个函数，所以，新版本 thrift 不兼容
+老版本生成的代码。并且没有简单的办法绕过。
+
+*** 如果新版本 thrift 不兼容老版本生成的代码，会带来哪些问题？
+目前，TZone 设计上，是让服务端在定义好接口、写好 thrift 文件后，使用
+tzone.cli(thrift-compiler) 生成代码并发包到 PyPI 上。
+
+而如果新版本 thrift 不兼容老版本 thrift-compiler 生成的代码，
+服务端则需要为不同 thrift 版本发包，客户端需要根据自己的 thrift 版本，来选择适合自己的包。
+
+目前推荐解决思路是：废弃发包这个方式！（根据目前调研， thrift 0.11.0 也不兼容 thrift 0.10.0 生成的代码）
+客户端可以自己从服务端维护者获取 thrift 文件，自己使用 thrift-compiler 生成代码，给自己项目使用。
+
+另外，值得说明的是：thrift 不同版本的 protocol 实现是没有变化的，
+所以使用老版本 thrift 的客户端可以访问使用新版本 thrift 的服务端，
+新版本 thrift 客户端也能访问老版本 thrift 服务端。
+
+*** thrift TMultiplexedProtocol 有怎样一个 bug？
+bug 详见： https://github.com/apache/thrift/pull/1547/files
+
+
+transport.write 的时候调用 fast_encode，接着抛出异常
+
+#+begin_src
+TypeError: function takes exactly 2 arguments (3 given)
+#+end_src
+
+*** 新版本 TMultiplexedProtocol 的 bug 对我们有什么影响？
+我们在 tzone 服务端使用 TMultiplexedPrecessor，客户端相应使用了 TMultiplexedProtocol。
+
+*** 问题小结
+- 第一个问题 -> Python 3 中不能使用 0.9.x thrift-compiler 生成的代码
+- 第二个问题 -> 我们不要发布 Python 包，而是发布 thrift 文件
+- 第三个问题 -> 想办法绕过或者修复！
+
+鉴于第三个问题，我们想到以下办法，并进行测试 [更新于 2018-5-24 17:30]：
+
+- [X] 绕过：放弃 fastbinary 是一个选择，不过看起来会有较大性能损失
+- [X] 修复：想办法魔改 0.10.0 版本或者参考 fbthrift
+
+*** 实验一：放弃 fastbinary.c
+实验目标：
+
+1. 放弃 fastbinary.c，测试新版本是否能兼容老版本
+2. 放弃 fastbinary.c，测试新版本 TMultiplexedProtocol 是否仍然存在问题
+
+经过 *简单* 的测试，结果表明：
+
+1. 放弃 fastbinary.c，新版本能兼容老版本
+2. 放弃 fastbinary.c，测试新版本 TMultiplexedProtocol 不存在问题
+
+fastbinary 能加速多少？
+
+据官方 benchmarking 数据和个人本地测试，能提速 20-30x。
+详见：[[https://issues.apache.org/jira/browse/THRIFT-3612][bench reuslt]]
+
+或许是不能接受的。
+
+*** 实验二：魔改 thrift 0.9.3 使其兼容 Python 3
+0.9.* 兼容 Python 3 遇到的问题::
+1. thrift-compiler 0.9.1 生成的代码的没有使用 absolute_import，在 Python 3
+中直接挂掉。所以 Python 3 的 Client 不能使用老的 thrift 生成的代码。
+
+结果表明::
+1. Python 3 client 要使用老版本生成代码几乎不可能。
+2. 必须给新的 Client 生成发不同版本的包
+   - 发 xxx-py3
+   - 发 xxx-0.10.0
+   - 发 xxx-0.11.0
+
+一个疑问：发包的方式是不是 best practice？好像很多都是把生成代码放在代码仓库里面。
+
+*** 实验三：修复 thrift 0.10.0 的 bug
+修改 TProtocolDecorator._wrap 方法，添加两行。
+
+#+begin_src python
+def _wrap(self, func, args, kwargs):
+    if isinstance(func, types.MethodType):
+        result = func(*args, **kwargs)
+    # https://issues.apache.org/jira/browse/THRIFT-4548
+    # XXX: try to make TMultiplexedProtocol work with TBinaryProtocolAccelerated
+    elif isinstance(func, types.BuiltinFunctionType):
+        result = func(*args, **kwargs)
+    else:
+        result = func(self.protocol, *args, **kwargs)
+    return result
+#+end_src
+
+按照目前 thrift(0.10.0) 的实现，理论上，这个条件判断的 else 分支是永远不可能走得到的。
+
+目前，0.11.0 版本刚发布没多久，生态没有特别完善，比如目前比较难找到
+现成的 thrift-compiler 包。为了减少维护成本和踩尽量少的坑，
+这里选择修改 thrift 0.10.0 版本。
+
+
+*** 实验四：参考 fbthrift
+fbthrift 的加速模块实现和 thrift 的实现差别比较大，不是很有参考价值，
+没有特别仔细研究。

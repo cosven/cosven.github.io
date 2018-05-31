@@ -232,7 +232,6 @@ to other process or worker
 ***** TODO 分布式任务队列最简单的起源在哪？
 ***** TODO 了解 AMQP？
 *** TODO [#A] 协程相关
-[[file:../blog_draft/asyncio_learning.org][learning notes]]
 #+INCLUDE: "./blog_draft/asyncio_learning.org::#tasks" :only-contents t
 
 *** TODO 常见系统设计
