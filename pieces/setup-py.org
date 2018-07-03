@@ -1,0 +1,43 @@
+* setup.py 常见命令的执行逻辑
+
+1. bdist_wheel 是 wheel 包提供的
+2. 使用 MANIFEST.in，而不是 package_data
+3. 创建一个零时的包占坑（没有找到其他好办法）
+
+#+begin_src
+build
+ -> build_py
+ -> build_clib
+ -> build_ext
+ -> build_scripts
+
+sdist
+ -> check
+   -> check_metadata
+
+install
+ -> build
+ -> install_lib
+   -> build_py if has_pure_modules
+   -> build_ext if has_ext_modueles
+ -> install_headers
+ -> install_scripts
+ -> install_data
+ -> install_data
+ -> install_egg_info
+#+end_src
+
+:LOGBOOK:
+1. build 可能需要一个 id
+:END:
+
+
+** 1
+thrift-compiler -> gen-py/
+package_dir={'': 'gen-py'}
+packages=find_packages('gen-py')
+
+不能安装 gen-py/ 目录下的包到系统环境
+
+** 2
+预先在 gen-py 目录下创建好包

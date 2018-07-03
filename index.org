@@ -261,6 +261,7 @@ to other process or worker
 
 *** TODO graphviz algorithm
 *** TODO Connection Pool blog
+*** TODO 为何不建个分区来记录自己喜欢的电影和音乐？
 *** TODO 基于文件的缓存系统或者数据库
 - tinydb
 - mmap'ed files

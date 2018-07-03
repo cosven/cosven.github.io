@@ -1,0 +1,29 @@
+* Pin 迁移至 Python 3
+** 难点
+1. 这些库都没有在其它应用上试过
+2. 每个库写两天就要 24 天，时间上估计正好，得让业务同学帮忙改一改
+
+** QA
+1. 有哪些库可以不用了？
+2. 能不能分 unit 来迁移
+3. 如果我想试用新的 tzone 客户端
+
+*** 目前没有兼容 Python 3 的依赖
+- bidict -> 找不到项目了
+- devicekit -> 未知？
+- failsafe
+- feature_client
+- franz-py
+- impyla
+- lotan
+- miller2
+- pier
+- pyhs2 -> 好像是一个没人维护的 hive 客户端
+- thealth -> 一个非常简单的库
+- ztext2 -> 一个有 c 扩展的文字处理库
+- zhihu-poseidon
+- zhihu-protobuf -> 好像支持 Python 3
+
+---------------
+
+* hermes 迁移到 Python 3

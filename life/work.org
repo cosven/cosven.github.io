@@ -588,9 +588,47 @@ artifact/type: static, tarball
      CLOSED: [2018-04-26 四 14:28]
 - [X] master build get_mr
 
-**** TODO oauth-LDAP posixAccount
+**** DONE oauth-LDAP posixAccount
+     CLOSED: [2018-06-07 四 11:13]
 **** TODO Python __setstate__ 是干啥用的？
-***
+
+**** 推动一个应用接入 Python 3
+1. 轮询 lang-python3 channel 里有 C 类项目的人
+   - 依赖 zone/pier - hourong
+   - 以来 poseidon(happy-game) - tangjianyun
+   - 写 go - xlzd/shibin
+   - 全是比较重要的业务 - yanyan
+   - java - zhaoyuanqing
+   - zhihu-live - majingyang
+
+2. 轮询 ZAE 新业务
+   - kingsguard - adam
+   - account-privacy - zhihu-poseidon/pier
+
+3. 向老司机询问
+
+
+**** DONE tzone.cli MR
+     CLOSED: [2018-06-20 三 18:12]
+***** thrift-compiler 打包
+     CLOCK: [2018-06-08 五 10:39]--[2018-06-08 五 11:37] =>  0:58
+
+**** 自己折腾
+
+***** Chrome high cpu
+     CLOCK: [2018-06-08 五 11:30]--[2018-06-08 五 12:12] =>  0:42
+
+**** TODO 工作交接
+1. newbay
+2. oauth2
+3. Python 3
+4. features
+5. codesearch
+
+*** oncall
+**** 2018-06-11
+1. zhihu-product 疑似有两个版本
+
 *** 业务会议
 **** 2018.5.25
 1. 一个月要插入这么多需求 - 惊呆
@@ -620,5 +658,38 @@ artifact/type: static, tarball
 
 **** 2018.5.29 - EP 组会
 **** 2018.5.29 - 分享
-
 任务调度系统
+**** 2018.5.41 - 商业组会
+1. 配置宝 -
+2. 日志 - 收集 + 搜索（保留时间 1 周）
+        - 收集不稳定
+        - Kafka CPU 报警（多个集群会不会互相影响？）
+
+3. 分支联调（）--- QA 测试数据
+4. 多个版本（）
+5. 服务链 - tracing(java/go)
+6. 测试环境
+7. Java 基础设施
+
+**** 2018.6.4 - 知识市场
+1. 使用 java/go 的项目多吗？ Go + Java
+2. Python 3 有兴趣么？
+
+1. bug
+2. 假数据 - mock -
+3. 日志 - 2 周 - Python - 文档
+4. 通过自定义的字段来查日志 - Kibana 文档
+5. Kibana 不稳定
+
+6. 定时任务 - 10 几秒 - 1 分钟
+   1. 加大间隔
+   2.
+   询问最佳解决方案 - zhihu-live/zhihu-order
+7. 分支部署 - office - 多个服务，HTTP->RPC->RPC，第二个 RPC 会跑到线上。
+8. 分支部署 - 不知道 - 培训
+**** 2018-06-11
+1. 组织架构同步
+2. bug 和进度同步
+
+3. beanstalk - 误报
+4. halo-logging JAVA

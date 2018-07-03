@@ -1,4 +1,6 @@
 * Debian Packaging
+** Debian Policy Manual
+
 ** SourcePackage
 参考资料：[[https://wiki.debian.org/Packaging/SourcePackage]]
 
@@ -24,5 +26,4 @@ https://www.zhihu.com/question/25347164/answer/90224221
 - [[https://backports.debian.org/news/jessie_released_-_backports_related_changes/][Versioning]] -> 使用 ~bpo8+1 for jessie
 
 *** 一些常见命令
-
 - apt-cache policy xxx  # 查看一个包的版本信息

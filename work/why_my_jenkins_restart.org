@@ -1,0 +1,11 @@
+* 为啥我的 Jenkins Slave 又重启了？
+
+1. 监控中看到某一个 CPU 的 iowait 持续 100% (31-34)
+2. 重启之前最后的 log
+
+:LOGBOOK:
+Jun 25 19:30:01 jenkins-slave-01 CRON[41834]: (root) CMD (/usr/local/agenttools/agent/check_tmp_agent.sh >/dev/null 2>&1)
+Jun 25 19:30:03 jenkins-slave-01 crontab[41874]: (root) LIST (root)
+Jun 25 19:32:00 jenkins-slave-01 crontab[46508]: (root) LIST (root)
+Jun 25 19:34:00 jenkins-slave-01 crontab[48126]: (root) LIST (root)
+:END:
