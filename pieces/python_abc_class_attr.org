@@ -1,0 +1,23 @@
+* abstract class attribute
+
+本意是想要求子类必须实现下面几个类属性，但是并没有
+abstract-class-property 装饰器。另外，无论在这里设置该字段为
+abstractproperty 还是 abstractmethod，子类只要有个同名字段，它
+就能正常实例化，所以这里为了代码看起来相对简单，直接使用
+abstractmethod 来装饰这几个字段。
+
+#+BEGIN_SRC python
+class AbstractXxx(ABC):
+    @abstractmethod
+    def Song(self):
+        pass
+#+END_SRC
+
+而按照对 ABC 的理解，正确的方式可能是要这样写::
+#+BEGIN_SRC
+    @property
+    @classmethod
+    @abstractmethod
+    def Song(self):
+        pass
+#+END_SRC
