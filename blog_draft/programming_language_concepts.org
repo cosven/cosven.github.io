@@ -21,6 +21,7 @@ Java 中 Class.forName 方法也都是反射功能的体现。
 
 比如 C++ 中有模板
 
+** 接口
 ** 鸭子类型
 *** 概念定义
 duck typing is an application of the duck test in type safety.
@@ -64,4 +65,30 @@ def a(x):
         print(i)
     return b
 b()  # 输出 0
+#+END_SRC
+** 模式匹配
+好像许多函数式编程都有这个特性，举个例子来理解模式匹配：
+
+没有模式匹配特性的语言写出来的代码大概长这个样子
+#+BEGIN_SRC
+int fib(int n) {
+    if(n == 0) return 1;
+    if(n == 1) return 1;
+    return fib(n – 2) + fib(n – 1);
+}
+#+END_SRC
+
+有模式匹配的语言可以这样写（编译器为其实现了分支）
+#+BEGIN_SRC
+int fib(0) {
+    return 1;
+}
+
+int fib(1) {
+    return 1;
+}
+
+int fib(int n) {
+    return fib(n – 2) + fib(n – 1);
+}
 #+END_SRC
