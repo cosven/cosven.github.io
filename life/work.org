@@ -590,8 +590,6 @@ artifact/type: static, tarball
 
 **** DONE oauth-LDAP posixAccount
      CLOSED: [2018-06-07 四 11:13]
-**** TODO Python __setstate__ 是干啥用的？
-
 **** 推动一个应用接入 Python 3
 1. 轮询 lang-python3 channel 里有 C 类项目的人
    - 依赖 zone/pier - hourong
@@ -606,7 +604,6 @@ artifact/type: static, tarball
    - account-privacy - zhihu-poseidon/pier
 
 3. 向老司机询问
-
 
 **** DONE tzone.cli MR
      CLOSED: [2018-06-20 三 18:12]
