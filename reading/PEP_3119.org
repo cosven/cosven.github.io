@@ -1,0 +1,59 @@
+* PEP 3119 -- Introducing Abstract Base Classes
+
+** 摘要
+提出了以下几点
+
+- 一个重载 isinstance() 和 issubclass 的方法
+- 一个新模块 abc，它定义了用来实现抽象基类的元类
+和一个用来定义抽象方法的装饰器
+- 在 collections 模块中加入了 container 和 iterators 一些具体的抽象基类
+
+该提案的主要目的是为了澄清："what makes a set", "what makes a mapping"
+and "what makes a sequence".
+
+** 理论
+（这一段根本不会翻译，可能对这个领域不太了解，潦草记录下关键词）
+*** invocation and inspection
+- Invocation(调用) -> 多态
+- Inspection(检查) -> 检查对象类型，然后根据类型做相应的事情
+
+在经典 OOP 理论中，更倾向于 invocation 模式， inspection 被
+认为是面向对象的遗产。而在实践中，这个结论显得过于武断和不灵活，
+会导致了一些死板的设计，和 Python 语言的动态天性相违背。
+
+特别是实际场景中，大家通常会使用一些类的设计者没想到的方式来处理对象。
+(blabla...) 模式匹配(pattern-match) 就是一个例子。
+
+On the other hand, one of the criticisms of inspection by classic OOP
+ theorists is the lack of formalisms and the ad hoc nature of
+ what is being inspected.
+
+大家公认的结论是：
+> The generally agreed-upon remedy is to standardize the tests,
+and group them into a formal arrangement. This is most easily done
+ by associating with each class a set of standard testable properties,
+either via the inheritance mechanism or some other means.
+Each test carries with it a set of promises: it contains a promise
+ about the general behavior of the class, and a promise as to what
+ other class methods will be available.
+
+ABCs 定义了一组最小的方法来描述一个类型的特征。
+
+** Specification
+
+（太多，忽略）
+
+** ABCs vs. Alternatives
+
+*** ABCs vs. Duck Typing
+ABCs 不是 Duck Typing 的终结者。比如：你可以自己定义一个拥有
+ ~__getitem__~ 方法的类来实现 Mapping，而不是一定要继承 BasicMapping 类。
+
+*** ABCs vs. Generic Functions
+
+*** ABCs vs. Interfaces
+
+** 个人体会
+ABC 这东西可以说是 OOP 思想的一个产物，但经典 OOP 学说中的一些理论
+其实并不适用于动态语言。在这个 PEP 中，作者叙述了为什么在 Python 中
+弄了个 ABC，它有哪些适用场景。
