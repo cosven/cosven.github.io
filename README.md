@@ -1,1 +1,3 @@
-> life tracking
+这里用于记录一些不成文的零碎笔记
+
+成文的会放在这里 [个人博客](http://cosven.me/)
