@@ -1,19 +1,136 @@
 #+SETUPFILE: ./theme-bigblow.setup
+#+options:    H:5 num:nil toc:t \n:nil ::t |:t ^:t f:t *:t
 
-* 懂事以来 - 自己推动的
+* 技术
 
-*** 学习姿势
+** DONE 学习 org mode [100%]                                           :self:
+    CLOCK: [2018-01-04 Thu 15:36]--[2018-01-04 Thu 16:06] =>  0:30
+    CLOCK: [2017-12-04 Mon 10:47]--[2017-12-04 Mon 12:14] =>  1:17
+- [X] 了解时间管理的工作流程
+- [X] 看看能不能把一天的时线给打印出来
+- [ ] 把当前任务显示在 tmux 状态栏中
+
+** DONE emacs 进入 evil 时代
+    CLOCK: [2017-12-05 Tue 15:35]--[2017-12-05 Tue 15:45] =>  0:10
+
+1. 为什么要用 evil？
+   h/j/k/l 用起来爽
+
+** TODO 了解邻接表，和学弟沟通 [50%]                                   :self:
+    CLOCK: [2017-12-04 Mon 12:30]--[2017-12-04 Mon 13:00] =>  0:30
+- [X] 大概懂了邻接表是个啥
+- [ ] 实现 pta 某个题
+
+**** DONE c 语言结构体
+1. 结构体怎样初始化
+
+**** TODO 用 c 语言实现一把拓扑排序
+     CLOCK: [2017-12-13 Wed 11:05]--[2017-12-13 Wed 11:10] =>  0:05
+用 c 语言实现解决 pta 那个 [[https://pintia.cn/problem-sets/16/problems/708][问题]]
+
+** TODO feeluown 开发 [75%]
+*** DONE feeluown 2.0 发版
+    CLOSED: [2018-08-03 五 15:32]
+
+[[https://github.com/cosven/FeelUOwn/projects/1]]
+
+*** DONE feeluown-core 2.0 发版
+    CLOSED: [2018-08-03 五 15:30]
+    CLOCK: [2018-02-05 Mon 18:15]--[2018-02-05 Mon 20:24] =>  2:09
+
+**** DONE show artist 等功能
+     CLOSED: [2018-02-20 Tue 21:01]
+**** DONE 确保 add/remove/list 等命令可用
+     CLOSED: [2018-01-06 Sat 17:07]
+
+**** DONE user 相关操作
+     CLOSED: [2018-01-06 Sun 23:35]
+     CLOCK: [2018-01-06 Sat 17:08]--[2018-01-06 Sun 23:35] => 22:27
+**** DONE 本地播放列表
+     CLOSED: [2018-01-14 Sun 19:14]
+     CLOCK: [2018-01-07 Sun 15:36]--[2018-01-07 Mon 18:42] =>  3:06
+*** DONE feeluown 2.0 推广
+    CLOSED: [2018-08-05 日 15:35]
+*** TODO emacs-fuo 完善
+     CLOCK: [2018-02-26 Mon 10:35]--[2018-02-26 Mon 11:00] =>  0:25
+
+- update melpa:MR
+
+** TODO coursera 操作系统课程
+**** DONE 第一章：操作系统概述
+操作系统特征：共享、并发、随机、虚拟
+
+**** TODO 第二章：操作系统运行环境
+** TODO 《unix 网络编程》
+** TODO 《operating system: three easy pieces》
+*** TODO 进程相关 [100%]
+    CLOCK: [2018-01-04 Thu 12:30]--[2018-01-04 Thu 14:00] =>  1:30
+- [X] 进程状态 -> 请见读书笔记 three easy pieces
+- [ ] PCB 是个啥？
+
+** TODO gunicorn 模型
+**** TODO 当一个 worker timeout 之后，gunicorn 会干什么
+** TODO 分布式任务队列 -> 了解分布式
+*** TODO Celery 的执行模型
+
+- [ ] 是 worker prefetch 了 task，还是 process prefetch 了？
+- [ ] after a task is prefetched, is it possible to re-schedule the task
+to other process or worker
+
+*** TODO 激发好奇心的问题
+***** TODO 单机并发和分布式是否矛盾，或者说它们是否有机结合？
+比如说，协程可以和分布式系统一起使用吗？推荐这么用吗？
+***** TODO 分布式任务队列最简单的起源在哪？
+***** TODO 了解 AMQP？
+** TODO [#A] 协程相关
+*** DONE 学习死锁
+    CLOSED: [2018-08-07 二 15:28]
+[[http://cosven.me/blogs/74]]
+
+** TODO [#A] Python 2to3
+    CLOCK: [2018-03-01 Thu 10:59]--[2018-03-01 Mon 18:32] =>  7:33
+
+** TODO 朋友兴趣爱好等备忘 2333
+好记性不如烂笔头
+
+- [X] 带酒酿 + 糍粑 + 红薯片？
+- [X] 坛子菜可以带么？
+- [ ] xxx 红色的口红？������
+- [ ] 木质调 - 星光 - 香水
+- [ ] 珍珠
+- [ ] 某妹子：运动鞋39、皮鞋38
+
+** TODO 计算机原理
+*** TODO Python 是怎样实现 int 的？
+[[https://stackoverflow.com/questions/21871829/twos-complement-of-numbers-in-python][two's complement in python]]
+
+** TODO mysql/redis 等存储系统
+*** DONE mysql 索引的原理
+     CLOSED: [2018-03-19 一 17:00] SCHEDULED: <2018-03-19 Mon 23:00>
+
+** TODO graphviz algorithm
+** TODO 为何不建个分区来记录自己喜欢的电影和音乐？
+** TODO 基于文件的缓存系统或者数据库
+- tinydb
+- mmap'ed files
+- BerkeleyDB
+
+
+* 兴趣、爱好
+** 学习姿势
 1. python dev mail-list
 2. python pep
 3. paper
 4. hackernews and github trending
 5. best practices
 
-*** 神奇的歌曲
+** 神奇的歌曲
 - Dirás Que Estoy Loco-Miguel Ángel Muñoz
 
-*** 日常阅读
-  (fuo-mode)**** 为什么现在又流行服务端渲染html？
+
+* 阅读
+** 日常阅读
+*** 为什么现在又流行服务端渲染html？
       CLOCK: [2018-02-26 Mon 11:54]--[2018-02-26 Mon 12:04] =>  0:10
 
 为什么现在又流行服务端渲染html？ - 方应杭的回答 - 知乎
@@ -21,11 +138,11 @@ https://www.zhihu.com/question/59578433/answer/326694511
 
 SSR(Server side rendering) 主要有两个好处：SEO 和首屏渲染。
 
-**** 微服务和 SOA 的区别
+*** 微服务和 SOA 的区别
 SOA 强调服务重用；多个服务可能会共享存储。
 微服务强调解耦；互不影响，存储独立。
 
-**** 缓存世界的三大问题
+*** 缓存世界的三大问题
      CLOCK: [2018-03-16 Fri 00:30]--[2018-03-16 Fri 00:50] =>  0:20
 
 [[https://juejin.im/post/5aa8d3d9f265da2392360a37][文章链接]]
@@ -38,7 +155,7 @@ SOA 强调服务重用；多个服务可能会共享存储。
    - 不同的过期时间
    - 互斥锁
 
-**** kafka 和 redis pubsub 对比
+*** kafka 和 redis pubsub 对比
      CLOCK: [2018-03-16 Fri 00:50]--[2018-03-16 Fri 01:16] =>  0:46
 
 1. redis 适用于实时的消息分发，不保证可靠性
@@ -46,17 +163,12 @@ SOA 强调服务重用；多个服务可能会共享存储。
 3. kafka 支持持久化
 4. kafka pub/sub 有 ack 机制
 
-**** Python method 和 function 小讨论
+*** Python method 和 function 小讨论
      CLOCK: [2018-03-16 Fri 11:00]--[2018-03-16 Fri 11:56] =>  0:56
 [[https://www.zhihu.com/question/268842195/answer/342894622][问题链接]]
-*** DONE 学习 org mode [100%]                                          :self:
-    CLOCK: [2018-01-04 Thu 15:36]--[2018-01-04 Thu 16:06] =>  0:30
-    CLOCK: [2017-12-04 Mon 10:47]--[2017-12-04 Mon 12:14] =>  1:17
-- [X] 了解时间管理的工作流程
-- [X] 看看能不能把一天的时线给打印出来
-- [ ] 把当前任务显示在 tmux 状态栏中
 
-*** DONE 东北行调研
+* 旅游
+** DONE 东北行调研
     CLOSED: [2017-12-26 Tue 23:18]
 - *漠河总结* 如果有票，就可以去，前后两天假，住宿条件，游玩基本没有问题。价格大概 800 - 1000 - 1250 左右。
 - *雪乡总结* 看下面
@@ -142,132 +254,10 @@ http://www.youxiake.com/lines.html?id=20514
 ***** 雪乡 - 天狼户外旅行 - 3 日游（哈尔滨晚上酒店他们订好了） - 双人坑（两晚总共 600 块钱）- 1580 每个人
 ***** 雪乡 - 卡兹户外 - 3 日游 - 拼炕 - 4 人 - 男女分开
 ***** 雪乡 - 北方假期 - 3 日游 - 已满
-*** DONE emacs 进入 evil 时代
-    CLOCK: [2017-12-05 Tue 15:35]--[2017-12-05 Tue 15:45] =>  0:10
 
-1. 为什么要用 evil？
-   h/j/k/l 用起来爽
 
-*** TODO 了解邻接表，和学弟沟通 [50%]                                  :self:
-    CLOCK: [2017-12-04 Mon 12:30]--[2017-12-04 Mon 13:00] =>  0:30
-- [X] 大概懂了邻接表是个啥
-- [ ] 实现 pta 某个题
-
-**** DONE c 语言结构体
-1. 结构体怎样初始化
-
-**** TODO 用 c 语言实现一把拓扑排序
-     CLOCK: [2017-12-13 Wed 11:05]--[2017-12-13 Wed 11:10] =>  0:05
-用 c 语言实现解决 pta 那个 [[https://pintia.cn/problem-sets/16/problems/708][问题]]
-
-*** TODO 迁徙事宜 [/]                                                  :self:
-**** TODO 杭州有哪些大的互联网公司？
-
-**** TODO 杭州有哪些 Python 牛人？
-
-**** TODO 杭州有哪些酷酷的公司？
-
-**** TODO 杭州有哪些 Python 大厂？
-
-**** TODO 杭州有什么搞物联网/机器人厂？
-
-**** TODO 网易杭州有哪些工作？
-- [[https://www.lagou.com/jobs/3943966.html][Python 游戏服务端 3-5 年工作经验]]
-
-**** TODO 阿里有哪些工作？
-*** TODO feeluown-core 开发 [80%]
-- [ ] 某一首歌在哪个电影里面出现过
-- [ ] 展示评论
-- [X] show handler 实现
-- [ ] 优化代码和注释
-    CLOCK: [2018-02-05 Mon 18:15]--[2018-02-05 Mon 20:24] =>  2:09
-
-实现 show handler 的基础架构
-
-- [ ] 通过 wikipedia 获取这首歌的相关 wiki？
-
-**** DONE show artist 等功能
-     CLOSED: [2018-02-20 Tue 21:01]
-**** DONE 确保 add/remove/list 等命令可用
-     CLOSED: [2018-01-06 Sat 17:07]
-
-**** DONE user 相关操作
-     CLOSED: [2018-01-06 Sun 23:35]
-     CLOCK: [2018-01-06 Sat 17:08]--[2018-01-06 Sun 23:35] => 22:27
-**** DONE 本地播放列表
-     CLOSED: [2018-01-14 Sun 19:14]
-     CLOCK: [2018-01-07 Sun 15:36]--[2018-01-07 Mon 18:42] =>  3:06
-**** TODO emacs-fuo 完善
-     CLOCK: [2018-02-26 Mon 10:35]--[2018-02-26 Mon 11:00] =>  0:25
-
-- update melpa:MR
-
-**** TODO pubsub 实现
-
-*** TODO coursera 操作系统课程
-**** DONE 第一章：操作系统概述
-操作系统特征：共享、并发、随机、虚拟
-
-**** TODO 第二章：操作系统运行环境
-*** TODO 《unix 网络编程》
-*** TODO 《operating system: three easy pieces》
-**** TODO 进程相关 [100%]
-    CLOCK: [2018-01-04 Thu 12:30]--[2018-01-04 Thu 14:00] =>  1:30
-- [X] 进程状态 -> 请见读书笔记 three easy pieces
-- [ ] PCB 是个啥？
-
-*** TODO gunicorn 模型
-**** TODO 当一个 worker timeout 之后，gunicorn 会干什么
-*** TODO 调研 Python 大牛都在干嘛，能干嘛？
-*** TODO 分布式任务队列 -> 了解分布式
-**** TODO Celery 的执行模型
-
-- [ ] 是 worker prefetch 了 task，还是 process prefetch 了？
-- [ ] after a task is prefetched, is it possible to re-schedule the task
-to other process or worker
-
-**** TODO 激发好奇心的问题
-***** TODO 单机并发和分布式是否矛盾，或者说它们是否有机结合？
-比如说，协程可以和分布式系统一起使用吗？推荐这么用吗？
-***** TODO 分布式任务队列最简单的起源在哪？
-***** TODO 了解 AMQP？
-*** TODO [#A] 协程相关
-#+INCLUDE: "./blog_draft/asyncio_learning.org::#tasks" :only-contents t
-
-*** TODO 常见系统设计
-**** TODO 点赞系统
-*** TODO [#A] Python 2to3
-    CLOCK: [2018-03-01 Thu 10:59]--[2018-03-01 Mon 18:32] =>  7:33
-
-#+INCLUDE: "./blog_draft/python_2to3.org::#tasks" :only-contents t
-
-*** TODO 朋友兴趣爱好等备忘 2333
-好记性不如烂笔头
-
-- [X] 带酒酿 + 糍粑 + 红薯片？
-- [X] 坛子菜可以带么？
-- [ ] xxx 红色的口红？������
-- [ ] 木质调 - 星光 - 香水
-- [ ] 珍珠
-- [ ] 某妹子：运动鞋39、皮鞋38
-
-*** TODO 计算机原理
-**** TODO Python 是怎样实现 int 的？
-[[https://stackoverflow.com/questions/21871829/twos-complement-of-numbers-in-python][two's complement in python]]
-
-*** TODO mysql/redis 等存储系统
-**** DONE mysql 索引的原理
-     CLOSED: [2018-03-19 一 17:00] SCHEDULED: <2018-03-19 Mon 23:00>
-
-*** TODO graphviz algorithm
-*** TODO Connection Pool blog
-*** TODO 为何不建个分区来记录自己喜欢的电影和音乐？
-*** TODO 基于文件的缓存系统或者数据库
-- tinydb
-- mmap'ed files
-- BerkeleyDB
-
-*** Emacs 折腾
+* 折腾
+** Emacs 折腾
 **** DONE 折腾 Python IDE -> Elpy
     CLOCK: [2017-12-14 Thu 12:59]--[2017-12-14 Thu 23:00] => 10:01
 **** DONE Emacs workspace 管理
@@ -288,16 +278,13 @@ perspeen 代替以前的 iTerm2 + Vim + Tmux + shell 的工作模式
 =(setq next-screen-scroll-context-lines 10)=
 但是这个设置貌似并没有用。
 
-*** 杂碎记录
-**** 朋友无脑沟通？
-***** 围观高老板面试
-      CLOCK: [2018-02-27 Tue 10:44]--[2018-02-27 Tue 11:44] =>  1:00
-**** aha，聊人生？
-***** 工作生活 with amy
-     CLOCK: [2018-02-27 Tue 12:10]--[2018-02-27 Tue 12:47] =>  1:47
-***** 生活工作 with 高老板
-     CLOCK: [2018-02-27 Tue 13:00]--[2018-02-27 Tue 13:50] =>  0:50
-*** 部署系统
+
+
+* 哲学
+** 我是谁？我在哪里？
+
+* 系统设计
+** 部署系统
 **** 一些概念
 - 金丝雀 /发布/ 是测试新代码是否正常工作的手段，对于比一次性全量上线。
 - 滚动 /部署/ 是是上线新代码的一种部署策略，对比于蓝绿部署。
@@ -307,7 +294,7 @@ perspeen 代替以前的 iTerm2 + Vim + Tmux + shell 的工作模式
 进行金丝雀发布时，我们需要让线上生产环境只保留一个版本。我们应该是需要
 保证线上的保留的这个版本是能正常工作的版本。
 但如果线上没有版本能正常工作呢（对于一个成熟的项目，基本不可能发生）？
-*** 构建系统
+** 构建系统
 **** Context
 build_id: app
 **** 关于 PaaS 是传元信息过来还是构建参数
@@ -316,7 +303,7 @@ build_id: app
 现在实现方式是：传元信息。原因是 Jenkins 自带的 rebuild 功能
 没有走 API。
 **** TODO pip 的缓存逻辑
-*** 功能开关、配置、A/B 测试
+** 功能开关、配置、A/B 测试
 
 facebook 那篇文章最主要的还是配置，关于 A/B Test 涉及比较少。关于 A/B Test 目前多是参考 google 这篇论文
 https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/36500.pdf
@@ -416,4 +403,35 @@ for the frontend PHP products.
 - Improving Commit Throughput（多个同时更改（同一个）配置）
 - Fault Tolerance
 ***
-*** 我是谁？我在哪里？
+
+
+** TODO 常见系统设计
+*** TODO 点赞系统
+
+* 其它
+** TODO 迁徙事宜 [/]                                                   :self:
+**** TODO 杭州有哪些大的互联网公司？
+
+**** TODO 杭州有哪些 Python 牛人？
+
+**** TODO 杭州有哪些酷酷的公司？
+
+**** TODO 杭州有哪些 Python 大厂？
+
+**** TODO 杭州有什么搞物联网/机器人厂？
+
+**** TODO 网易杭州有哪些工作？
+- [[https://www.lagou.com/jobs/3943966.html][Python 游戏服务端 3-5 年工作经验]]
+
+**** TODO 阿里有哪些工作？
+** 杂碎记录
+*** 朋友无脑沟通？
+***** 围观高老板面试
+      CLOCK: [2018-02-27 Tue 10:44]--[2018-02-27 Tue 11:44] =>  1:00
+*** aha，聊人生？
+**** 工作生活 with amy
+     CLOCK: [2018-02-27 Tue 12:10]--[2018-02-27 Tue 12:47] =>  1:47
+**** 生活工作 with 高老板
+     CLOCK: [2018-02-27 Tue 13:00]--[2018-02-27 Tue 13:50] =>  0:50
+
+** TODO 调研 Python 大牛都在干嘛，能干嘛？
