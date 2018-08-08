@@ -30,7 +30,8 @@
 - [ ] 有了 asyncio 之后， python thread 还有任何优势吗？
 - [ ] 协程的历史，协程很古老，他曾经存在于 windows 3.2 和 早期的 JVM
   去了解下为什么现在的 windows 和 jvm 不采用协程的模型
-- [ ] 并发编程范式
+- [X] 并发编程范式
+  - [X] Event vs Lock vs ... [[http://www.laurentluce.com/posts/python-threads-synchronization-locks-rlocks-semaphores-conditions-events-and-queues/][blog]]
 - [ ] 怎样实现连接复用？
 - [ ] connect 也可以是非阻塞操作？
 - [ ] 协程目前的实际应用
@@ -46,13 +47,12 @@
 *** yield from vs yield
 yield from 相当于一个 delegator
 
-*** select/poll in practice
-
-#+BEGIN_SRC python
-#+END_SRC
+** select/poll/epoll
+- [ ] select/poll/epoll 是不是一定要配合 nonblocking 一起用？
+  不一定要配合一起用，可以看 `Lib/socketserver.py` 这个示例
 
 ** Greenlet
-Greenlet 实际上就是协程，应该也是利用 generator 来实现的。
-不过 Greenlet 自己实现了 Generator。
+Greenlet 实际上就是协程，它表面看起来和 generator 来实现的。
 
 ** gevent from the ground up
+see [[https://gist.github.com/cosven/a251ca10c6c0c57c8b5dbd92fe131c2f][gist]]
