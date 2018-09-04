@@ -62,6 +62,7 @@ FIN segment
 TIME_WAIT 状态存在的[意义](http://blog.csdn.net/rain_qingtian/article/details/9977249)
 
 
+#### 端口号
 
 #### socket pair
 
@@ -85,6 +86,17 @@ TIME_WAIT 状态存在的[意义](http://blog.csdn.net/rain_qingtian/article/det
 
 > Also, the segments in Steps 2 and 3 are both from the end performing the passive close and could be combined into one segment
 
+
+## 第三章 Sockets Introduction
+这个章节主要讲了 socket address structure 以及它在各个 address family 中的差别。
+此外，此章节还简单的介绍了一些 socket API 以及这些 API 涉及的一些
+基础理论。
+
+总体来说，自己看得迷迷糊糊的，大概是因为这些东西和日常实践搭不着边。
+
+- [ ] 为啥 socket 大部分函数（系统调用）里面要传 sock_len 参数？
+- [ ] host byte order vs network byte order? big-endian order?
+- [ ] 做一下课后习题？
 
 ## 第六章 I/O Multiplexing: The select and poll Functions
 
