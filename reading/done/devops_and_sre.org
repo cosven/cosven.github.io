@@ -1,0 +1,134 @@
+* DevOps 和 SRE
+
+写的还挺好的 ~
+
+https://blog.alswl.com/2018/09/devops-and-sre/
+
+1. 讲了两者定义
+2. 叙述了两者历史
+3. 列出了两者工作和技能要求不同
+
+#+BEGIN_QUOTE
+*DevOps*
+
+- 设定应用生命管理周期制度，扭转流程
+- 开发、管理 开发工程师 /QA 工程师使用 开发平台系统
+- 开发、管理 发布系统
+- 开发、选型、管理 监控、报警系统
+- 开发、管理 权限系统
+- 开发、选型、管理 CMBD
+- 管理变更
+- 管理故障
+
+*SRE*
+
+- 管理变更
+- 管理故障
+- 制定 SLA 服务标准
+- 开发、选型、管理 各类中间件
+- 开发、管理 分布式监控系统
+- 开发、管理 分布式追踪系统
+- 开发、管理 性能监控、探测系统（dtrace、火焰图）
+- 开发、选型、培训 性能调优工具
+
+很有趣的对比，DevOps 和 SRE 都会关心应用生命周期，特别是生命周期里面中变更和故障。
+但是 DevOps 工作内容是主要为开发链路服务，一个 DevOps Team 通常会提供一串工具链，
+这其中会包括：开发工具、版本管理工具、CI 持续交付工具、CD 持续发布工具、报警工具、故障处理。
+
+而 SRE Team 则关注更为关注变更、故障、性能、容量相关问题，会涉及具体业务，产出工具链会有：
+容量测量工具、Logging 日志工具、Tracing 调用链路跟踪工具、
+Metrics 性能度量工具、监控报警工具等。
+#+END_QUOTE
+感觉文中描述的 SRE 岗位有点神奇：
+
+1. 性能监控、追踪系统 -> tracing
+2. 性能调优工具 -> 有什么经典的例子嘛？
+3. 中间件 -> 理论上应该有个中间件团队才对？
+4. 选型 -> 理论上应该主要是业务开发者进行选型？
+
+#+BEGIN_QUOTE
+在职业发展天花板上，DevOps 可能缺乏 SRE 在一些专业领域的技能：
+计算机体系结构能力；高吞吐高并发优化能力；可扩展系统设计能力；
+复杂系统设计能力；业务系统排查能力。
+#+END_QUOTE
+理论上，SRE 是需要这些技能，但是不知道这个在国内的实际实践是怎样的。
+
+
+#+BEGIN_QUOTE
+DevOps：
+
+- Operator 技能
+  - Linux Basis
+    - 基本命令操作
+    - Linux FHS（Filesystem Hierarchy Standard 文件系统层次结构标准）
+    - Linux 系统（差异、历史、标准、发展）
+  - 脚本
+    - Bash / Python
+  - 基础服务
+    - DHCP / NTP / DNS / SSH / iptables / LDAP / CMDB
+  - 自动化工具
+    -Fabric / Saltstack / Chef / Ansible
+  - 基础监控工具
+    - Zabbix / Nagios / Cacti
+  - 虚拟化
+    - KVM 管理 / XEN 管理 / vSphere 管理 / Docker
+    - 容器编排 / Mesos / Kubernetes
+  - 服务
+    - Nginx / F5 / HAProxy / LVS 负载均衡
+    -常见中间件 Operate（启动、关闭、重启、扩容）
+
+Dev
+
+- 语言
+  - Python
+  - Go（可选）
+  - Java（了解部署）
+- 流程和理论
+  - Application Life Cycle
+  - 12 Factor
+  - 微服务概念、部署、生命周期
+  - CI 持续集成 / Jenkins / Pipeline / Git Repo Web Hook
+  - CD 持续发布系统
+- 基础设施
+  - Git Repo / Gitlab / Github
+  - Logstash / Flume 日志收集
+  - 配置文件管理（应用、中间件等）
+  - Nexus / JFrog / Pypi 包依赖管理
+  - 面向 开发 / QA 开发环境管理系统
+  - 线上权限分配系统
+  - 监控报警系统
+  - 基于 Fabric / Saltstack / Chef / Ansible 自动化工具开发
+
+SRE：
+
+- 语言和工程实现
+  - 深入理解开发语言（假设是 Java）
+    - 业务部门使用开发框架
+    - 并发、多线程和锁
+    - 资源模型理解：网络、内存、CPU
+    - 故障处理能力（分析瓶颈、熟悉相关工具、还原现场、提供方案）
+  - 常见业务设计方案和陷阱（比如 Business Modeling，N+1、远程调用、不合理 DB 结构）
+  - MySQL / Mongo OLTP 类型查询优化
+  - 多种并发模型，以及相关 Scalable 设计
+
+- 问题定位工具
+  - 容量管理
+    - Tracing 链路追踪
+    - Metrics 度量工具
+    - Logging 日志系统
+
+运维架构能力
+
+- Linux 精通，理解 Linux 负载模型，资源模型
+- 熟悉常规中间件（MySQL Nginx Redis Mongo ZooKeeper 等），能够调优
+- Linux 网络调优，网络 IO 模型以及在语言里面实现
+- 资源编排系统（Mesos / Kubernetes）
+
+理论
+
+- 容量规划方案
+- 熟悉分布式理论（Paxos / Raft / BigTable / MapReduce / Spanner 等），能够为场景决策合适方案
+- 性能模型（比如 Pxx 理解、Metrics、Dapper）
+- 资源模型（比如 Queuing Theory、负载方案、雪崩问题）
+- 资源编排系统（Mesos / Kurbernetes）
+#+END_QUOTE
