@@ -1,7 +1,7 @@
 #+TITLE: Python 3 porting - quickstart
 #+OPTIONS: ^:{}, num:nil
 
-在 [[http://wiki.in.zhihu.com/pages/viewpage.action?pageId=38832334][Python 3 porting 大纲]] 中，我们简单的描述了 porting 的几个基本步骤：
+在 [Python 3 porting 大纲] 中，我们简单的描述了 porting 的几个基本步骤：
 
 1. 提高项目测试覆盖率，推荐超过 80%
 2. 学习 Python 2 和 Python 3 之间的差异
@@ -69,7 +69,7 @@ ps: 这个配置可以合理的利用 CI 缓存机制，让我们的测试以最
 [tox]
 envlist = {py27,py36}-{test}
 indexserver =
-    default = https://mirror.in.zhihu.com/simple
+    default = https://mirror.in.xx.com/simple
 recreate=false
 
 [testenv]
