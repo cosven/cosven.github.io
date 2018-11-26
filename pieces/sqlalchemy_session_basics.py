@@ -16,7 +16,7 @@ Session = sessionmaker(bind=engine)
 session1 = Session()
 session2 = Session()
 
-SessionNoAutoflush = sessionmaker(bind=engine, autoautoflush=False)
+SessionNoAutoflush = sessionmaker(bind=engine, autoflush=False)
 session3 = SessionNoAutoflush()
 
 

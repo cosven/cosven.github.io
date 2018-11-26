@@ -25,6 +25,7 @@ def index():
 @app.route('/check')
 def check():
     user = db.session.query(User).filter_by(name=request.args['name']).first()
+    db.session.commit()
     return 'ok' if user is None else 'not'
 
 
