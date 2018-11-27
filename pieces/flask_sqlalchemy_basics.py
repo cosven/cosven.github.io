@@ -18,7 +18,7 @@ class User(db.Model):
 @app.route('/')
 def index():
     db.session.add(User(name=request.args['name']))
-    time.sleep(5)
+    time.sleep(10)
     raise RuntimeError
 
 
@@ -29,4 +29,4 @@ def check():
     return 'ok' if user is None else 'not'
 
 
-app.run()
+app.run(port=8888)
