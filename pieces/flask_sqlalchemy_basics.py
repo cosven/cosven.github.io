@@ -15,18 +15,16 @@ class User(db.Model):
     name = db.Column(db.String(64))
 
 
+@app.route('/health')
+def ok():
+    return 'ok'
+
+
 @app.route('/')
 def index():
-    db.session.add(User(name=request.args['name']))
-    time.sleep(10)
-    raise RuntimeError
+    user = db.session.query(User).filter_by(name='wen').first()
+    return user.name
 
 
-@app.route('/check')
-def check():
-    user = db.session.query(User).filter_by(name=request.args['name']).first()
-    db.session.commit()
-    return 'ok' if user is None else 'not'
-
-
-app.run(port=8888)
+if __name__ == '__main__':
+    app.run(port=18888)
