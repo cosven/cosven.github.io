@@ -1,0 +1,79 @@
+* 操作系统
+** 死锁
+[[http://cosven.me/blogs/74]]
+
+** QUESTION 基于文件的缓存系统或者数据库
+- tinydb
+- mmap'ed files
+- BerkeleyDB
+
+
+** 理解 top 命令输出
+
+#+BEGIN_QUOTE
+top - 11:51:15 up 206 days, 18:42,  4 users,  load average: 1.19, 0.84, 0.76
+Tasks: 289 total,   1 running, 288 sleeping,   0 stopped,   0 zombie
+Cpu(s):  7.1%us,  1.6%sy,  0.0%ni, 90.5%id,  0.0%wa,  0.0%hi,  0.7%si,  0.1%st
+Mem:   8193588k total,  5989856k used,  2203732k free,   436376k buffers
+Swap:        0k total,        0k used,        0k free,  1455476k cached
+#+END_QUOTE
+
+*** 第一行：load average
+参考资料（推荐）：[[http://www.ruanyifeng.com/blog/2011/07/linux_load_average_explained.html][linux_load_average_explained]]
+
+#+BEGIN_QUOTE
+load average: 1.19, 0.84, 0.76
+#+END_QUOTE
+它们的意思分别是1分钟、5分钟、15分钟内系统的平均负荷。
+当一个 CPU 完全空闲的时候，平均负荷为0；当CPU工作量饱和的时候，平均负荷为1。
+当负荷超过 1 时，意味着 CPU 已经被占满，有 19% 的任务在等待。
+
+如果机器有 n 个处理器，则它的满负荷是 n.0 。
+
+第一行的输出似乎和 uptime 命令的输出一模一样。
+
+*** 第三行：CPU Stats
+参考资料（推荐）：[[http://blog.scoutapp.com/articles/2015/02/24/understanding-linuxs-cpu-stats][understanding-linuxs-cpu-stats]]
+
+摘抄几个：
+
+- *High kernel usage* 通常来说，如果系统频繁 IO 操作，则 kernel usage(sy) 会比较高。
+- *High waiting on I/O* 有大的 IO 操作，并且这个 IO 操作是低效的。
+- *High interrupt processing* 可能是硬件有问题
+
+
+** 上下文切换
+
+进程上下文包含哪些内容 ->
+#+BEGIN_QUOTE
+The kernel maintains a /context/ for each process. The context is the state
+that the kernel needs to restart a preempted process. It consists of the values
+of objects such as the general purpose registers, the floating-point registers, the
+program counter, user’s stack, status registers, kernel’s stack, and various kernel
+data structures such as a /page table/ that characterizes the address space, a /process
+table/ that contains information about the current process, and a /file table/ that
+contains information about the files that the process has opened.
+
+-- from CSAPP 8.2 Context Switches
+#+END_QUOTE
+
+额外资料
+
+- [[https://stackoverflow.com/questions/5440128/thread-context-switch-vs-process-context-switch][thread context switch vs process context switch]]
+- [[http://www.personal.kent.edu/~rmuhamma/OpSystems/Myos/threads.htm][In theory: threads vs processes]]
+- [[https://stackoverflow.com/questions/807506/threads-vs-processes-in-linux][In Practice: linux thread vs processes]]
+
+** pidfile
+pidfile 基本的作用是用来告诉用户，这个程序已经正常运行，并且 process id 就是这个。
+
+- 是不是 pidfile 最好都放在 /var/run 目录下？放在 ~/.app/ 目录下，好不好？
+- 如果放在 /var/run目录下，权限的问题怎样解决？
+
+暂时来看，对于绝大部分使用GUI的Linux用户来说，放在 home 目录是一个还算不错的选择。
+要想把 pidfile 放在/var/run目录下，就必须有 root 权限
+在 Linux 下，也可以通过创建 dbus service，这样就不需要创建 pidfile.
+
+http://unix.stackexchange.com/questions/12815/what-are-pid-and-lock-files-for
+http://stackoverflow.com/questions/5173636/must-my-pidfile-be-located-in-var-run
+
+lockfile 基本类似。

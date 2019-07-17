@@ -1,0 +1,78 @@
+* feeluown
+  :PROPERTIES:
+  :CUSTOM_ID: feeluown
+  :END:
+
+** 怎样帮助用户判断一些歌曲是否可以播放
+   :PROPERTIES:
+   :CUSTOM_ID: feeluown/ux-invalid-song
+   :END:
+问题：目前网易云音乐很多歌曲都没有版权，不能播放，但是搜索结果却有包含这些歌曲，
+feeluown 在界面上展现这些歌曲，用户点击之后，却不能播放，体验不好。
+
+背景：在网易云音乐的网页端，它将这些不能播放的歌曲标记为灰色（disabled 状态）来告诉用户无法播放，
+feeluown 使用比较老版本的接口(weapi)来获取歌单音乐列表，
+老的接口返回的音乐信息中没有字段标记这首歌是否可以播放。
+
+调研：在客户端新版本 API 中 (eapi)，它给每首歌都相应的配置了一个 privilege object，
+其中有一个 =cp= 字段标记这首歌能否播放。但新版本 API 的使用方式目前不明确。
+
+解决办法：
+1. 请求音乐信息的时候，多发一此请求，将所有的歌曲 url 请求一次（批量）
+以确认歌曲是否可以播放（目前看来，成本最低）
+2. 继续调研，查看是否能使用 eapi（理论上不可以持续）
+3. 使用爬虫的方法，爬去网页版（理论上可持续发展）
+4. 避开这个问题：当用户点击歌曲，发现不能播放的时候，弹窗推荐其它平台相应的歌
+（成本较低，尊重各平台版权）
+
+最终解决办法：不能播放的歌曲自动 fallback
+
+** DONE [#B] 将一行歌曲描述转换成一个 Model
+   DEADLINE: <2018-12-19 Wed>
+
+1. 已知一首歌曲的 ID 和平台，获取这首歌曲的所有信息 -> 允许调用接口
+
+将所有的字段设置为 =detail_fields= 。
+
+#+BEGIN_SRC python
+song = Song(id=1)
+
+# 如果该 model 已经被真正的初始化，这个字段应该返回 song.artists_name，
+# 否则，返回用于展示的值
+song.artists_name_display
+
+#+END_SRC
+
+2. 已知一首歌的 ID 和平台，在播放列表中展示这首歌，访问特定字段时可以访问详情
+
+展示一首歌曲时，可能需要知道这首歌的 title, artists_name, album_name 等，
+如果这时字段没有值，就忽略。但当播放这首歌曲时，希望能访问网络。
+
+** 本地歌曲 identifier 计算方法调研
+大概思路： hash(field1 + field2 + ...)
+
+*** 歌曲的什么信息可以用来标识一首歌曲
+我们可以看 ID3 的发展历史，另外可以看现代歌曲 ID3 tag 信息包含的字段，
+可以得出两个结论：
+
+- =title + artist + album= 是一首歌重要的标识信息
+- 现代大部分歌曲（网易云，qq）的 ID3 tag 中都包含这三个字段
+
+而在实际情况中，不同的歌曲这三个字段可能会完全一样，比如一首歌曲的现场版和专辑版本。
+所以，我们考虑将 duration(length) 这个字段也加入标识信息中。
+
+参考资料：[[https://zh.wikipedia.org/wiki/ID3#%E6%A0%BC%E5%BC%8F][wikipedia: ID3]]
+
+*** 什么样的 hash 函数合适？
+
+一开始是用 =elfhash(title + artist + album)= 来计算 identifier，
+但遇到了好几个冲突的情况（比如 黄伟文的 YY 话 (1-9)）。后来加上
+duration 之后缓解了这个问题。所以这个函数选择之后还需要斟酌下。
+
+** TODO [#C] feeluown 内存占用太多的问题
+详情请看 telegram feeluown 群讨论
+
+** TODO [#B] fuo 协议增强
+syntax-directed interpreter
+concrete syntax tree
+abstract syntax tree

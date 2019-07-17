@@ -1,0 +1,93 @@
+* 折腾
+** TODO [#C] 使用 Emacs 一年半的感受 - Emacs 基本哲学与插件选择
+*** 文件树、项目浏览：treemacs vs neotree (vs speedbar)
+很早以前使用过 speedbar，很难用，比如打开它时，会弹出一个 frame，我也懒得折腾。
+后来尝试了 neotree，neotree 和 vim 的 nerdtree 非常像，我使用了一段时间。
+但使用过程中，发现很多细节问题：比如每次打开 neotree 时，
+它显示的文件目录是你上次打开的目录，它和 projectile 的联动也非常难用，
+所以我几乎很少使用上它。
+
+后来发现了 treemacs，它文档上介绍的几个特性还是非常有吸引力的：
+
+- 看截图，颜值不错
+- 可以和 projectile 集成
+- 支持 project 和 workspace (和 vscode/IDE 等工具的文件浏览器更像了)
+
+*** restclient
+超级赞！比 curl 方便，比 postman (一个 chrome 插件) 好用，更容易与其它工具集成。
+比如：它支持将 query 导出为 curl 格式；我们也可以直接将这个复制到代码中做为文档。
+
+*** pyim
+Emacs 中的拼音输入法，非常惊艳。给我的几个感受：
+
+1. 惊讶：Emacs 这种文字为主的界面还可以弹出输入法！
+2. M-j 就能将输入的字母变成汉字（已经没有见过这样的交互）
+3. 完美的解决了系统中文输入法带来的若干麻烦。
+比如我之前遇到的一个非常头疼的问题：系统中文输入法会无意间修改 buffer。
+
+美中不足的就是词库似乎不是很够。
+
+#+BEGIN_QUOTE
+Runs queries from a plain-text query sheet, displays results as a pretty-printed XML, JSON and even images.
+#+END_QUOTE
+
+*** 自定义 mode-line
+示例可以参考 init-mode-line.el
+
+** flycheck with python-mode
+
+flycheck 没有 flycheck-enable-checker 命令，它的 [[elisp:flycheck-disable-checker]]
+命令可以达到 enable 的效果。方法是先按 =C-u= ，然后再运行命令。这样一来，
+就可以为 python-mode 启用 python-pylint 等 checker 了。
+
+也可以直接按 =C-u C-c ! x= ，这样就相当于 flycheck-enable-checker。
+有兴趣的可以看 [[https://github.com/flycheck/flycheck/blob/master/flycheck.el][flycheck.el]] 源码中的 flycheck-disable-checker 函数。
+
+*附注*
+
+flycheck 支持多 checker，以 Python 为例，目前有 python-compile, python-pylint,
+python-flake8, python-mypy 这四个 checker。
+
+flake8 侧重代码风格检查，也会简单检查编译错误，它的检查点有[[http://flake8.pycqa.org/en/latest/user/error-codes.html#error-violation-codes][这些]]。
+pylint 会进行静态分析，它的检查点很多，可以看[[http://pylint.pycqa.org/en/latest/technical_reference/features.html][这里]]，根据过去经验，
+一般的代码很难完全通过 pylint 的检查。
+
+** Emacs 高效编辑和移动   :reading:fav:
+[[https://www.masteringemacs.org/article/effective-editing-movement][effective editting movement]]
+
+我们在写代码时，有很大一部分时间都是在读代码。
+比如看一个函数上下文，函数是在哪里定义的，函数属于某个类，类有哪些属性等。
+也就是说，移动可能是我们最常用的行为之一。这篇文章比较完整的介绍了 Emacs
+常见移动光标的方法。
+
+** Org 文件常用设置
+*** 上标 (superscripts)，下标 (subscripts)
+- =#+OPTIONS: ^:nil= 忽略所有上下标 (superscripts, subscripts)
+- =#+OPTIONS: ^:{}= 上下标也可以部分忽略
+
+详情请看 https://emacs.stackexchange.com/a/10620
+
+** TODO [#C] Emacs Python mode 增强  :elisp:editor:
+实现 Dabeaz 的 Python 编辑器
+
+** TODO [#B] Emacs anaconda-mode 进程经常 100%    :elisp:
+** TODO [#C] Emacs frame tiling  :elisp:
+Emacs 可以获取到屏幕大小，也可以知道当前 frame 大小，
+并且可以获取所有可见的 frame，理论上可以实现 Emacs frame tiling.
+
+参考 init-simple.el 中的 mcenter-current-frame 函数。
+
+** term 模式                                                          :elisp:
+*** 自定义 multi-term 配置
+使用 =custom-set-variables= 语法即可设置 multi-term 的 =term-bind-key-alist=
+等重要参数，目前已经在 =.emacs.d/elisp/init-common-packages.el= 中有所记录。
+
+*** QUESTION xterm-256color 意味着什么？
+
+** 遇到乱码问题时，请检查 locale 设置
+1. 比如 vim 不能正确显示中文时
+
+** Mac
+*** 睡眠配置
+- =sudo pmset -b disablesleep 1= 关闭盖子，不会睡眠
+- =sudo pmset -b disablesleep 0= 恢复

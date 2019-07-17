@@ -1,0 +1,53 @@
+* 代码片断
+** In-place swap
+
+#+BEGIN_SRC python
+def swap_int(a, b):
+    a = a ^ b
+    b = a ^ b
+    a = b ^ a
+    return a, b
+
+return swap_int(2, 1)
+#+END_SRC
+
+#+RESULTS:
+| 1 | 2 |
+
+** fswatch + rsync 同步文件
+
+#+BEGIN_SRC sh
+fswatch -e "./.git" . | while read file; do git ch
+eck-ignore -q $file || (echo $file && rsync -av . ${ip}:${dir}); done
+#+END_SRC
+
+** CentOS 7 mysql 配置
+
+0. CentOS 7 上默认只有 MariaDB 5.5，安装 MySQL 5.7 需要加源
+
+1. root 初始密码可能不为空，可以在日志里面 grep 临时密码，
+（这个设定有点脑残），参考 [[https://www.percona.com/blog/2016/05/18/where-is-the-mysql-5-7-root-password/][博客]] 。
+
+#+BEGIN_SRC
+grep 'temporary password' /var/log/mysqld.log
+#+END_SRC
+
+2. 修改 root 密码
+
+MySQL 5.7 似乎对密码有要求，有字母、特殊字符、长度等，
+而且逆步你不修改密码，它似乎不让你继续操作。
+
+我们可以先改密码，然后卸载 =validate_password= 插件
+#+BEGIN_SRC
+set password = PASSWORD("cosven!123")
+#+END_SRC
+
+3. 创建用户
+
+#+BEGIN_SRC
+create user 'xxx'@'%' identified by 'xxx';
+GRANT ALL PRIVILEGES ON *.* TO 'xxx'@'%';
+#+END_SRC
+
+='xxx'@'%'= 表示用户名为 xxx，% 代表任意主机名，表示可以从远程连接，
+也可以从本地连接。

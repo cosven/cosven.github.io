@@ -1,0 +1,63 @@
+* Python
+
+我自己获取 Python 资源的途径：
+
+1. twitter - 关注 core developer (尝试中)
+2. [[https://reddit.com/r/python][/r/python]] - 尝试过一段实践（可以看一些社区新闻）
+3. 关注看到过的一些不错的博客
+4. 主动通过搜索引擎搜索关键字（比如 Python dataclasses）
+
+** Flask
+*** Flask 中使用线程池
+** Gunicorn
+
+** SQLAlchemy
+*** TODO [#C] 问题排差：2013, 'Lost connection to MySQL server during query'
+** TODO [#B] Python 3.7 Dataclasses
+
+- [ ] 为什么要加入 dataclasses？
+  - 不是已经有 attr 了么？
+- [X] dataclasses 基本用法（讲基础用法的文章很多）
+- [ ] dataclasses 和 Model/Serializer/Schema 等概念的关系是怎样的？
+  - 要不要内置支持 validation？
+  - 现有资料没有谈这几个东西之间的关联
+
+*高级话题*
+
+- [ ] 据说 dataclasses 没有使用 metaclass，那它是怎样实现的呢？
+
+*主要参考资料：*
+
+- [[https://www.python.org/dev/peps/pep-0557/][PEP 557]]
+- [[https://docs.python.org/3/library/dataclasses.html][Python docs]]
+
+*** 为什么要有 dataclasses？
+
+Guido:([[https://github.com/ericvsmith/dataclasses/issues/19#issuecomment-310913558][link]])
+#+BEGIN_QUOTE
+I would say the stdlib is lacking some very useful functionality in this area.
+#+END_QUOTE
+
+
+kawabangga:([[https://www.kawabangga.com/posts/2959][对比于 attr, Namedtyple 等其它容器]])
+#+BEGIN_QUOTE
+
+1. 没有使用 BaseClass 或者 metaclass，不会影响代码的继承关系。
+   被装饰的类依然是一个普通的类
+2. 使用类的 Fields 类型注解，用原生的方法支持类型检查，不像 attr 这种库对代码有侵入性
+   （要用 attr 的函数将一些东西处理）
+#+End_quote
+
+*** Dataclasses 和 Model, Schema, Serializer 这些概念的联系是什么？
+
+** 一些奇怪的坑
+*** try...except... 使用的一个注意事项
+这段代码看起来是 A 模块不存在，但其实还有一种可能，A 模块依赖的一个模块不存在。
+#+BEGIN_SRC python
+try:
+    import A
+except ImportError:
+    print('A not found.')
+#+END_SRC
+
+另外一个现实中的例子：[[https://github.com/pallets/werkzeug/commit/b488d7ed5c88619191e89acbb642db2c03e13e2c][werkzeug: Fix import_string masking of AttributeError]]
