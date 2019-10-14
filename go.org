@@ -1,0 +1,15 @@
+* Golang
+
+** 问题
+
+*** flag provided but not defined
+
+:LOG:
+~/p/tidb-binlog master > make arbiter
+CGO_ENABLED=0 GO111MODULE=on go build  -ldflags '-L/usr/local/opt/mysql-client/lib -X "github.com/pingcap/tidb-binlog/pkg/version.BuildTS=2019-07-26 09:47:56" -X "github.com/pingcap/tidb-binlog/pkg/version.GitHash=7771d9e8d36b43b149ca707a60f3b77f8c06c3e1" -X "github.com/pingcap/tidb-binlog/pkg/version.ReleaseVersion=v3.0.1-12-g7771d9e"' -o bin/arbiter cmd/arbiter/main.go
+# command-line-arguments
+flag provided but not defined: -L/usr/local/opt/mysql-client/lib
+usage: link [options] main.o
+:END:
+
+后来查出来是自己设置了一个 LDFLAG 的环境变量，而 Makefile 中正好依赖了这个变量。

@@ -51,3 +51,124 @@ GRANT ALL PRIVILEGES ON *.* TO 'xxx'@'%';
 
 ='xxx'@'%'= 表示用户名为 xxx，% 代表任意主机名，表示可以从远程连接，
 也可以从本地连接。
+** Docker 常见命令
+*** 启动 MySQL 并 expose 端口
+#+BEGIN_SRC sh
+docker run --name mysql80 -e MYSQL_ROOT_PASSWORD=123456 -p 33060:3306 -d mysql:8.0
+#+END_SRC
+
+*** 查看 volume/network
+
+#+BEGIN_SRC
+docker volume ls
+docker network ls
+#+END_SRC
+** Python 编写 rest 客户端
+
+#+BEGIN_SRC python
+from functools import wraps
+
+import requests
+
+
+class RESTRequestError(Exception):
+    pass
+
+
+def rest(method, path, allowed_status_code=None,
+         json_fields=None, query_fields=None, url_fields=None):
+    """a decorator for pd restclient
+    """
+    allowed_status_code = allowed_status_code or [200, 201]
+    json_fields = json_fields or []
+    query_fields = query_fields or []
+    url_fields = url_fields or []
+
+    def _wrapper(func):
+        @wraps(func)
+        def wrapper(client, **kwargs):
+            # extract request body and request options
+            body = {}
+            query = {}
+            url_kwargs = {}
+            req_kwargs = {}
+            for key, value in kwargs.items():
+                if key in json_fields:
+                    body[key] = value
+                elif key in query_fields:
+                    query[key] = value
+                elif key in url_fields:
+                    url_kwargs[key] = value
+                else:
+                    req_kwargs[key] = value
+
+            # cook api url
+            try:
+                path_ = path.format(**url_kwargs)
+            except KeyError:
+                raise PDRequestError('build url failed')
+            url = client.cook_url(path_)
+
+            # call client.request method
+            if method == 'POST':
+                resp = client.request(method, url, json=body, **req_kwargs)
+            elif method == 'GET':
+                resp = client.request(method, url, params=query, **req_kwargs)
+            elif method == 'DELETE':
+                resp = client.request(method, url, **req_kwargs)
+            else:
+                raise RESTRequestError(f'unknown request method: {method}')
+
+            # check if status code are allowed
+            status_code = resp.status_code
+            if status_code not in allowed_status_code:
+                raise RESTRequestError(f'unallowed status_code: {status_code}')
+
+            return resp
+        return wrapper
+    return _wrapper
+#+END_SRC
+** MySQL fixtures
+
+*** easy
+  :PROPERTIES:
+  :engine:   mysql
+  :dbhost:   0.0.0.0
+  :database: test
+  :dbuser:   root
+  :dbpassword: 123456
+  :cmdline:  --protocol=tcp
+  :exports:  both
+  :END:
+
+#+BEGIN_SRC sql
+use test;
+
+drop table if exists user;
+
+create table user (
+  id int not null auto_increment,
+  name varchar(64) not null,
+  star int not null,
+  company varchar(16),
+  primary key (`id`)
+);
+
+insert into user
+  (name, star, company)
+values
+  ('cosven', 3, 'pingcap'),
+  ('cosven', 4, 'zhihu'),
+  ('yannnli', 5, 'sogou'),
+  ('yannnli', 4, 'alibaba'),
+  ('amy', 4, 'zhihu'),
+  ('zyguan', 5, 'pingcap'),
+  ('cyliu', 3, null);
+#+END_SRC
+** 查看 container 的在宿主机的 pid
+#+BEGIN_SRC
+docker inspect -f '{{.State.Pid}}' <container id>
+#+END_SRC
+
+** netstat vs lsof
+https://serverfault.com/a/155560

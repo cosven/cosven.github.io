@@ -1,5 +1,12 @@
 * 折腾
 ** TODO [#C] 使用 Emacs 一年半的感受 - Emacs 基本哲学与插件选择
+*** 终端 or GUI
+在 macOS iterm2 中使用 Emacs terminal 模式，会有以下问题
+
+1. 突然 hang 住并消耗大量 CPU (100%)
+2. =emacsclient -nc= 无法使用，期望能创建一个 GUI frame
+3. 刚打开文件时，可能会比较卡（不知道为啥）
+
 *** 文件树、项目浏览：treemacs vs neotree (vs speedbar)
 很早以前使用过 speedbar，很难用，比如打开它时，会弹出一个 frame，我也懒得折腾。
 后来尝试了 neotree，neotree 和 vim 的 nerdtree 非常像，我使用了一段时间。

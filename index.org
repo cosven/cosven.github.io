@@ -1,12 +1,11 @@
 
-#+SETUPFILE: ./.theme-worg.setup
+#+SETUPFILE: ~/Dropbox/public/.theme-worg.setup
 #+STARTUP: nologdone
 #+OPTIONS: html-style:nil
 #+OPTIONS: H:5 num:nil toc:t \n:nil ::t |:t f:t *:t ^:{}
 #+OPTIONS: tex:t
 #+KEYWORDS:  cosven, notes, wiki
 #+TODO: TODO(t) | DONE(d)
-#+TODO: QUESTION(q) | ANSWERED(a)
 #+LANGUAGE:  en
 
 #+TITLE:  零碎笔记
@@ -25,3 +24,5 @@
 #+include: "./snippet.org" :minlevel 1
 #+include: "./design_pattern.org" :minlevel 1
 #+include: "./hack.org" :minlevel 1
+#+include: "./clean_code.org" :minlevel 1
+#+include: "./go.org" :minlevel 1
