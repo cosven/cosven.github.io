@@ -3,7 +3,8 @@
 *** read index 请求是什么
 应该是 follower 发给 leader，leader 会返回一个  read index。
 
-据 mh 老师描述，tikv 中的 read index 请求有两种，一个是 raft 的，一个是 tikv 的，
+据 mh 老师描述，tikv 中的 read index 请求有两种，一个是 raft 的，一个是 tikv
+一个是 tikv 的，
 tikv 的这个会给 tiflash 用。
 
 #+BEGIN_SRC rust
@@ -15,7 +16,7 @@ pub struct ReadIndexRequest {
     // `true` means it's in `ReadIndexQueue::reads`.
     in_contexts: bool,
 }
-+END_SRC
+#+END_SRC
 
 *** raft 一次写入的流程是什么
 当 Client 需要写入某个数据的时候，Client 会将操作发送给 Raft Leader，
@@ -57,4 +58,27 @@ https://github.com/tikv/tikv/pull/8005
 
 疑问：怎样判断一个 target peer 是否存在？
 
-** RocksDB
+** RocksDB Rate-Limiter
+
+- 功能：rate limiter
+- 作用：限制最大的写入速度
+- 场景：写入达到一定程度的时候，容易给读的 latency 带来尖刺
+- 介绍：
+  - 只对 flush 和 compaction 有影响，对 wal 就不会有影响
+
+
+- 功能：auto-tuned rate limiter
+- 算法：令牌桶算法
+- 作用：rate_bytes_per_sec 比较难配置，太低容易导致 memtable 和 L0 文件堆积，
+  太高容易影响前台读取和写入。rocksdb 提供算法自动设置这个值。
+
+
+- 测试点
+  - 关于限流
+    - 流量一直很高或很低：似乎没问题
+    - 流量从高变低：
+    - 流量从低变高：
+    - 流量过高时，解除限流
+  - auto-tuned 开关 + rate-bytes-per-sec 大小
+  - flush 和 compaction 流量
+  - 人肉指定的 rate-bytes-per-sec

@@ -152,3 +152,21 @@ https://mp.weixin.qq.com/s/lfN9O7qwWQZCx_iqiAqP0g
 
 搜了下资料，似乎不怎么存在『长尾问题』这个词语，一般说『长尾效应』，也称『长尾』，
 英文为：The Long Tail。
+** NVMe vs SATA
+
+- https://zh.wikipedia.org/wiki/NVM_Express
+- https://blog.csdn.net/u012459957/article/details/51226658
+- https://zhuanlan.zhihu.com/p/26172972
+
+记了如下零散结论，从结论中应该可以了解这些概念之间的关系
+
+- AHCI 是为 SATA 设计的控制器接口，定义了存储设备和主机之间的信息如何传递
+- 传统的 SATA 连接只能支持一个队列，一次只能接收 32 条数据，
+  而 NVMe 存储支持最多 64000 个队列，每个队列有 64000 个条目
+- NVMe 使用原生 PCIe 通道，免去了 SATA 与 SAS 接口的主机适配器与 CPU
+  通信所带来的延时
+- 绝大多数 SATA 硬盘都支持 AHCI
+- AHCI 它允许软件与 SATA 储存装置沟通的硬件机制，可让 SATA 储存装置启用进阶 SATA
+  功能，例如原生指令队列及热插入
+- SATA 设备可以连接 SAS 控制器
+- PCIe vs PCI：可以看 https://zhuanlan.zhihu.com/p/26172972
