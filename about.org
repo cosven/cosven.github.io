@@ -31,3 +31,11 @@
 
 *** 少用 3 级标题，不要用 4 级标题
 这里的 3 级标题对应 HTML 的 h4，这里的 4 级标题在各个 HTML theme 中都非常难看。
+
+*** 各类笔记记录在哪？
+笔记主要有几类：
+1. 工作项目：jira 和 google docs。
+2. 工作琐事：todo-list (feishu)
+3. 工作GTD：org-mode (dropbox/notes)。
+4. 生活：evernote 与博客。包括日记，琐事。
+5. 个人项目与编程：cosven.github.io 以及博客。
