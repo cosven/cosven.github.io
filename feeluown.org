@@ -76,3 +76,28 @@ duration 之后缓解了这个问题。所以这个函数选择之后还需要�
 syntax-directed interpreter
 concrete syntax tree
 abstract syntax tree
+** Picture In Picture 调研
+
+*uninit_gl 流程*
+
+uninit_video_out
+- 先调用 uninit_video_change
+- vo_destroy mpctx->video_out
+- 发出 video_reconfig 信号
+- 然后会把 mpctx->video_out 设置为 NULL
+
+*init_best_video_out 流程*
+
+mpctx->video_out = init_best_video_out(mpctx->global, &ex);
+
+调用方
+- reinit_video_chain_src
+  - Reinit_complex_filters
+    - mp_option_change_callback
+  - reinit_video_chain
+    - mp_switch_track_n
+    - play_current_file
+- handle_force_window
+
+[debug] cplayer: Run command: video-reload, flags=64, args=["-1"]
+('Error running mpv command', -12, (<MpvHandle object at 0x10ef36b90>, <mpv.c_char_p_Array_2 object at 0x123192f80>))
