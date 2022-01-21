@@ -17,6 +17,28 @@
 成文的笔记会放在这里 [[http://cosven.me][个人博客]]，Python 相关的好的文章或者视频会记在 [[http://blog.pyzh.org][pyzh-blog]]。
 
 ** 笔记的记录准则
+*** 笔记的分类（一切的基础）
+笔记大体分三类：工作，生活，兴趣爱好。兴趣爱好是分散在工作和生活中的。
+
+工作主要包含积累
+1. 工作短期计划（无沉淀价值的）：TODO list（飞书）。
+2. 工作长期关注（有沉淀价值的）：Dropbox/notes。
+3. 工作项目记录：Google docs。
+
+生活主要包含
+1. 生活短期计划（无沉淀价值的）：没有很好的方法，目前分散在 Dropbox/life_tracking。
+2. 生活长期关注（有沉淀和记录价值的）：
+   1. 记录计划与细节：Dropbox/life_tracking
+   2. 思考总结类：evernote
+
+兴趣爱好
+1. 技术类分两种（比如 FeelUOwn）
+   1. 临时记录：cosven.github.io
+   2. 有思考并且有深度：blogs
+2. 生活类（比如听歌）
+   1. 临时记录：life_tracking。
+   2. 有思考并且有深度：blogs, evernote。
+
 *** 一些小的事情、事件没必要记录时间
 重要的事情可以放在大事件里面，大事件中的事情可以记录时间。
 
@@ -31,11 +53,3 @@
 
 *** 少用 3 级标题，不要用 4 级标题
 这里的 3 级标题对应 HTML 的 h4，这里的 4 级标题在各个 HTML theme 中都非常难看。
-
-*** 各类笔记记录在哪？
-笔记主要有几类：
-1. 工作项目：jira 和 google docs。
-2. 工作琐事：todo-list (feishu)
-3. 工作GTD：org-mode (dropbox/notes)。
-4. 生活：evernote 与博客。包括日记，琐事。
-5. 个人项目与编程：cosven.github.io 以及博客。
