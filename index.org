@@ -27,3 +27,4 @@
 #+include: "./clean_code.org" :minlevel 1
 #+include: "./go.org" :minlevel 1
 #+include: "./tikv.org" :minlevel 1
+#+include: "./testing.org" :minlevel 1

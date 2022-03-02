@@ -20,24 +20,38 @@
 *** 笔记的分类（一切的基础）
 笔记大体分三类：工作，生活，兴趣爱好。兴趣爱好是分散在工作和生活中的。
 
-工作主要包含积累
-1. 工作短期计划（无沉淀价值的）：TODO list（飞书）。
-2. 工作长期关注（有沉淀价值的）：Dropbox/notes。
-3. 工作项目记录：Google docs。
+索引
+- 重要事情以及当下事情一览：工作看 notes, 生活看 evernote，evernote 上可以包含一部分工作的索引
+- 思考总结类：evernote, blogs, notes
+- 临时计划类：TODO list, evernote
+- 项目类：Docs, issues
+- 零碎积累：cosven.github.io
 
-生活主要包含
-1. 生活短期计划（无沉淀价值的）：没有很好的方法，目前分散在 Dropbox/life_tracking。
-2. 生活长期关注（有沉淀和记录价值的）：
-   1. 记录计划与细节：Dropbox/life_tracking
-   2. 思考总结类：evernote
+按公私分：
+- 公：blogs, cosven.github.io, issues, docs, todo list
+- 私：evernote, Dropbox/notes
 
-兴趣爱好
-1. 技术类分两种（比如 FeelUOwn）
-   1. 临时记录：cosven.github.io
-   2. 有思考并且有深度：blogs
-2. 生活类（比如听歌）
-   1. 临时记录：life_tracking。
-   2. 有思考并且有深度：blogs, evernote。
+按类型分
+- 工作：Docs, TODO list, Dropbox/notes
+  - 工作短期计划（无沉淀价值的）：TODO list（飞书）
+  - 工作长期关注（有沉淀价值的）：Dropbox/notes
+    由于这类事情部分是私有的，所以不能直接放在和公司绑定的软件上。
+    evernote 也是一个考虑的选项，但它有两个问题：一方面 evernote 要收费，没有 linux 版；
+    另一方面，虑工作和生活能够有序的隔离是比较好的，而 evernote 只包含生活的。
+  - 工作项目记录：Goolge Docs/Feishu Docs
+- 生活：evernote
+  - 生活短期计划（无沉淀价值的）：evernote
+    没有特别好的方法。之前尝试过记在 life_tracking 里面，但是那样太分散了。
+  - 生活长期关注（有沉淀和记录价值的）：
+    - 记录计划与细节：evernote
+    - 思考总结类：evernote
+- 兴趣爱好: cosven.github.io, blogs, evernote
+  - 技术类分两种（比如 FeelUOwn）
+    - 临时记录：cosven.github.io
+    - 有思考并且有深度：blogs
+  - 生活类（比如听歌）
+    - 临时记录：evernote。
+    - 有思考并且有深度：blogs, evernote。
 
 *** 一些小的事情、事件没必要记录时间
 重要的事情可以放在大事件里面，大事件中的事情可以记录时间。
