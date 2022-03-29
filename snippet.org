@@ -172,3 +172,16 @@ docker inspect -f '{{.State.Pid}}' <container id>
 
 ** netstat vs lsof
 https://serverfault.com/a/155560
+
+** prometheus rate 函数的坑
+
+基础理论：rate(xxx[30]) 计算的时候需要最少取两个点，一般情况 15s 一个点。
+
+一种事实情况：当用一个 ts=200.222 的时间戳去查询时，也就是在 [170.222, 200.222] 区间内必须要有两个点。
+而 prometheus 在这个区间附近正好有几个点：它们分别是 170.111, 185.111。200.111 这个点还在计算当中。
+于是真正符合区间要求的就一个 ts=185.111 的点，所以这个 rate 查询就查不出来值，于是 QPS 就有误报。
+
+把 query 改成如下应该就可以
+#+BEGIN_SRC
+sum(irate(tidb_executor_statement_total[1m])) < 0.1 * sum(rate(tidb_executor_statement_total[1m] offset 2m))
+#+END_SRC

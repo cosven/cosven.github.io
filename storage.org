@@ -58,6 +58,7 @@ https://github.com/tikv/tikv/pull/8005
 
 疑问：怎样判断一个 target peer 是否存在？
 
+** 工程师要知道的几个数值，以及衡量方法
 ** RocksDB Rate-Limiter
 
 - 功能：rate limiter

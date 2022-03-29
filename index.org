@@ -12,7 +12,8 @@
 #+AUTHOR: Cosven
 
 #+include: "./about.org" :minlevel 1
-#+include: "./python.org" :minlevel 1
+#+include: "./lang/python.org" :minlevel 1
+#+include: "./lang/go.org" :minlevel 1
 #+include: "./react.org" :minlevel 1
 #+include: "./web.org" :minlevel 1
 #+include: "./os.org" :minlevel 1
@@ -25,6 +26,5 @@
 #+include: "./design_pattern.org" :minlevel 1
 #+include: "./hack.org" :minlevel 1
 #+include: "./clean_code.org" :minlevel 1
-#+include: "./go.org" :minlevel 1
-#+include: "./tikv.org" :minlevel 1
+#+include: "./storage.org" :minlevel 1
 #+include: "./testing.org" :minlevel 1

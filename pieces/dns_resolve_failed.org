@@ -1,5 +1,0 @@
-* dns resolve failed
-
-1. 使用代码使用的库复现解析问题
-2. 使用 socket.gethostbyname 复现 dns 解析问题
-3. 看 dns 解析所经过的软件系统的日志，比如 dnsmasq?
