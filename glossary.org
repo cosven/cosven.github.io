@@ -170,3 +170,45 @@ https://mp.weixin.qq.com/s/lfN9O7qwWQZCx_iqiAqP0g
   功能，例如原生指令队列及热插入
 - SATA 设备可以连接 SAS 控制器
 - PCIe vs PCI：可以看 https://zhuanlan.zhihu.com/p/26172972
+
+** Expressions and Stateements
+
+#+BEGIN_SRC python
+def hello():
+    pass
+
+hello()
+
+print 'hello world'
+#+END_SRC
+
+- 在上面个例子中， ~hello~ 是函数（你不能说 ~hello~ 是个表达式）
+- ~hello()~ 这整个一起，才是个表达式 （感受一下）
+- print "hello world" 整个一行叫做 print 语句
+- =def hello(): pass= 这两行，是个函数定义语句
+- =hello()= 这一行也可以叫做表达式语句
+
+也就是说：语句和表达式并不是两个相对立的概念 。
+
+再看一小段代码：
+
+#+BEGIN_SRC python
+Python 2.7.15rc1 (default, Apr 15 2018, 21:51:34)
+[GCC 7.3.0] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+>>> map(print, [1, 2])
+  File "<stdin>", line 1
+    map(print, [1, 2])
+            ^
+SyntaxError: invalid syntax
+>>> from __future__ import print_function
+>>> map(print, [1, 2])
+1
+2
+[None, None]
+#+END_SRC
+
+在 Python 2 中， print 默认是个 statement，在上面这个例子中，我们可以看到，当 print 是个 statement 时，它没办法与 map 函数一起使用。
+而当 print是个函数时，它可以与 map 函数一起使用，而 statement 没办法与函数一起使用。这就是将 print 从 statement 改成函数的好处！
+
+总的来说，我们没必要在意三者区别是什么，它们其实没啥可比性，关键还是理解它们是什么。

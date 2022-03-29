@@ -98,3 +98,120 @@ Emacs 可以获取到屏幕大小，也可以知道当前 frame 大小，
 *** 睡眠配置
 - =sudo pmset -b disablesleep 1= 关闭盖子，不会睡眠
 - =sudo pmset -b disablesleep 0= 恢复
+
+** 升级 debian jessie 内核
+从 3.16 升级到 4.7
+
+1. 首先将 backport 加入到 sources.list 中
+2. 然后搜索一下 linux-image
+3. 然后安装
+4. 然后 reboot
+
+** 在 jessie 安装 neovim
+
+1. 经过多年探索，在 jessie 上安装 neovim 的比较简单的办法是通过 linuxbrew
+
+#+BEGIN_SRC sh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+#+END_SRC
+
+2. 然后安装 vim-plug 给 neovim 用
+
+#+BEGIN_SRC sh
+curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+#+END_SRC
+** 命令行
+*** item2/tmux/neovim true color 支持
+
+-   iterm 设置 term 环境变量为 xterm-256color
+-   tmux 设置 ~set-option -ga terminal-overrides ",xterm-256color:Tc"~
+-   neovim 不怎么需要设置，如果要的话，就是下面这个
+
+    set termguicolor
+    set t_8f=^[[38;2;%lu;%lu;%lum
+    set t_8b=^[[48;2;%lu;%lu;%lum
+
+举个例子：[我的配置](https://github.com/cosven/rcfiles/commit/1af74b2352967f0a937a63cb03942b91c0fc7f42)
+测试脚本：[链接](https://github.com/cosven/rcfiles/commit/b608261986833bad359d13168229d9e6ccdc1a64#diff-9bf5a2f4d58325ac0e124b2525172d15) -> 如果输出的颜色润滑过度，就代表改环境是支持 true color 的。
+
+*** linux 查看已经安装的内核
+
+    dpkg -l | grep linux-image
+
+*** ssh 端口映射
+
+本地端口映射： `ssh -L 9000:cosven.dev:8000 cosven.dev`
+这时，访问本地 9000 端口，就相当于访问 cosven.dev 的 8000 端口
+
+远程端口映射： `ssh -nNT -R 2222:localhost:22 cosven.dev`
+假设我们从本地可以 ssh 到 cosven.dev，但是从 cosven.dev 不能 ssh 到本地
+这时，我们可以使用这种方式&#x2026;
+
+`-N` 不登录 `-f` 后台跑
+
+*** 替换一个目录下的所有文件中包含某个字符串的文件
+
+=grep -rnw '*path/to/somewhere*' -e 'pattern'=
+
+*** 查看一个程序占用了那个端口
+
+`lsof -Pan -p PID -i`
+
+*** 重构 - 重命名
+tags: refactor, rename
+
+```shell
+linux: git grep -l 'original_text' | xargs sed -i 's/original_text/new_text/g'
+mac: git grep -l 'original_text' | xargs sed -i '' -e 's/original_text/new_text/g'
+```
+** mysql installation
+
+不知道从哪个版本之后，mysql 会限制只能从本地连接数据库。
+也就是说 mysql -uxxx -pxxx -h xx.xxx.xx.xx 会连接失败，典型报错：
+
+#+BEGIN_QUOTE
+ERROR 1130 (HY000): Host 'gw-cm.dev.rack.xx.com' is not allowed to connect to this MySQL server
+#+END_QUOTE
+
+这时，我们需要进行两部操作，以允许从远程连接该数据库
+
+1. 将 /etc/mysql/my.cnf (路径可能稍有差异) 的 bind-address 字段的值改成 0.0.0.0
+2. 第二步不能少，切记
+   GRANT ALL PRIVILEGES ON *.* TO <your-user-here>@'%' IDENTIFIED BY '<user-password-here>';
+   FLUSH PRIVILEGES;
+3. 然后重启
+
+Ubuntu 18.04 用户名和密码保存在 =/etc/mysql/debian.cnf=
+
+1. 添加用户： =create user cosven identified by '';=
+2. 给用户添加数据库权限： =grant all privileges on *.* to cosven@'%' identified by '';=
+3. =flush privileges;=
+
+** Debian Packaging
+*** SourcePackage
+参考资料：[[https://wiki.debian.org/Packaging/SourcePackage]]
+
+=Source packages= provide you with all of the necessary files to
+compile or otherwise, build the desired piece of software.
+
+*** Why looking at a source package ?
+If you want to study [[https://wiki.debian.org/Packaging][packaging]], or a specific package.
+
+If you want to know which compile-time options are enabled for
+ a specific package ([[https://wiki.debian.org/DebianPackageConfiguration][DebianPackageConfiguration]]).
+
+*** Why bother with source package if there is a binary package ?
+
+Some build systems (e.g. cmake) and =ad-hoc= scripts provide a
+convenient way to produce Binary packages in a uniform fashion.
+
+ad-hoc scripts: 这类脚本往往有这些特性：不通用、不幂等、临时的。
+https://www.zhihu.com/question/25347164/answer/90224221
+
+*** 怎样从一个 SourcePackge 打一个 deb 包？
+- [[https://wiki.debian.org/SimpleBackportCreation][Backporting]] 最简单的 backporting 方法（超好用）
+- [[https://backports.debian.org/news/jessie_released_-_backports_related_changes/][Versioning]] -> 使用 ~bpo8+1 for jessie
+
+*** 一些常见命令
+- apt-cache policy xxx  # 查看一个包的版本信息

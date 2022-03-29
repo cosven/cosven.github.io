@@ -61,3 +61,96 @@ except ImportError:
 #+END_SRC
 
 另外一个现实中的例子：[[https://github.com/pallets/werkzeug/commit/b488d7ed5c88619191e89acbb642db2c03e13e2c][werkzeug: Fix import_string masking of AttributeError]]
+
+** 字符串
+Q: 字符串 format 如何得到这种 {value} 形式的字符串
+
+```python
+'{{{hosts}}}'.format(hosts=','.join(['hello', 'world']))
+```
+
+** 描述符
+问题：A.b, a.b 分别是如何工作的？
+
+#+BEGIN_SRC python
+class A(object):
+    @property
+    def h(self):
+        return 1
+
+a = A()
+#+END_SRC
+
+[参考链接](https://docs.python.org/3/howto/descriptor.html#invoking-descriptors)
+
+> For objects, the machinery is in `object.__getattribute__()` which transforms b.x
+into `type(b).__dict__['x'].__get__(b, type(b))`. The implementation works through
+a precedence chain that gives data descriptors priority over instance variables,
+instance variables priority over non-data descriptors, and assigns lowest priority
+to `__getattr__()` if provided. The full C implementation can be found in
+PyObject_GenericGetAttr() in Objects/object.c.
+
+> For classes, the machinery is in `type.__getattribute__()` which transforms B.x
+into `B.__dict__['x'].__get__(None, B)`. In pure Python, it looks like:
+
+** Abstract Class Attribute
+本意是想要求子类必须实现下面几个类属性，但是并没有
+abstract-class-property 装饰器。另外，无论在这里设置该字段为
+abstractproperty 还是 abstractmethod，子类只要有个同名字段，它
+就能正常实例化，所以这里为了代码看起来相对简单，直接使用
+abstractmethod 来装饰这几个字段。
+
+#+BEGIN_SRC python
+class AbstractXxx(ABC):
+    @abstractmethod
+    def Song(self):
+        pass
+#+END_SRC
+
+而按照对 ABC 的理解，正确的方式可能是要这样写::
+#+BEGIN_SRC
+    @property
+    @classmethod
+    @abstractmethod
+    def Song(self):
+        pass
+#+END_SRC
+
+** setup.py 常见命令的执行逻辑
+1. bdist_wheel 是 wheel 包提供的
+2. 使用 MANIFEST.in，而不是 package_data
+3. 创建一个零时的包占坑（没有找到其他好办法）
+
+#+begin_src
+build
+ -> build_py
+ -> build_clib
+ -> build_ext
+ -> build_scripts
+
+sdist
+ -> check
+   -> check_metadata
+
+install
+ -> build
+ -> install_lib
+   -> build_py if has_pure_modules
+   -> build_ext if has_ext_modueles
+ -> install_headers
+ -> install_scripts
+ -> install_data
+ -> install_data
+ -> install_egg_info
+#+end_src
+
+:LOGBOOK:
+1. build 可能需要一个 id
+:END:
+
+thrift-compiler -> gen-py/
+package_dir={'': 'gen-py'}
+packages=find_packages('gen-py')
+
+不能安装 gen-py/ 目录下的包到系统环境
+or 预先在 gen-py 目录下创建好包

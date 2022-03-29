@@ -7,7 +7,6 @@
 - mmap'ed files
 - BerkeleyDB
 
-
 ** 理解 top 命令输出
 
 #+BEGIN_QUOTE
@@ -40,7 +39,6 @@ load average: 1.19, 0.84, 0.76
 - *High kernel usage* 通常来说，如果系统频繁 IO 操作，则 kernel usage(sy) 会比较高。
 - *High waiting on I/O* 有大的 IO 操作，并且这个 IO 操作是低效的。
 - *High interrupt processing* 可能是硬件有问题
-
 
 ** 上下文切换
 
@@ -77,3 +75,33 @@ http://unix.stackexchange.com/questions/12815/what-are-pid-and-lock-files-for
 http://stackoverflow.com/questions/5173636/must-my-pidfile-be-located-in-var-run
 
 lockfile 基本类似。
+
+** 内存模型
+    CLOSED: [2021-09-14 Tue 10:33]
+参考资料：https://research.swtch.com/mm
+
+1. “内存模型”讨论的内容是什么？
+   内存模型描述线程通过内存的交互及其对数据的共享使用。
+   可以认为，内存模型是在多线程环境下特有的一个概念。
+2. 第一篇《硬件内存模型》主要内容概括
+   1. 几种模型：
+      - 顺序一致性（Sequential Consistency）
+      - 全存储排序（x86 Total Store Order）
+      - 更弱的
+   2. 介绍背景：不同硬件的模型都不一样，举了一些例子，可见真的很复杂。
+   3. 后来有人提出了一种模型，一直沿用至今：
+      Weak Ordering and Data-Race-Free Sequential Consistency
+      - 这是一个规范，硬件上层只要满足这种规范，软件可以不关心硬件内部的模型如何
+      - 缩写：DRF-SC
+3. 第二篇《编程语言内存模型》
+   1. 现代编程语言保证 data-race-free 的程序总是以 sequential
+      consistent 的方式来执行。
+   2. synchronizing atomic 变量带来的效果 /可能/ 有四点，挺刷新我认识的（基础不行）
+      1. The compiled code for thread 1 must make sure that the write
+         to x completes and is visible to other threads before the write
+         to done becomes visible.
+      2. The compiled code for thread 2 must (re)read done on every iteration of the loop.
+      3. The compiled code for thread 2 must read from x after the reads from done.
+      4. The compiled code must do whatever is necessary to disable hardware optimizations that might reintroduce any of those problems.
+   3. 一个共识：编译器会对代码进行一些优化，比如指令 reorder。哪些 reorder 是合法的呢？
+      这个内存模型的一个重要问题。

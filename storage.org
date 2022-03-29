@@ -58,7 +58,18 @@ https://github.com/tikv/tikv/pull/8005
 
 疑问：怎样判断一个 target peer 是否存在？
 
-** 工程师要知道的几个数值，以及衡量方法
+** 常见数值，以及衡量方法
+*** 磁盘
+1. nvme 盘的 disk latency 一般在 1ms 以下。
+2. 盘的性能指标：带宽；IOPS。
+
+把 blocksize 改正常值 IOPS，改大可以测带宽。
+#+BEIGN_SRC shell
+fio --filename=/data1/test_fio -iodepth=64 -ioengine=libaio -direct=1 \
+  -rw=randwrite -bs=4k -size=100G -numjobs=128 -runtime=300 -group_reporting \
+  -name=test-rand-writ
+#+END_SRC
+
 ** RocksDB Rate-Limiter
 
 - 功能：rate limiter
