@@ -1,4 +1,4 @@
-* TiKV
+* Storage
 ** FAQ
 *** read index 请求是什么
 应该是 follower 发给 leader，leader 会返回一个  read index。
@@ -58,17 +58,35 @@ https://github.com/tikv/tikv/pull/8005
 
 疑问：怎样判断一个 target peer 是否存在？
 
-** 常见数值，以及衡量方法
-*** 磁盘
-1. nvme 盘的 disk latency 一般在 1ms 以下。
-2. 盘的性能指标：带宽；IOPS。
+** IO 基准测试
+这篇文档有使用 fio 测试磁盘性能的方法。
+https://cloud.google.com/compute/docs/disks/benchmarking-pd-performance
+1. 测试裸盘性能时，filename 要指定为磁盘，filesize 指定为磁盘容量大小。
+   而测试文件系统时，这两项配置则比较自由。可以改为文件和 10G 等。
+2. 测试 IOPS/带宽/latency 时，都有一些值得注意的参数配置。
+   比如测带宽用顺序写，blocksize 调大一点，并发和 iodepth 都调大，
+   并且注意不要让其它指标成为瓶颈。
 
-把 blocksize 改正常值 IOPS，改大可以测带宽。
-#+BEIGN_SRC shell
-fio --filename=/data1/test_fio -iodepth=64 -ioengine=libaio -direct=1 \
-  -rw=randwrite -bs=4k -size=100G -numjobs=128 -runtime=300 -group_reporting \
-  -name=test-rand-writ
-#+END_SRC
+这篇文档介绍了 iodepth 的含义，以及它与 numjobs 的区别。
+https://www.spinics.net/lists/fio/msg07191.html
+有趣的几点：
+1. 一个核有可能只能承受一定的 iodepth。
+2. Linux Buffered IO 不是异步的 [[https://fio.readthedocs.io/en/latest/fio_man.html#cmdoption-arg-iodepth][ref]]。
+
+这篇文章介绍了 Linux IO 的基本分层。
+https://zhuanlan.zhihu.com/p/71149410
+感觉问题主要是两个
+1. 知道有多少层缓存。
+2. 知道这个图 [[https://pic4.zhimg.com/80/v2-387d87592d876ec23e0774f7d14d8063_1440w.jpg][io layer]]。
+
+*** TiKV
+
+tikv 使用的 rocksdb 是以 buffered IO 为入口往下写的。rocksdb 写入可以认为是阻塞的（by 明华老师）。
+所以模拟 tikv 基准测试时，可以用 iodepth=2 或者 iodepth=1,numjobs=2（我的推论）。
+
+** IO 常数值
+1. nvme 盘的 disk latency 一般在 1ms 以下。
+2. 盘的性能指标：带宽；IOPS；latency。
 
 ** RocksDB Rate-Limiter
 
