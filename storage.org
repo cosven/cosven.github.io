@@ -84,9 +84,20 @@ https://zhuanlan.zhihu.com/p/71149410
 tikv 使用的 rocksdb 是以 buffered IO 为入口往下写的。rocksdb 写入可以认为是阻塞的（by 明华老师）。
 所以模拟 tikv 基准测试时，可以用 iodepth=2 或者 iodepth=1,numjobs=2（我的推论）。
 
-** IO 常数值
+** 关于存储的经验值
+*** 磁盘指标
+0. 盘的性能指标：带宽；IOPS；latency。
 1. nvme 盘的 disk latency 一般在 1ms 以下。
-2. 盘的性能指标：带宽；IOPS；latency。
+2. 观察 TiDB 发版性能测试的指标可以发现在 sysbench oltp_insert 负载中压力下，
+   磁盘 avg latency 在 30us 左右。数据导入阶段磁盘 avg latency 在 5ms 左右。
+
+*** RocksDB(tikv) 指标
+1. 关于 rocskdb bytes_per_write:
+   - 发版测试中，sysbench insert 负载下，kv rocksdb 的 avg bytes_per_write
+     为 28.5KB，p99 有 51KB。
+   - go-ycsb batchsize 为 128 的时候，bytes_per_write avg 为 300KB，
+     p99 有 558KB (这个值只是一次测试的结果)。查看代码发现 value size 为 1k。
+     这个我猜应该比 oltp_insert 的 value size 要大。
 
 ** RocksDB Rate-Limiter
 

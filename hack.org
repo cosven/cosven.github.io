@@ -165,6 +165,13 @@ tags: refactor, rename
 linux: git grep -l 'original_text' | xargs sed -i 's/original_text/new_text/g'
 mac: git grep -l 'original_text' | xargs sed -i '' -e 's/original_text/new_text/g'
 ```
+*** 查看当前时间
+以一个不错的格式输出当前时间
+#+BEGIN_SRC sh
+-> date +%F_%T
+2022-06-23_16:23:31
+#+END_SRC
+
 ** mysql installation
 
 不知道从哪个版本之后，mysql 会限制只能从本地连接数据库。
