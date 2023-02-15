@@ -1,0 +1,737 @@
+* DevOps
+** 功能开关、配置、A/B 测试
+
+facebook 那篇文章最主要的还是配置，关于 A/B Test 涉及比较少。关于 A/B Test 目前多是参考 google 这篇论文
+https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/36500.pdf
+
+ABTest / 配置管理 / 功能开关体系这篇 paper 写的最好
+http://sigops.org/sosp/sosp15/current/2015-Monterey/printable/008-tang.pdf
+
+** Holistic Configuration Management at Facebook                    :reading:
+- 为什么要看这篇 paper？
+- 它大概讲了什么？
+- 它有解决你的问题吗？
+- 你对它哪个部分最感兴趣？
+
+ps: 这篇论文我自己并没有完整的看完，后面有一部分是匆匆带过。
+
+*** 为什么看这篇 paper？
+一天，我在知乎上看到一篇文章讲“[[https://zhuanlan.zhihu.com/p/32712056][怎样才是真正的灰度发布]]”。
+
+它从这三个方面讲：
+1. 精确地流量分发控制。根据用户 ID 或者用户所在地域（省份）等方面进行流量分发控制。
+2. 监控系统支撑，监控一些指标变化。产品方面：点击率，pv，uv；应用层：错误率，吞吐量；
+基础设施层：CPU，内存等。
+3. 灵活的发布系统。支持服务多个版本（长期）共存等。
+
+其中，我对文章这样一句话“也就是硅谷里常说的 A/B testing，也可以归到灰度发布的范畴。”
+印象比较深刻。在我理解中，灰度发布即为灰度部署，和A/B 测试没有必然关系。
+灰度发布更倾向保证新版本代码可以正确运行，而 A/B test 是为产品服务的，优化产品策略用。
+
+一谈到 A/B testing，我就想起一位同事经常推荐的这篇 paper。不过这 paper 和灰度发布
+好像没半毛钱关系。
+
+*** 它大概讲了什么？
+
+*摘要*: This paper gives a comprehensive description of the use cases,
+design, implementation, and usage statistics of a suite of tools
+that manage Facebook’s configuration end-to-end, including
+ the frontend products, backend systems, and mobile apps.
+
+- *Runtime configuration management* is an important problem for
+ Internet services, but it is not well defined in the literature.
+We describe the problem space and the real use cases from our experience,
+in the hope of motivating future research in this area.
+- We describe *Facebook’s configuration management stack*, which addresses
+ many challenges not covered by prior work, e.g., gating product rollouts,
+config authoring, automated canary testing, mobile config,
+and a hybrid subscription-P2P model for large config distribution.
+This is the first published solution of holistic configuration management
+ for Internet services.
+- We report the *statistics and experience* of operating a large-scale
+configuration management stack, which are made available in the
+ literature for the first time. For exam- ple, do old configs become dormant,
+and how often do config changes expose code bugs?
+
+
+*配置管理的主要挑战* ：
+
+- *Configuration sprawl* （配置混乱）：Historically, each system could use its own configuration store and
+ distribution mechanism, which makes the site as a whole hard to manage.
+- *Configuration authoring and version control* （配置编写与版本控制）.
+- *Defending against configuration errors*.
+- *Configuration dependency* ：For example, after the monitoring tool’s config
+ is updated to enable a new monitoring feature, the monitoring configs
+ of all other systems might need be updated accordingly.
+- *Scalable and reliable configuration distribution*.
+
+*场景和解决方案* ：
+
+- Gating new product features.（大概理解为灰度？）
+- Conducting experiments.（大概理解为 A/B 测试把）
+- Application-level traffic control. 比如修改 HAProxy 配置？
+- Topology setup and load balancing. （基础设施变更
+- Monitoring, alerts, and remediation.（调整报警参数）
+- Updating machine learning models.
+- Controlling an application’s internal behavior.（比如调整容器 CPU）
+
+*用到的工具* ：
+
+- *Configerator* provides all the foundational functions, including version control,
+ authoring, code review, automated canary testing, and config distribution.
+Other tools are built on top of Configerator and provide specialized functions.
+- *Gatekeeper* controls the rollouts of new product features. Moreover, it
+can also run A/B testing experiments to find the best config parameters.
+- PackageVessel uses peer-to-peer file transfer to assist the distribution
+ of large configs.
+- Sitevars is a shim layer that provides an easy-to-use configuration API
+for the frontend PHP products.
+- MobileConfig manages mobile apps’ configs on Android and iOS, and bridges
+ them to the backend systems such as Configerator and Gatekeeper.
+
+
+*Configerator, Sitevars, and PackageVessel*
+
+- *Configuration Authoring*: 用代码生成配置（thrift 等）
+- Improving Usability through UI and Sitevars
+- Preventing Configuration Errors
+- Scalable and Reliable Configuration Distribution（ZooKeeper）
+- Distributing Large Configs through PackageVessel
+- Improving Commit Throughput（多个同时更改（同一个）配置）
+- Fault Tolerance
+
+** The Death of Microservice Madness in 2018  :reading:
+[[http://www.dwmkerr.com/the-death-of-microservice-madness-in-2018/]]
+
+1. 讲了什么是微服务，微服务为什么流行？独立部署-独立开发-独立扩容-可复用
+2. 为啥微服务之前没流行？基础设施健全了
+3. 微服务有什么问题？
+   开发复杂度 -> 运维复杂度-devops 复杂度 -> 需要这方面专家 -> 实际系统之间边界模糊
+   服务有状态 -> 服务之前有数据交换 -> 版本管理 -> 分布式事务
+4. 避免盲目使用微服务
+   团队大小-服务是否有状态-服务解决的问题是否是多个-依赖是否复杂-团队是否有专家
+5. 微服务不是一种架构：Component 化的一种实现
+
+
+* 操作系统
+** 死锁
+[[http://cosven.me/blogs/74]]
+
+** QUESTION 基于文件的缓存系统或者数据库
+- tinydb
+- mmap'ed files
+- BerkeleyDB
+
+** 理解 top 命令输出
+
+#+BEGIN_QUOTE
+top - 11:51:15 up 206 days, 18:42,  4 users,  load average: 1.19, 0.84, 0.76
+Tasks: 289 total,   1 running, 288 sleeping,   0 stopped,   0 zombie
+Cpu(s):  7.1%us,  1.6%sy,  0.0%ni, 90.5%id,  0.0%wa,  0.0%hi,  0.7%si,  0.1%st
+Mem:   8193588k total,  5989856k used,  2203732k free,   436376k buffers
+Swap:        0k total,        0k used,        0k free,  1455476k cached
+#+END_QUOTE
+
+*** 第一行：load average
+参考资料（推荐）：[[http://www.ruanyifeng.com/blog/2011/07/linux_load_average_explained.html][linux_load_average_explained]]
+
+#+BEGIN_QUOTE
+load average: 1.19, 0.84, 0.76
+#+END_QUOTE
+它们的意思分别是1分钟、5分钟、15分钟内系统的平均负荷。
+当一个 CPU 完全空闲的时候，平均负荷为0；当CPU工作量饱和的时候，平均负荷为1。
+当负荷超过 1 时，意味着 CPU 已经被占满，有 19% 的任务在等待。
+
+如果机器有 n 个处理器，则它的满负荷是 n.0 。
+
+第一行的输出似乎和 uptime 命令的输出一模一样。
+
+*** 第三行：CPU Stats
+参考资料（推荐）：[[http://blog.scoutapp.com/articles/2015/02/24/understanding-linuxs-cpu-stats][understanding-linuxs-cpu-stats]]
+
+摘抄几个：
+
+- *High kernel usage* 通常来说，如果系统频繁 IO 操作，则 kernel usage(sy) 会比较高。
+- *High waiting on I/O* 有大的 IO 操作，并且这个 IO 操作是低效的。
+- *High interrupt processing* 可能是硬件有问题
+
+** 上下文切换
+
+进程上下文包含哪些内容 ->
+#+BEGIN_QUOTE
+The kernel maintains a /context/ for each process. The context is the state
+that the kernel needs to restart a preempted process. It consists of the values
+of objects such as the general purpose registers, the floating-point registers, the
+program counter, user’s stack, status registers, kernel’s stack, and various kernel
+data structures such as a /page table/ that characterizes the address space, a /process
+table/ that contains information about the current process, and a /file table/ that
+contains information about the files that the process has opened.
+
+-- from CSAPP 8.2 Context Switches
+#+END_QUOTE
+
+额外资料
+
+- [[https://stackoverflow.com/questions/5440128/thread-context-switch-vs-process-context-switch][thread context switch vs process context switch]]
+- [[http://www.personal.kent.edu/~rmuhamma/OpSystems/Myos/threads.htm][In theory: threads vs processes]]
+- [[https://stackoverflow.com/questions/807506/threads-vs-processes-in-linux][In Practice: linux thread vs processes]]
+
+** pidfile
+pidfile 基本的作用是用来告诉用户，这个程序已经正常运行，并且 process id 就是这个。
+
+- 是不是 pidfile 最好都放在 /var/run 目录下？放在 ~/.app/ 目录下，好不好？
+- 如果放在 /var/run目录下，权限的问题怎样解决？
+
+暂时来看，对于绝大部分使用GUI的Linux用户来说，放在 home 目录是一个还算不错的选择。
+要想把 pidfile 放在/var/run目录下，就必须有 root 权限
+在 Linux 下，也可以通过创建 dbus service，这样就不需要创建 pidfile.
+
+http://unix.stackexchange.com/questions/12815/what-are-pid-and-lock-files-for
+http://stackoverflow.com/questions/5173636/must-my-pidfile-be-located-in-var-run
+
+lockfile 基本类似。
+
+** 内存模型
+    CLOSED: [2021-09-14 Tue 10:33]
+参考资料：https://research.swtch.com/mm
+
+1. “内存模型”讨论的内容是什么？
+   内存模型描述线程通过内存的交互及其对数据的共享使用。
+   可以认为，内存模型是在多线程环境下特有的一个概念。
+2. 第一篇《硬件内存模型》主要内容概括
+   1. 几种模型：
+      - 顺序一致性（Sequential Consistency）
+      - 全存储排序（x86 Total Store Order）
+      - 更弱的
+   2. 介绍背景：不同硬件的模型都不一样，举了一些例子，可见真的很复杂。
+   3. 后来有人提出了一种模型，一直沿用至今：
+      Weak Ordering and Data-Race-Free Sequential Consistency
+      - 这是一个规范，硬件上层只要满足这种规范，软件可以不关心硬件内部的模型如何
+      - 缩写：DRF-SC
+3. 第二篇《编程语言内存模型》
+   1. 现代编程语言保证 data-race-free 的程序总是以 sequential
+      consistent 的方式来执行。
+   2. synchronizing atomic 变量带来的效果 /可能/ 有四点，挺刷新我认识的（基础不行）
+      1. The compiled code for thread 1 must make sure that the write
+         to x completes and is visible to other threads before the write
+         to done becomes visible.
+      2. The compiled code for thread 2 must (re)read done on every iteration of the loop.
+      3. The compiled code for thread 2 must read from x after the reads from done.
+      4. The compiled code must do whatever is necessary to disable hardware optimizations that might reintroduce any of those problems.
+   3. 一个共识：编译器会对代码进行一些优化，比如指令 reorder。哪些 reorder 是合法的呢？
+      这个内存模型的一个重要问题。
+
+* 网络
+** SO_REUSEADDR 在不同平台上的表现区别
+https://stackoverflow.com/a/14388707/4302892
+
+
+* Testing
+** 测试覆盖率
+
+覆盖率有几种（但网上有多种解释，但大同小异），这里参考维基百科给的解释
+
+- Statement coverage：经常被翻译成行覆盖，也会被翻译成指令覆盖。我理解 statement 就是语句的意思，对于比较好理解。
+- Decision coverage：维基百科说和分支覆盖不同
+- Condition coverage：也称为谓词覆盖
+- Condition/decision coverage：同时满足 Decisioon 和 Condition 覆盖
+- Modified condition/decision coverage：是 C/DC 的延伸，更加严格一些。sqlite
+- 多重条件覆盖：类似全组合
+
+有个例子可以比较好解释 Condition 和 Decision 覆盖率的区别
+#+BEGIN_SRC
+if a and b then
+#+END_SRC
+下面两个用例可以得到 100% 的 Condition 覆盖率
+- a=true, b=false
+- a=false, b=true
+  但是 Decision 覆盖率不是 100%
+
+#+BEGIN_SRC
+if (a or b) and c then
+#+END_SRC
+以下的测试可满足条件/判断覆盖：
+- a=true, b=true, c=true
+- a=false, b=false, c=false
+
+*测试覆盖率 100% 也会有 bug* 。在这个例子中 https://github.com/pingcap/tidb/pull/18814 ，
+这一段代码的每个分支都被覆盖到了，但需要 keys 长度大于 2，且一部分 key 满足 if，一部分满足 else，
+才可以复现。
+
+#+BEGIN_SRC go
+if s.cached != nil {
+        tmp := keys[:0]
+        for _, key := range keys {
+                if val, ok := s.cached[string(key)]; ok {
+                        m[string(key)] = val
+                } else {
+                        tmp = append(tmp, key)
+                }
+        }
+        keys = tmp
+}
+#+END_SRC
+
+* Storage
+** FAQ
+*** read index 请求是什么
+应该是 follower 发给 leader，leader 会返回一个  read index。
+
+据 mh 老师描述，tikv 中的 read index 请求有两种，一个是 raft 的，一个是 tikv
+一个是 tikv 的，
+tikv 的这个会给 tiflash 用。
+
+#+BEGIN_SRC rust
+pub struct ReadIndexRequest {
+    pub id: Uuid,
+    pub cmds: MustConsumeVec<(RaftCmdRequest, Callback<RocksEngine>, Option<u64>)>,
+    pub renew_lease_time: Timespec,
+    pub read_index: Option<u64>,
+    // `true` means it's in `ReadIndexQueue::reads`.
+    in_contexts: bool,
+}
+#+END_SRC
+
+*** raft 一次写入的流程是什么
+当 Client 需要写入某个数据的时候，Client 会将操作发送给 Raft Leader，
+这个在 TiKV 里面我们叫做 Propose，Leader 会将操作编码成一个 entry，
+写入到自己的 Raft Log 里面，这个我们叫做 =Append= 。
+
+Leader 也会通过 Raft 算法将 entry 复制到其他的 Follower 上面，这个我们叫做
+=Replicate= 。Follower 收到这个 entry 之后也会同样进行 Append 操作，
+顺带告诉 Leader Append 成功。当 Leader 发现这个 entry 已经被大多数节点 Append，
+就认为这个 entry 已经是 Committed 的了，然后就可以将 entry 里面的操作解码出来，
+执行并且应用到状态机里面，这个我们叫做 =Apply= 。
+
+理解：TiKV 的 Apply 是异步的；Applied Index <= Committed Index。
+
+*** TiKV 处理一个请求的流程
+可以参考这篇文档的 Service 部分
+https://pingcap.com/blog-cn/tikv-source-code-reading-9/#service
+
+事务类型的请求，比如 prewrite，会通过 sched_txn_command 方法来处理它
+（会把它塞到一个队列里面去，具体细节不是特别了解）。
+
+对于 read_index 请求，可以看到有个 read_index 方法来处理。
+
+总的来说，处理各种类型请求的入口都在 tikv/src/server/service/kv.rs 这个文件中。
+
+*** QUESTION [#C] Region Merge 的条件之一
+不是很懂这个。
+
+https://github.com/tikv/tikv/pull/8005
+它修复的问题：以前，region merge 允许 target peers 不全部存在（这个存在的意思应该是指分区等）。
+但是有些情况，最好所有的 target peers 都在。
+
+比如：一个 target peer 不存在，一个 source peer 等待它被创建。但其间，
+其它 target peers 进行了 conf change，把之前的 target peer 给移除了（…）。
+然后，这个 region  被 merge 到了另外一个 target region。
+在这个场景里面，之前那个等待的 source peer 就不知道自己是否该被移除了。
+
+这个 PR 给 region merge 加了个约束，所有的 target region 都必须存在。这样逻辑更简单。
+
+疑问：怎样判断一个 target peer 是否存在？
+
+** IO 基准测试
+这篇文档有使用 fio 测试磁盘性能的方法。
+https://cloud.google.com/compute/docs/disks/benchmarking-pd-performance
+1. 测试裸盘性能时，filename 要指定为磁盘，filesize 指定为磁盘容量大小。
+   而测试文件系统时，这两项配置则比较自由。可以改为文件和 10G 等。
+2. 测试 IOPS/带宽/latency 时，都有一些值得注意的参数配置。
+   比如测带宽用顺序写，blocksize 调大一点，并发和 iodepth 都调大，
+   并且注意不要让其它指标成为瓶颈。
+
+这篇文档介绍了 iodepth 的含义，以及它与 numjobs 的区别。
+https://www.spinics.net/lists/fio/msg07191.html
+有趣的几点：
+1. 一个核有可能只能承受一定的 iodepth。
+2. Linux Buffered IO 不是异步的 [[https://fio.readthedocs.io/en/latest/fio_man.html#cmdoption-arg-iodepth][ref]]。
+
+这篇文章介绍了 Linux IO 的基本分层。
+https://zhuanlan.zhihu.com/p/71149410
+感觉问题主要是两个
+1. 知道有多少层缓存。
+2. 知道这个图 [[https://pic4.zhimg.com/80/v2-387d87592d876ec23e0774f7d14d8063_1440w.jpg][io layer]]。
+
+*** TiKV
+
+tikv 使用的 rocksdb 是以 buffered IO 为入口往下写的。rocksdb 写入可以认为是阻塞的（by 明华老师）。
+所以模拟 tikv 基准测试时，可以用 iodepth=2 或者 iodepth=1,numjobs=2（我的推论）。
+
+** 关于存储的经验值
+*** 磁盘指标
+0. 盘的性能指标：带宽；IOPS；latency。
+1. nvme 盘的 disk latency 一般在 1ms 以下。
+2. 观察 TiDB 发版性能测试的指标可以发现在 sysbench oltp_insert 负载中压力下，
+   磁盘 avg latency 在 30us 左右。数据导入阶段磁盘 avg latency 在 5ms 左右。
+
+*** RocksDB(tikv) 指标
+1. 关于 rocskdb bytes_per_write:
+   - 发版测试中，sysbench insert 负载下，kv rocksdb 的 avg bytes_per_write
+     为 28.5KB，p99 有 51KB。
+   - go-ycsb batchsize 为 128 的时候，bytes_per_write avg 为 300KB，
+     p99 有 558KB (这个值只是一次测试的结果)。查看代码发现 value size 为 1k。
+     这个我猜应该比 oltp_insert 的 value size 要大。
+
+** RocksDB Rate-Limiter
+
+- 功能：rate limiter
+- 作用：限制最大的写入速度
+- 场景：写入达到一定程度的时候，容易给读的 latency 带来尖刺
+- 介绍：
+  - 只对 flush 和 compaction 有影响，对 wal 就不会有影响
+
+
+- 功能：auto-tuned rate limiter
+- 算法：令牌桶算法
+- 作用：rate_bytes_per_sec 比较难配置，太低容易导致 memtable 和 L0 文件堆积，
+  太高容易影响前台读取和写入。rocksdb 提供算法自动设置这个值。
+
+
+- 测试点
+  - 关于限流
+    - 流量一直很高或很低：似乎没问题
+    - 流量从高变低：
+    - 流量从低变高：
+    - 流量过高时，解除限流
+  - auto-tuned 开关 + rate-bytes-per-sec 大小
+  - flush 和 compaction 流量
+  - 人肉指定的 rate-bytes-per-sec
+
+** RocksDB SST 文件大小
+*** TiKV 中 KVDB SST 文件大小
+
+带着问题：
+1. 为什么大 region 时，rocksdb 的 compaction 看似更不稳定或者说更消耗资源？
+   这个问题经过探索，最好等 5h 的结果跑出来再分析。
+
+1. 观察部分
+   2. 为什么数据导入后，sst 文件平均大小在 25MB 左右？
+      经过对数据的观察，58MB/328K/18M/4M 的各种都有。
+   3. 为什么 s3 里面存了 22k sst,恢复后只有 18k sst？
+      不太清楚。
+   4. 在运行过程中，大 region 的 sst 会不会越来越大？
+      已经运行脚本在分析。
+   5. compaction 的行为，也能分析一点点。
+2. 理论部分，假设 sst 真的比较大，那影响是什么？
+
+write-buffer-size 为 128MB,
+level0-file-num-compaction-trigger 为 4，
+也就是说，正常情况下，L0 大小为 4*128 -> 512MB。
+L1 建议和 L0 一样，因此也是 512MB, 每一层的倍数为 10。
+
+L1 的文件大小是 target-file-size-base, tikv 默认配置为 8MB，但 tikv
+默认是开启 compaction guard 的，这个配置被覆盖成 128M 了。
+但一次 compaction 过后，L1 的文件数并不一定是这么多，可能会直接输出到下面的层，
+这是为了保持树的形状（level-compaction-dynamic-level-bytes 是 true 时的行为）。
+比如用 br 导入数据到 tikv，这时数据都在 L6，假设大小为 450G，那么 L5, L4, L3，L2 目标大小分别为
+45, 4.5, 450M，45M。而由于 max_bytes_for_level_base / max_bytes_for_level_multiplier 为 51.2,
+所以，compaction 不会把文件输出到 L2 层。这和测试观测到的现象一致。
+
+* React
+** ANSWERED [#C] React 怎样写一个有特定功能的基础组件？
+- [X] 问题一：我自己实现的 UserSelect 组件中已经绑定了 onChange 回调，
+但是我仍然想允许用户设置 onChange 回调，这时我该怎么办？
+
+React 中的组件都是使用『组合』的形式来扩展功能。
+
+对于问题一这种情况，我们可以在自己实现的 onChange
+函数中调用一下用户设置的 onChange 函数。另外，在 React 中，
+[[https://react-cn.github.io/react/docs/transferring-props.html][透传 props]] 似乎也是一种常见的设计模式。
+
+** React Component Lifecyle  :reading:react:
+[[https://github.com/ReactTraining/react-router/blob/c865bc6b331eabd853641dcc7e0224a7dce76f3b/docs/guides/ComponentLifecycle.md][React route: Component Lifecycle]]
+
+从 route 角度来看 Component Lifecyle 涉及到的问题
+
+1. 初始化时，在什么地方获取数据
+2. 更新时，在什么地方获取数据
+
+*** Where fetch data: componentwillmount vs componentdidmount
+[[https://daveceddia.com/where-fetch-data-componentwillmount-vs-componentdidmount/][Where fetch data: componentwillmount vs componentdidmount]]
+
+答案是：在 componentDidMount 获取后端数据
+
+#+BEGIN_QUOTE
+In practice, componentDidMount is the best place to put calls to fetch data, for two reasons:
+
+Using DidMount makes it clear that data won’t be loaded until after the initial render. This reminds you to set up initial state properly, so you don’t end up with undefined state that causes errors.
+
+If you ever need to render your app on the server (SSR/isomorphic/other buzzwords), componentWillMount will actually be called twice – once on the server, and again on the client – which is probably not what you want. Putting the data loading code in componentDidMount will ensure that data is only fetched from the client.
+#+END_QUOTE
+
+*** componentWillReceiveprops 使用分析
+[[http://www.cnblogs.com/gdsblog/p/7348375.html][componentWillReceiveProps 使用详解]]
+
+可以在 componentWillReceiveProps 中 setState。
+
+** 箭头函数和普通函数的区别
+推荐阅读 [[https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/Arrow_functions][mozilla 文档]].
+
+* Web 开发
+** ANSWERED [#B] MySQL like vs select all?
+有一个用户表，它只有 4 个字段： =(id, name, gender, is_deleted)= ，
+其中，id 是主键，name + env 是唯一的。现在有一个需求场景，前端有一个搜索框，
+用户在输入字符时，前端需要进行自动补全，返回 5 个最相似的男性用户名。
+
+解决方案：
+
+1. 不建立索引
+  1. select * from user where name like '%keyword%' and gender='male' and is_deleted=false
+  2. 返回前五行
+2. 建立联合索引 (name, gender, is_deleted)
+  1. select * from user where gender='male' and is_deleted=false;
+  2. 业务代码中进行相似度计算
+3. ...
+
+附加题：
+
+1. 如果这个表还有两个字段：created_at, updated_at 呢？
+2. 如果这个表有 100w+ 条数据呢？
+
+后来：它们说这个需求不适合 MySQL，用 es 把。如果非要用 MySQL，
+like 也不是不可以。
+
+** TODO [#B] REST methods and status code 和 CSRF 保护
+1. [[https://stackoverflow.com/questions/28459418/rest-api-put-vs-patch-with-real-life-examples][stackoverflow: put vs patch with real life example]]
+2. [[http://restcookbook.com/HTTP%20Methods/idempotency/][rest methods idempotency]]
+3. [[https://tools.ietf.org/html/rfc7231#section-6.5.8][409 status code]]
+4. [[https://stackoverflow.com/a/32101994/4302892][how to do batch update]]
+
+** Test Doubles — Fakes, Mocks and Stubs
+[[https://blog.pragmatists.com/test-doubles-fakes-mocks-and-stubs-1a7491dfa3da][文章链接]]
+
+- mock: mock 掉的对象是被测的对象。比如我们断言某一个函数会被调用，但又不想真正执行该函数，用 mock
+- stub: stub 掉的对象不是被测的对象，它是用来配合测试的。比如一个死板的人造的符合预期的数据
+- fake: 对实际系统的简单模拟。比如 python fakeredis。
+
+#+BEGIN_QUOTE
+Fakes are objects that have working implementations, but not same as production one. Usually they take some shortcut and have simplified version of production code.
+
+Stub is an object that holds predefined data and uses it to answer calls during tests. It is used when we cannot or don’t want to involve objects that would answer with real data or have undesirable side effects.
+
+Mocks are objects that register calls they receive.
+In test assertion we can verify on Mocks that all expected actions were performed.
+#+END_QUOTE
+
+附加参考资料： https://martinfowler.com/bliki/TestDouble.html
+
+* Golang
+** 问题
+*** flag provided but not defined
+:LOG:
+~/p/tidb-binlog master > make arbiter
+CGO_ENABLED=0 GO111MODULE=on go build  -ldflags '-L/usr/local/opt/mysql-client/lib -X "github.com/pingcap/tidb-binlog/pkg/version.BuildTS=2019-07-26 09:47:56" -X "github.com/pingcap/tidb-binlog/pkg/version.GitHash=7771d9e8d36b43b149ca707a60f3b77f8c06c3e1" -X "github.com/pingcap/tidb-binlog/pkg/version.ReleaseVersion=v3.0.1-12-g7771d9e"' -o bin/arbiter cmd/arbiter/main.go
+# command-line-arguments
+flag provided but not defined: -L/usr/local/opt/mysql-client/lib
+usage: link [options] main.o
+:END:
+
+后来查出来是自己设置了一个 LDFLAG 的环境变量，而 Makefile 中正好依赖了这个变量。
+
+* Python
+
+我自己获取 Python 资源的途径：
+
+1. twitter - 关注 core developer (尝试中)
+2. [[https://reddit.com/r/python][/r/python]] - 尝试过一段实践（可以看一些社区新闻）
+3. 关注看到过的一些不错的博客
+4. 主动通过搜索引擎搜索关键字（比如 Python dataclasses）
+
+** Flask
+*** Flask 中使用线程池
+** Gunicorn
+
+** SQLAlchemy
+*** TODO [#C] 问题排差：2013, 'Lost connection to MySQL server during query'
+** TODO [#B] Python 3.7 Dataclasses
+
+- [ ] 为什么要加入 dataclasses？
+  - 不是已经有 attr 了么？
+- [X] dataclasses 基本用法（讲基础用法的文章很多）
+- [ ] dataclasses 和 Model/Serializer/Schema 等概念的关系是怎样的？
+  - 要不要内置支持 validation？
+  - 现有资料没有谈这几个东西之间的关联
+
+*高级话题*
+
+- [ ] 据说 dataclasses 没有使用 metaclass，那它是怎样实现的呢？
+
+*主要参考资料：*
+
+- [[https://www.python.org/dev/peps/pep-0557/][PEP 557]]
+- [[https://docs.python.org/3/library/dataclasses.html][Python docs]]
+
+*** 为什么要有 dataclasses？
+
+Guido:([[https://github.com/ericvsmith/dataclasses/issues/19#issuecomment-310913558][link]])
+#+BEGIN_QUOTE
+I would say the stdlib is lacking some very useful functionality in this area.
+#+END_QUOTE
+
+
+kawabangga:([[https://www.kawabangga.com/posts/2959][对比于 attr, Namedtyple 等其它容器]])
+#+BEGIN_QUOTE
+
+1. 没有使用 BaseClass 或者 metaclass，不会影响代码的继承关系。
+   被装饰的类依然是一个普通的类
+2. 使用类的 Fields 类型注解，用原生的方法支持类型检查，不像 attr 这种库对代码有侵入性
+   （要用 attr 的函数将一些东西处理）
+#+End_quote
+
+*** Dataclasses 和 Model, Schema, Serializer 这些概念的联系是什么？
+
+** 一些奇怪的坑
+*** try...except... 使用的一个注意事项
+这段代码看起来是 A 模块不存在，但其实还有一种可能，A 模块依赖的一个模块不存在。
+#+BEGIN_SRC python
+try:
+    import A
+except ImportError:
+    print('A not found.')
+#+END_SRC
+
+另外一个现实中的例子：[[https://github.com/pallets/werkzeug/commit/b488d7ed5c88619191e89acbb642db2c03e13e2c][werkzeug: Fix import_string masking of AttributeError]]
+
+** 字符串
+Q: 字符串 format 如何得到这种 {value} 形式的字符串
+
+#+BEGIN_SRC
+'{{{hosts}}}'.format(hosts=','.join(['hello', 'world']))
+#+END_SRC
+
+** 描述符
+问题：A.b, a.b 分别是如何工作的？
+
+#+BEGIN_SRC python
+class A(object):
+    @property
+    def h(self):
+        return 1
+
+a = A()
+#+END_SRC
+
+[参考链接](https://docs.python.org/3/howto/descriptor.html#invoking-descriptors)
+
+> For objects, the machinery is in `object.__getattribute__()` which transforms b.x
+into `type(b).__dict__['x'].__get__(b, type(b))`. The implementation works through
+a precedence chain that gives data descriptors priority over instance variables,
+instance variables priority over non-data descriptors, and assigns lowest priority
+to `__getattr__()` if provided. The full C implementation can be found in
+PyObject_GenericGetAttr() in Objects/object.c.
+
+> For classes, the machinery is in `type.__getattribute__()` which transforms B.x
+into `B.__dict__['x'].__get__(None, B)`. In pure Python, it looks like:
+
+** Abstract Class Attribute
+本意是想要求子类必须实现下面几个类属性，但是并没有
+abstract-class-property 装饰器。另外，无论在这里设置该字段为
+abstractproperty 还是 abstractmethod，子类只要有个同名字段，它
+就能正常实例化，所以这里为了代码看起来相对简单，直接使用
+abstractmethod 来装饰这几个字段。
+
+#+BEGIN_SRC python
+class AbstractXxx(ABC):
+    @abstractmethod
+    def Song(self):
+        pass
+#+END_SRC
+
+而按照对 ABC 的理解，正确的方式可能是要这样写::
+#+BEGIN_SRC
+    @property
+    @classmethod
+    @abstractmethod
+    def Song(self):
+        pass
+#+END_SRC
+
+** setup.py 常见命令的执行逻辑
+1. bdist_wheel 是 wheel 包提供的
+2. 使用 MANIFEST.in，而不是 package_data
+3. 创建一个零时的包占坑（没有找到其他好办法）
+
+#+begin_src
+build
+ -> build_py
+ -> build_clib
+ -> build_ext
+ -> build_scripts
+
+sdist
+ -> check
+   -> check_metadata
+
+install
+ -> build
+ -> install_lib
+   -> build_py if has_pure_modules
+   -> build_ext if has_ext_modueles
+ -> install_headers
+ -> install_scripts
+ -> install_data
+ -> install_data
+ -> install_egg_info
+#+end_src
+
+:LOGBOOK:
+1. build 可能需要一个 id
+:END:
+
+thrift-compiler -> gen-py/
+package_dir={'': 'gen-py'}
+packages=find_packages('gen-py')
+
+不能安装 gen-py/ 目录下的包到系统环境
+or 预先在 gen-py 目录下创建好包
+
+* Rust
+** rust 快速入门
+1. cargo 规范了常规目录结构。example 和 test 都是通过 cargo 来运行。
+2. use 相当于其他语言的 import，且功能相当。
+   =use crate::{mod}::{struct}= 可以从当前项目导入模块的类。
+3. Box 相当于智能指标，会自动减引用和调用析构函数。
+4. Send 是一个关于并发模型的概念，允许在线程间转移所有权，相关的还有 Sync，允许多线程访问。
+5. prelude -> 在编程领域的意思可以理解为：不需要 import 就能用的函数。
+   因此在 raft-rs 中，会有 =use raft::prelude::*= 这样的代码。
+6. clone vs copy，clone 一般用于“基于语义的复制”。
+   对于实现了 Copy 的类型，它的 clone 方法应该跟 Copy 语义相容，等同于按位拷贝。
+   move 会移交所有权。
+7. =move ||= move 的作用是将所引用的变量的所有权转移至闭包内。
+8. into 和 from 都是类型转换。
+9. 结构体里面的属性可以直接对外暴露？ deref
+10. Span<'a> 是啥意思？似乎和模板有关系。
+11. into() 是什么 trait？是一个类型转换的 trait，但目前不知道哪些类型自带这个 trait。
+12. dyn 好像是 Box<dyn Type> 中的 Type 是个 trait 的时候，需要用 dyn 包一下。
+13.
+
+* 读《编程之美》
+** 结构之法 - 字符串及链表
+## 字符串
+
+### 基础
+- strstr: 平均 O(N)，最坏 O(NM)。
+- strlen: O(n)。 gcc 里面有个优化的实现，看看挺好玩的。
+- strcmp: strstr 会依赖 strcmp。
+
+### 题目
+
+1. 字符串移位包含
+2. 编辑距离
+3. 设计一个队列，能方便的取到最大值
+
+### 疑问
+
+1. 队列的底层数据结构是啥？
+
+   How about stack?
+
+   用两个 stack 实现一个 queue ... 不走寻常路
+
+### 感悟
+
+递归和动态规划有很大相似之处：
+
+- 动态规划：大问题的计算依赖小问题，小问题经常被多次重复依赖
+- 递归：大问题的计算转换为小问题
