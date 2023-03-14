@@ -1,5 +1,6 @@
-* DevOps
-** 功能开关、配置、A/B 测试
+* Learning
+
+** 功能开关、配置、A/B 测试                                          :devops:
 
 facebook 那篇文章最主要的还是配置，关于 A/B Test 涉及比较少。关于 A/B Test 目前多是参考 google 这篇论文
 https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/36500.pdf
@@ -113,7 +114,6 @@ for the frontend PHP products.
 5. 微服务不是一种架构：Component 化的一种实现
 
 
-* 操作系统
 ** 死锁
 [[http://cosven.me/blogs/74]]
 
@@ -191,7 +191,7 @@ http://stackoverflow.com/questions/5173636/must-my-pidfile-be-located-in-var-run
 
 lockfile 基本类似。
 
-** 内存模型
+** 内存模型（memory model）
     CLOSED: [2021-09-14 Tue 10:33]
 参考资料：https://research.swtch.com/mm
 
@@ -221,12 +221,41 @@ lockfile 基本类似。
    3. 一个共识：编译器会对代码进行一些优化，比如指令 reorder。哪些 reorder 是合法的呢？
       这个内存模型的一个重要问题。
 
-* 网络
+** 内存序（memory order）
+:LOGBOOK:
+CLOCK: [2023-03-01 Wed 17:00]--[2023-03-01 Sat 19:06] =>  2:06
+:END:
+1. 内存序本身是一个协议，编译器和处理器想办法满足它，因此程序员写的代码可以按照预期运行。
+2. litmus test 用来考察内存序的一类程序。
+   1. store buffer: Seq-cst(No), Acq-rel(Yes)
+   2. message passing: Seq-cst(No), Acq-rel(No)
+   3. IRIW (independent read independent write): Seq-cst(No), Acq-rel(Yes)
+3. seq-cst 可以理解为一种符合直觉的顺序（按照代码顺序产生的排列组合）。
+4. compiler 会优化代码，对代码重排序。
+5. cpu 也会优化重排指令。 =store buffer= 是实现重排指令的一种核心技术。
+   store buffer：可以理解为写 IO 的 buffer。而 disk 对应 shared memory。
+   也就是说线程1执行完的指令，线程2可能还看不到。于是给我们的感觉是指令乱序。
+6. data race 的定义：
+   1. 两个或多个线程同时访问同一段内存
+   2. 至少一个线程是写
+   3. 至少一个是未同步的
+7. acquire-release 类似 lock 和 unlock，acquire(load), release(store)。
+   1. acquire 不允许后面的读写挪到 acquire 之前。release 保证所有的读写都不能挪到 release 之后。
+      acquire 保证了 LoadLoad, LoadStore 顺序（因为 load 和 store 都不能拍到 acquire(load) 之前）。
+      release 保证了 LoadStore, StoreStore 顺序（因为 load 和 store 都不能排到 release(store) 之后）。
+      Store 是写入操作，load 是读取操作。对应到代码是 r1 = acquire_load(y), release_store(y, 3)。
+   2. acquire-release 模式可以很好的处理 message passing 模式（flag/data）。
+      release 和 acquire 要配对使用。
+8. x86 TSO(total store ordering) memory model
+   1. store buffer: x86 TSO(Yes). 插入 fence 可以让它回答 No。
+   2. message passing: x86 TSO(No)
+   3. IRIW: x86 TSO(No)，TSO 保证了每个线程看到的顺序是一样的。
+9. 实践
+   1. 原子变量的 fetch_add 走的是 acquire_release 序。
+
 ** SO_REUSEADDR 在不同平台上的表现区别
 https://stackoverflow.com/a/14388707/4302892
 
-
-* Testing
 ** 测试覆盖率
 
 覆盖率有几种（但网上有多种解释，但大同小异），这里参考维基百科给的解释
@@ -272,8 +301,8 @@ if s.cached != nil {
 }
 #+END_SRC
 
-* Storage
-** FAQ
+
+** Storage FAQ
 *** read index 请求是什么
 应该是 follower 发给 leader，leader 会返回一个  read index。
 
@@ -428,7 +457,7 @@ L1 的文件大小是 target-file-size-base, tikv 默认配置为 8MB，但 tikv
 45, 4.5, 450M，45M。而由于 max_bytes_for_level_base / max_bytes_for_level_multiplier 为 51.2,
 所以，compaction 不会把文件输出到 L2 层。这和测试观测到的现象一致。
 
-* React
+
 ** ANSWERED [#C] React 怎样写一个有特定功能的基础组件？
 - [X] 问题一：我自己实现的 UserSelect 组件中已经绑定了 onChange 回调，
 但是我仍然想允许用户设置 onChange 回调，这时我该怎么办？
@@ -468,7 +497,6 @@ If you ever need to render your app on the server (SSR/isomorphic/other buzzword
 ** 箭头函数和普通函数的区别
 推荐阅读 [[https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/Arrow_functions][mozilla 文档]].
 
-* Web 开发
 ** ANSWERED [#B] MySQL like vs select all?
 有一个用户表，它只有 4 个字段： =(id, name, gender, is_deleted)= ，
 其中，id 是主键，name + env 是唯一的。现在有一个需求场景，前端有一个搜索框，
@@ -498,7 +526,7 @@ like 也不是不可以。
 3. [[https://tools.ietf.org/html/rfc7231#section-6.5.8][409 status code]]
 4. [[https://stackoverflow.com/a/32101994/4302892][how to do batch update]]
 
-** Test Doubles — Fakes, Mocks and Stubs
+** Test Doubles — Fakes, Mocks and Stubs                                :web:
 [[https://blog.pragmatists.com/test-doubles-fakes-mocks-and-stubs-1a7491dfa3da][文章链接]]
 
 - mock: mock 掉的对象是被测的对象。比如我们断言某一个函数会被调用，但又不想真正执行该函数，用 mock
@@ -516,8 +544,8 @@ In test assertion we can verify on Mocks that all expected actions were performe
 
 附加参考资料： https://martinfowler.com/bliki/TestDouble.html
 
-* Golang
-** 问题
+
+** Golang FAQ 问题  :golang:
 *** flag provided but not defined
 :LOG:
 ~/p/tidb-binlog master > make arbiter
@@ -529,15 +557,18 @@ usage: link [options] main.o
 
 后来查出来是自己设置了一个 LDFLAG 的环境变量，而 Makefile 中正好依赖了这个变量。
 
-* Python
 
-我自己获取 Python 资源的途径：
+** Python 一些奇怪的坑                                               :python:
+*** try...except... 使用的一个注意事项
+这段代码看起来是 A 模块不存在，但其实还有一种可能，A 模块依赖的一个模块不存在。
+#+BEGIN_SRC python
+try:
+    import A
+except ImportError:
+    print('A not found.')
+#+END_SRC
 
-1. twitter - 关注 core developer (尝试中)
-2. [[https://reddit.com/r/python][/r/python]] - 尝试过一段实践（可以看一些社区新闻）
-3. 关注看到过的一些不错的博客
-4. 主动通过搜索引擎搜索关键字（比如 Python dataclasses）
-
+另外一个现实中的例子：[[https://github.com/pallets/werkzeug/commit/b488d7ed5c88619191e89acbb642db2c03e13e2c][werkzeug: Fix import_string masking of AttributeError]]
 ** Flask
 *** Flask 中使用线程池
 ** Gunicorn
@@ -580,18 +611,6 @@ kawabangga:([[https://www.kawabangga.com/posts/2959][对比于 attr, Namedtyple 
 #+End_quote
 
 *** Dataclasses 和 Model, Schema, Serializer 这些概念的联系是什么？
-
-** 一些奇怪的坑
-*** try...except... 使用的一个注意事项
-这段代码看起来是 A 模块不存在，但其实还有一种可能，A 模块依赖的一个模块不存在。
-#+BEGIN_SRC python
-try:
-    import A
-except ImportError:
-    print('A not found.')
-#+END_SRC
-
-另外一个现实中的例子：[[https://github.com/pallets/werkzeug/commit/b488d7ed5c88619191e89acbb642db2c03e13e2c][werkzeug: Fix import_string masking of AttributeError]]
 
 ** 字符串
 Q: 字符串 format 如何得到这种 {value} 形式的字符串
@@ -686,8 +705,8 @@ packages=find_packages('gen-py')
 不能安装 gen-py/ 目录下的包到系统环境
 or 预先在 gen-py 目录下创建好包
 
-* Rust
-** rust 快速入门
+
+** rust 快速入门  :rust:
 1. cargo 规范了常规目录结构。example 和 test 都是通过 cargo 来运行。
 2. use 相当于其他语言的 import，且功能相当。
    =use crate::{mod}::{struct}= 可以从当前项目导入模块的类。
@@ -706,8 +725,8 @@ or 预先在 gen-py 目录下创建好包
 12. dyn 好像是 Box<dyn Type> 中的 Type 是个 trait 的时候，需要用 dyn 包一下。
 13.
 
-* 读《编程之美》
-** 结构之法 - 字符串及链表
+
+** 结构之法 - 字符串及链表 :datastructure:
 ## 字符串
 
 ### 基础
