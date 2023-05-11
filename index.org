@@ -1,4 +1,4 @@
-#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-bigblow.setup
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 #+STARTUP: nologdone
 #+OPTIONS: html-style:nil
 #+OPTIONS: H:5 num:nil toc:t \n:nil ::t |:t f:t *:t ^:{}
