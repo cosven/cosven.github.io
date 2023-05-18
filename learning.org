@@ -113,6 +113,7 @@ for the frontend PHP products.
    团队大小-服务是否有状态-服务解决的问题是否是多个-依赖是否复杂-团队是否有专家
 5. 微服务不是一种架构：Component 化的一种实现
 
+**
 
 ** 死锁
 [[http://cosven.me/blogs/74]]
@@ -754,3 +755,242 @@ or 预先在 gen-py 目录下创建好包
 
 - 动态规划：大问题的计算依赖小问题，小问题经常被多次重复依赖
 - 递归：大问题的计算转换为小问题
+
+
+** Oauth 的几种实践方案
+
+2023-05-18：我觉得 Oauth 的这部分内容写的很不完善，但这些内容可以充当一个索引的作用，
+因此保存在这里。如果后续对这个话题有兴趣，建议把这一块内容重写。
+
+*** 一个前后端分离项目的 oauth 实现方案
+
+1. 访问 http://A 时，前端检测是否有 token，没有 token 就重定向到 /oauth/authorize 页面
+2. 用户在 authorize 页面输入用户名和密码，如果验证成功，重定向到用户指定的 redirect_url 上。
+   比如 /oauth/callback 上（这个页面是前端的一个页面）。（此时，页面是有 grant_code 的）
+3. 前端用 grant_code 给后端，后端用这个 code 去 oauth 换 token。
+   换取成功后，后端把这个 token 保存起来。再把 token 返回给前端，前端存起来。
+4. 之后，后端每次都去校验前端传过来的 token
+
+*** 常见的 oauth 认证方案
+
+1. 设置 cookie（有安全风险）（好像比较传统）
+2. 在 localStorage 中保存
+3. [X] token 方案 vs session 方案
+token 提高了安全性，避免了额 CSRF 攻击
+但是认为可以修改 token，万一踩狗屎了呢？
+4. [X] 传统 token 方案 vs JWT
+jwt 是个自包含的东西，服务端不需要去查数据库来验证这个东西是否正确。
+人为不方便修改 jwt。
+
+*** 一个 SSO 方案
+
+思路：[[https://segmentfault.com/a/1190000005357718]]
+
+A,B 是应用服务器。L 是认证服务器。
+客户端存一个 L 分发下去的 session_id。
+A 检测客户端是否有 session_id_a，没有让 L 去验证，验证完之后，设置一个 session_id_a。
+B 同理。
+
+
+** 读《Thrift: Scalable Cross-Language Services Implementation》
+
+2023-05-18：这是之前的论文阅读笔记，markdown 格式。它主要是把一些重要的内容给摘抄了下来，
+但我不知道当时读这篇论文的目的是什么，因此只是纯粹的把这段内容保留下来。
+
+Terminology::
+1. IDL (interface definition language)
+
+
+## abstract
+
+Thrift is a software library and set of code-generation tools.
+
+Its primary goal is to enable efficient and reliable communication across programming
+languages by abstracting the portions(部分) of each language.
+
+Specifically, thrift offers IDL and code generation.
+
+## Introduction
+
+Background::
+1. LAMP framework is too limited
+2. Facebook's engineering culture:
+   - choosing the best tools and implementations
+   - begrudgingly accepting its inherent limitations.
+3. Existing solutions:
+   - no sufficient datatype freedom (protobuf?)
+   - suffering from subpar performance
+
+Thrift::
+1. Choosing static code generation over a dynamic system allows
+us to create validated code.(thriftpy?)
+
+Key Challenges::
+- `Types`: Common type system -> corresponding to language native types.
+- `Transport`: common interface to bidirectional raw data transport.
+TCP stream sockets, raw data in memory, files on disk.
+- `Protocol`: using the Transport layer to encode and decode datatypes.
+- `Versioning`
+- `Processors`: processing data streams to accomplish remote procedure calls.
+
+## Types
+
+The goal of the Thrift type system is to enable programmers to
+develop using completely natively defined types.
+
+### Base Types
+bool, i8, i16, i32, i64, double, string.
+
+No unsigned integers.
+
+### Structs
+
+Class / C Struct
+
+### Containers
+C++ template / Java Generices
+
+- list\<type\> An ordered list of elements. Translates directly
+into an STL `vector`, Java `ArrayList`, or native array in script-
+ing languages. May contain duplicates.
+- set\<type\> An unordered set of unique elements. Translates
+into an STL `set`, Java `HashSet`, `set` in Python, or native
+dictionary in PHP/Ruby.
+- map<type1,type2> A map of strictly unique keys to values
+Translates into an STL `map`, Java `HashMap`, PHP `associative
+array`, or Python/Ruby dictionary.
+
+Custom code generator directives have been added to substitute custom types
+in destination languages. The only requirement is that the custom types
+support all the necessary iteration primitives.
+
+In the target language, each definition generates a type with two
+methods, read and write, which perform serialization and trans-
+port of the objects using a Thrift TProtocol object.
+
+### Exceptions
+Exceptions are syntactically and functionally equivalent to structs
+except that they are declared using the exception keyword instead
+of the struct keyword.
+
+Again, the design emphasis is on making the code familiar
+to the application developer.
+
+### Services
+Services are defined using Thrift types. Definition of a service is
+semantically equivalent to defining an interface (or a pure virtual
+abstract class) in object oriented programming.
+
+## Transport
+The transport layer is used by the generated code to facilitate data
+transfer.
+
+### Interface
+
+A key design choice in the implementation of Thrift was to de-
+couple the transport layer from the code generation layer.
+
+Though Thrift is typically used on top of the TCP/IP stack with streaming
+sockets as the base layer of communication, there was no compelling reason
+to build that constraint into the system.
+
+TTransport::
+- `open` Opens the tranpsort
+- `close` Closes the tranport
+- `isOpen` Indicates whether the transport is open
+- `read` Reads from the transport
+- `write` Writes to the transport
+- `flush` Forces any pending writes
+
+TServerTransport::
+- open Opens the transport
+- listen Begins listening for connections
+- accept Returns a new client transport
+- close Closes the transport
+
+### Implementation
+#### TSocket
+#### TFileTransport
+#### Utilities
+The Transport interface is designed to support easy extension us-
+ing common OOP techniques, such as composition.
+
+## protocol
+Thrift enforces a certain messaging structure when transporting data.
+
+### Interface
+The Thrift Protocol interface is very straightforward. It fundamen-
+tally supports two things::
+1. bidirectional sequenced messaging
+2. encoding of base types, containers, and structs
+
+```
+writeMessageBegin(name, type, seq)
+writeMessageEnd()
+writeStructBegin(name)
+writeStructEnd()
+writeFieldBegin(name, type, id)
+writeFieldEnd()
+writeFieldStop()
+writeMapBegin(ktype, vtype, size)
+writeMapEnd()
+writeListBegin(etype, size)
+writeListEnd()
+writeSetBegin(etype, size)
+writeSetEnd()
+writeBool(bool)
+writeByte(byte)
+writeI16(i16)
+writeI32(i32)
+writeI64(i64)
+writeDouble(double)
+writeString(string)
+
+name, type, seq = readMessageBegin()
+readMessageEnd()
+name = readStructBegin()
+readStructEnd()
+name, type, id = readFieldBegin()
+readFieldEnd()
+k, v, size = readMapBegin()
+readMapEnd()
+etype, size = readListBegin()
+readListEnd()
+etype, size = readSetBegin()
+readSetEnd()
+bool = readBool()
+byte = readByte()
+i16 = readI16()
+i32 = readI32()
+i64 = readI64()
+double = readDouble()
+string = readString()
+```
+
+- write -> writeFieldStop ---> writeStructEnd
+- read => readFieldBegin -> stop field -> readStructEnd
+
+### Structure
+Thrift structures are designed to support encoding into a streaming
+protocol. The implementation should never need to frame or com-
+pute the entire data length of a structure prior to encoding it.
+
+However, if the list can be written as **iteration** is
+performed, the corresponding read may begin in parallel, theoreti-
+cally offering an end-to-end speedup of (kN − C), where N is the
+size of the list, k the cost factor associated with serializing a sin-
+gle element, and C is fixed offset for the delay between data being
+written and becoming available to read.
+
+### Implementation
+Facebook has implemented and deployed a space-efficient binary
+protocol which is used by most backend services.
+
+## Versioning
+The system must be able to support reading of
+old data from log files, as well as requests from out-of-date clients
+to new servers, and vice versa.
+
+### Field Identifiers(WIP)
+The combination of this field identifier
+and its type specifier is used to uniquely identify the field.

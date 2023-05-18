@@ -53,12 +53,57 @@ root 进行 split，这样树的高度会加一。删除的时候，如果是删
 查询，插入，删除的最坏复杂度都基本是logdN。插入和删除的细节看 wikipedia
 更好懂一点，2333。
 
+一个不足是它的 next 性能不够好，logdN。并且一个查询要把沿路的节点都记录下来，
+并且要缓存 h（高度）个节点。
+> Unfortunately, a B-tree may not do well
+in a sequential processing environment.
+While a simple preorder tree walk
+[KNUT68] extracts all the keys in order, it
+requires space for at least h = logd(n + 1)
+nodes in main memory since it stacks the
+nodes along a path from the root to avoid
+reading them twice. Additionally, process-
+ing a next operation may require tracing a
+path through several nodes before reaching
+the desired key. For example, the smallest
+key is located in the leftmost leaf; finding it
+requires accessing all nodes along a path
+from the root to that leaf as shown in Figure
+12.
+
 ## B-tree 变种
 
 插入和删除的时候，split 和 contatenation 都可以延迟，通过和邻居平衡。
 next 查询
 
-B*-trees 是一种节点必须有 2/3 满的树。单节点满的时候，从旁边的节点挪一挪。
-两个节点满的时候，正好分为 3 个 2/3 的树。说这种方法，空间使用率最少有 66%。
+B\*-trees 是一种节点必须有 2/3 满的树。单节点满的时候，从旁边的节点挪一挪。
+两个节点满的时候，正好分为 3 个 2/3 的树。说这种方法，**空间使用率**最少有 66%。
 
-B+-trees，只有叶子节点有 key，上层只有 index。
+B+-trees，只有叶子节点有 key，上层只有 index。index 的值不一定是存在的，
+部分 delete 操作可以不需要处理 index。index 与 key 分离。
+
+Prefix B+-trees，给 index 省点空间。对一和二没太明白。
+Thus, virtual B-trees have the following advantages:
+1) The special hardware performs transfers at high speed,
+2) The memory protection mechanism isolates other users, and
+3) Frequently accessed parts of the tree will remain in memory.
+
+Compression，key的 前缀压缩和指针压缩。指针压缩可以是基础地址+偏移。
+
+Variable Length Entries，没看懂论文说了个啥。
+
+Binary B-trees，order=1 的 B-tree，适用 one-level store，不懂这是啥。
+
+2-3 Trees and Theoretical Results，也是适用 one-level store。
+说空间利用率还不错，可以有 69% 左右。然后说消除自下而上的更新对性能影响很大。
+> The small node size makes 2-3 trees
+impractical for external storage, but quite
+appropriate for an internal data structure.
+
+## 并发控制
+
+讲的似乎有点粗糙。
+
+## xx
+
+后面还以 IBM's VSAM 设计为例，讲了讲 B+-tree 的一个实际应用
