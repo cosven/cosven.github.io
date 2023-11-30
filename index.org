@@ -11,7 +11,7 @@
 #+AUTHOR: Cosven
 
 #+include: "./about.org" :minlevel 1
-#+include: "./best_practice.org" :minlevel 1
+#+include: "./clean_code.org" :minlevel 1
 #+include: "./glossary.org" :minlevel 1
 #+include: "./hack.org" :minlevel 1
 #+include: "./learning.org" :minlevel 1

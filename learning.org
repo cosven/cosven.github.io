@@ -254,6 +254,52 @@ CLOCK: [2023-03-01 Wed 17:00]--[2023-03-01 Sat 19:06] =>  2:06
 9. 实践
    1. 原子变量的 fetch_add 走的是 acquire_release 序。
 
+** tcp 几个状态存在的意义                                            :basics:
+
+参考博客：[[https://coolshell.cn/articles/11564.html][TCP 的那些事儿（上）]]
+
+先重复记录一些基础的内容，不然总是忘记。自己记录一下，比从网上搜索效率高太多。
+1. 主动断开连接的一方
+   1. 首先进入 =fin_wait1= 状态
+   2. 等接收到对方发过来的 ack 之后，会进入 =fin_wait2= 状态
+   3. 接收到对方发过来的 fin 之后，会进入 =time_wait= 状态
+      （等待 2*MSL 时间，linux 上 MSL=30s）
+   4. 进入 =CLOSED= 状态
+2. 被动断开的一方
+   1. 收到 fin 后，首先进入 =close_wait= 状态
+      =close_wait= 的可以理解为“等待调用 close”
+   2. 发送给 ack 和 fin 给对端，自己进入 =last_ack= 状态
+   3. 收到对方的 ack 之后关闭，进入 =CLOSED= 状态
+
+*Q: 如果机器上很多连接处于 =time_wait= ，意味着什么？*
+主动断开连接的一方会进入这个状态，也就是说短连接很多，毕竟都是自己断开的。
+根本解决办法是换成长连接。
+
+*=time_wait= 的意义（来自 coolshell 的解释）*
+1. TIME_WAIT确保有足够的时间让对端收到了 ACK，如果被动关闭的那方没有收到Ack，
+   就会触发被动端重发Fin，一来一去正好 2 个 MSL。
+2. 有足够的时间让这个连接不会跟后面的连接混在一起
+   （你要知道，有些自做主张的路由器会缓存IP数据包，如果连接被重用了，那么这些延迟收到的包就有可能会跟新连接混在一起）
+
+如果一个 http server 没有打开 SO_REUSEADDR，那么它可能会因为 TIME_WAIT
+而启动不了？
+
+*=close_wait= 意味着什么？*
+意味着它还不想关闭连接。
+衍生一个问题：fin 关掉的是写还是读？关闭的是写（都写完了，于是发个 fin）。
+
+*怎样用 netstat 看连接的状态？*
+=netstat -tunlp=
+-t 代表 tcp，
+-u 代表 udp，
+-n 展示 ip 地址，
+-l 展示 listening sockets，
+-p 展示 pid 和进程名字。
+
+*一个进程被kill掉之后，连接会怎么样？*
+会被释放。参考 linux kernel 在进程退出时，会调用 do_exit。这个里面会调用 exit_files，
+这个过程会关闭 socket 的链接。
+
 ** SO_REUSEADDR 在不同平台上的表现区别
 https://stackoverflow.com/a/14388707/4302892
 
