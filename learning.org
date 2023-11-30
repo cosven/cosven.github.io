@@ -837,6 +837,32 @@ A,B 是应用服务器。L 是认证服务器。
 A 检测客户端是否有 session_id_a，没有让 L 去验证，验证完之后，设置一个 session_id_a。
 B 同理。
 
+** streaming=True 之后发生了什么❓
+
+参考链接：https://gist.github.com/CMCDragonkai/6bfade6431e9ffb7fe88
+
+好处：
+
+- the receiver can act on the data stream in chunks immediately
+  instead of waiting for the entire data to arrive
+
+疑问：
+
+- http request 的 body 没有被读的时候，这些内容在哪个地方呢？
+  在网线上？还是被系统缓存起来了？还是在 Nginx 什么之类的？
+
+> ``Content-Length`` header determines the byte length
+> of the request/response body. If you neglect to specify
+> the Content-Length header, HTTP servers will implicitly
+> add a Transfer-Encoding: chunked header. (**they should not be used together**)
+
+> The Content-Length header will not allow streaming,
+> but it is useful for large binary files, where you want to
+> support partial content serving.
+
+一点基础知识：一个连接过来传到 Nginx，当这个连接发送的数据足够多或者关闭时，
+Nginx 才会把东西继续往下传。所以，streaming 其实就是用了 Chunked transfer
+encoding 这个东西。噗
 
 ** 读《Thrift: Scalable Cross-Language Services Implementation》
 
