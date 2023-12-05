@@ -300,6 +300,32 @@ CLOCK: [2023-03-01 Wed 17:00]--[2023-03-01 Sat 19:06] =>  2:06
 会被释放。参考 linux kernel 在进程退出时，会调用 do_exit。这个里面会调用 exit_files，
 这个过程会关闭 socket 的链接。
 
+** 内存不足时，系统可能会卡死（很慢）
+在云服务器以及个人 Linux 上，都会遇到“swap 是关闭的，内存不足时，机器卡主”的情况。
+原因是什么呢？经过监控查看，基本可以判断卡主的时候，有一个现象“page in/out 突然升高”。
+一位大佬也补充道：这个时候，major page fault 指标也会较高，内存不够，进程使用内存时需要读盘。
+
+这里有两个问题
+1. 为什么这个时候，oom-killer 没有触发呢？
+   目前完全不知道。[[https://lwn.net/Articles/684945/][这篇LWP文章]] 说 oom-killer 有时候介入太晚，不是很稳定。
+   =vm.overcommit_memory= 的默认值是 0，遇到“卡主”的云服务器的这个参数也是默认值。
+   不过看 tidb/redis 文档，都是推荐设置为 1，1 是一种乐观策略，总是尝试 overcommit 内存。
+2. 没有开启 swap，也会需要从内存置换到磁盘？这个应该是和 memory_overcommit 行为有关系。
+   [[https://johnnysswlab.com/debugging-performance-issues-in-kernel-space-minor-fault-and-major-faults/][这篇文章]]也讲了 major page fault 这个东西。
+   #+BEGIN_QUOTE
+   There are a number of conditions that can cause a processor to generate a page fault.
+   The most common condition is when an application attempts to access memory at
+   a location outside of its allocated address space. A second condition occurs when
+   the operating system needs more physical memory than is available in the computer's main memory.
+   In this case, the operating system will allocate some additional memory from disk storage.
+   #+END_QUOTE
+
+这里提了这个问题，但还没有解决：
+- https://unix.stackexchange.com/questions/373312/oom-killer-doesnt-work-properly-leads-to-a-frozen-os
+
+总的看起来，这个问题在各个版本 linux 内核上都是存在的。而 earlyoom 这样的解决方案对于个人来说是不错的。
+对于企业，暂时不确定哪种方案比较好，oom-killer 可调的参数似乎也没多少。
+
 ** SO_REUSEADDR 在不同平台上的表现区别
 https://stackoverflow.com/a/14388707/4302892
 
@@ -503,6 +529,42 @@ L1 的文件大小是 target-file-size-base, tikv 默认配置为 8MB，但 tikv
 比如用 br 导入数据到 tikv，这时数据都在 L6，假设大小为 450G，那么 L5, L4, L3，L2 目标大小分别为
 45, 4.5, 450M，45M。而由于 max_bytes_for_level_base / max_bytes_for_level_multiplier 为 51.2,
 所以，compaction 不会把文件输出到 L2 层。这和测试观测到的现象一致。
+
+
+** 读懂执行计划                                                    :database:
+拿到两个执行计划，一个是有 PhysicalDistribute，一个没有。那它们区别是什么呢？
+优化器开发者看到这个时，会觉得这两个计划分别对应 broadcast join / shuffle join。
+怎样才能有这个条件反射呢？
+
+#+BEGIN_SRC
+--hashJoin[RIGHT_OUTER_JOIN](t1.bk_x = t2.bk_x)(t1.ydate = t2.bus_x)
+----PhysicalDistribute
+------PhysicalProject
+--------PhysicalOlapScan[flt_prod_nav]
+----PhysicalDistribute
+------PhysicalLimit
+#+END_SRC
+
+#+BEGIN_SRC
+--hashJoin[RIGHT_OUTER_JOIN](t1.bk_x = t2.bk_x)(t1.ydate = t2.bus_x)
+----PhysicalDistribute
+------PhysicalProject
+--------PhysicalOlapScan[flt_prod_nav]
+----PhysicalDistribute
+------PhysicalLimit
+#+END_SRC
+
+有几个需要理解的点
+
+*** DONE broadcast hash join 和 shuffle hash join 的原理区别
+1. broadcast join 的网络传输成本是：小表*节点数。适用于大表join极小表。
+2. shuffle join 的网络传输成本是：左表+右表。据说适用于大表join小表。
+3. doris 还支持 bucket shuffle join，解决一种特殊场景，当 join key 是数据分布列的时候，
+   只需要把一个表的数据传输到另外一个表所在的节点即可。和 shuffle join 的区别是，
+   shuffle join 需要把两个表的数据计算 hash 之后，相同 hash 的分布到一个节点。
+
+*** TODO exechange/sink/distribute 这些概念都发源于哪里？
+目前看起来都是来自 MPP 的概念。MPP 概念又来自哪里呢，暂时还没找到相关的论文？
 
 
 ** ANSWERED [#C] React 怎样写一个有特定功能的基础组件？
