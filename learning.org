@@ -566,6 +566,26 @@ L1 的文件大小是 target-file-size-base, tikv 默认配置为 8MB，但 tikv
 *** TODO exechange/sink/distribute 这些概念都发源于哪里？
 目前看起来都是来自 MPP 的概念。MPP 概念又来自哪里呢，暂时还没找到相关的论文？
 
+** JOIN 类型与区别                                                 :database:
+- INNER JOIN：如果表中有至少一个匹配，则返回行（join 默认就是 inner join）
+- OUTER JOIN
+  - LEFT [OUTER] JOIN：即使右表中没有匹配，也从左表返回所有的行，右边会补 null
+  - RIGHT [OUTER] JOIN：即使左表中没有匹配，也从右表返回所有的行，左边补 null
+  - FULL [OUTER] JOIN：只要其中一个表中存在匹配，则返回行
+- CROSS JOIN：笛卡尔积，左边的每一行都和右边的所有行都产生一个 join 结果。
+  据说这种用法比较少。
+- 特殊 JOIN（这些 JOIN 只取坐标或者右表数据）
+  - SEMI JOIN：只能查一个表的列。和 INNER JOIN 相似。
+    - LEFT SEMI JOIN 是取交集后，再取左表的列
+  - ANTI JOIN：只能查一个表的列。和 INNER JOIN 相反。
+    - LEFT ANTI JOIN 是左表减去左右交集部分（INNER JOIN 是取交集）
+- UNION
+  - UNION：似乎是取交集的意思
+  - UNION ALL：似乎是取并集的意思（结果里面允许有重复行）
+- UNION 和 INNER JOIN 区别在于：
+  - UNION 要求两个表的列都是一样的，结果集的列数和任意一个表一样
+  - JONI 是把两个标的列加在一起，新的列的个数是两者之和
+
 
 ** ANSWERED [#C] React 怎样写一个有特定功能的基础组件？
 - [X] 问题一：我自己实现的 UserSelect 组件中已经绑定了 onChange 回调，
