@@ -74,15 +74,23 @@ pylint 会进行静态分析，它的检查点很多，可以看[[http://pylint.
 
 详情请看 https://emacs.stackexchange.com/a/10620
 
-** TODO [#C] Emacs Python mode 增强  :elisp:editor:
-实现 Dabeaz 的 Python 编辑器
-
 ** TODO [#B] Emacs anaconda-mode 进程经常 100%    :elisp:
 ** TODO [#C] Emacs frame tiling  :elisp:
 Emacs 可以获取到屏幕大小，也可以知道当前 frame 大小，
 并且可以获取所有可见的 frame，理论上可以实现 Emacs frame tiling.
 
 参考 init-simple.el 中的 mcenter-current-frame 函数。
+
+** pyright 识别不到 editable 包的问题                            :python:lsp:
+
+2023-12 的某一天，vscode/emacs 使用的 pylance/pyright 忽然都“失灵”，
+说一个包找不到，而我很确定，我是通过 =pip install -e= 的方式安装该包的。
+经过一番排查和思索，最终在[[https://github.com/microsoft/pylance-release/issues/78][这里]]找到了可靠的解决方案。仔细看 [[https://github.com/microsoft/pyright/blob/main/docs/import-resolution.md#editable-installs][pyright 文档]]的话，
+它其实也说明了这个问题。
+
+#+BEGIN_SRC shell
+pip install -e . --config-settings editable_mode=compat
+#+END_SRC
 
 ** term 模式                                                          :elisp:
 *** 自定义 multi-term 配置
@@ -171,6 +179,11 @@ mac: git grep -l 'original_text' | xargs sed -i '' -e 's/original_text/new_text/
 -> date +%F_%T
 2022-06-23_16:23:31
 #+END_SRC
+
+*** 常见命令
+
+1. 解压 tar.xz 文件：
+   =tar xvf x.tar.xz= 即可，因为新版 tar 支持解压 xz 文件。
 
 ** mysql installation
 
@@ -532,8 +545,6 @@ values
 #+BEGIN_SRC
 docker inspect -f '{{.State.Pid}}' <container id>
 #+END_SRC
-** netstat vs lsof
-https://serverfault.com/a/155560
 ** prometheus rate 函数的坑
 
 基础理论：rate(xxx[30]) 计算的时候需要最少取两个点，一般情况 15s 一个点。
