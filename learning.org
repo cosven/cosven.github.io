@@ -586,6 +586,34 @@ L1 的文件大小是 target-file-size-base, tikv 默认配置为 8MB，但 tikv
   - UNION 要求两个表的列都是一样的，结果集的列数和任意一个表一样
   - JONI 是把两个标的列加在一起，新的列的个数是两者之和
 
+** SQL 改写系列
+博客链接：https://open.oceanbase.com/blog/10900289
+
+- [ ] 所谓“查询改写本质上是一个模式匹配的过程”，体现到代码中，是怎样实现的呢？
+
+*** 概览
+
+两种改写算法
+1. 基于规则的改写：视图合并、子查询提升、内连接消除、外连接消除等改写算法。
+2. 基于代价的改写：OR Expansion、JA 子查询提升、Win Magic、Group-By Placement
+   等代价改写算法。基于代价 = 规则 + 代价验证。基于代价的改写，最容易理解的就是用不用索引。
+   在这个例子里面，如果 C1 和 C2 都有索引，那么 Q2 代价可能更小。
+   #+begin_src
+   Q1:
+   SELECT * FROM T1 WHERE C1 < 20000 OR C2 < 30 ;
+   =>
+   Q2:
+   SELECT /*SEL_1*/ * FROM T1 WHERE C1 < 20000 UNION ALL
+   SELECT /*SEL_2*/ * FROM T1 WHERE C2 < 30 AND LNNVL (C1 < 20000);
+   #+end_src
+
+*** 几个经验
+
+1. 存在性谓词（比如 EXISTS,IN,ANY,ALL），这类通常可以改写为 SEMI JOIN / ANTI JOIN。
+   NOT IN 可能可以改写为 null-aware anti join。看了些资料，null-aware 的主要意义在于，
+   它可以大幅提升计算性能。举个例子，null in (1, null, ...)，无论右边的集合有多大，
+   表达式的结果总是 null。
+2.
 
 ** ANSWERED [#C] React 怎样写一个有特定功能的基础组件？
 - [X] 问题一：我自己实现的 UserSelect 组件中已经绑定了 onChange 回调，
