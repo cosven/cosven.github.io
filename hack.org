@@ -92,6 +92,12 @@ Emacs 可以获取到屏幕大小，也可以知道当前 frame 大小，
 pip install -e . --config-settings editable_mode=compat
 #+END_SRC
 
+使用 vscode 还遇到一个问题：我在 feeluown 项目中创建了一个虚拟环境，
+我用 vscode 打开一个 workspace，里面包含 feeluown 和 feeluown-netease
+两个项目，vscode 默认会为 feeluown-netease 选择系统 python 作为解释器，
+而实际上我想选用虚拟环境的解释器。我在界面上操作过几次，但有时结果不符合期望。
+这时可以通过 “clear workspace intepreter” 命令来解决问题。
+
 ** term 模式                                                          :elisp:
 *** 自定义 multi-term 配置
 使用 =custom-set-variables= 语法即可设置 multi-term 的 =term-bind-key-alist=
