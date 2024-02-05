@@ -1,0 +1,109 @@
+* 菜鸟学数据库                                                     :database:
+** 优化器100%覆盖率
+
+试图找到一个视角，可以完成对优化器 100% 的 SQL 覆盖率。
+
+*** join 算法
+
+join 算法的思路
+1. nested loop join -> O(N^2)
+2. sort merge join -> O(NlogN)
+3. hash join -> O(N)
+
+*** JOIN 类型与区别                                               :optimizer:
+- INNER JOIN：如果表中有至少一个匹配，则返回行（join 默认就是 inner join）
+- OUTER JOIN
+  - LEFT [OUTER] JOIN：即使右表中没有匹配，也从左表返回所有的行，右边会补 null
+  - RIGHT [OUTER] JOIN：即使左表中没有匹配，也从右表返回所有的行，左边补 null
+  - FULL [OUTER] JOIN：只要其中一个表中存在匹配，则返回行
+- CROSS JOIN：笛卡尔积，左边的每一行都和右边的所有行都产生一个 join 结果。
+  据说这种用法比较少。
+- 特殊 JOIN（这些 JOIN 只取坐标或者右表数据）
+  - SEMI JOIN：只能查一个表的列。和 INNER JOIN 相似。
+    - LEFT SEMI JOIN 是取交集后，再取左表的列
+  - ANTI JOIN：只能查一个表的列。和 INNER JOIN 相反。
+    - LEFT ANTI JOIN 是左表减去左右交集部分（INNER JOIN 是取交集）
+- UNION
+  - UNION：似乎是取交集的意思
+  - UNION ALL：似乎是取并集的意思（结果里面允许有重复行）
+- UNION 和 INNER JOIN 区别在于：
+  - UNION 要求两个表的列都是一样的，结果集的列数和任意一个表一样
+  - JONI 是把两个标的列加在一起，新的列的个数是两者之和
+
+新扩展的 join 类型
+1. mark join：在 join 的时候，额外的加一列，来标记某一行是否被过滤掉了。
+   背景：关联子查询的一种常见优化是把它改写成 semi join，但当条件里面有 or 的时候，
+   这个优化就不那么适用了，mark join 就是解决这个问题的。
+   参考资料：https://emmymiao87.github.io/jekyll/update/2021/07/25/Mark-Join.html
+   #+BEGIN_SRC sql
+     select l_orderkey
+     from lineitem
+     where exists
+         (select *
+          from orders
+          where o_orderkey = l_orderkey )
+       or l_linenumber in (1,
+                           2,
+                           3);
+   #+END_SRC
+2. single join：它的 single 体现为子查询里面最多只能返回一行。
+   这个资料说对于关联子查询的情况，可以转换成 left outer join。
+   参考资料：https://zhuanlan.zhihu.com/p/614953165
+   资料太少，似乎没必要细究。
+   #+BEGIN_SRC sql
+    --q3 包含相关子查询，目的是查找教授的id和name，以及这个教授的助教的名字。
+    --因为相关子查询位于select后，按照SQL标准，要求对于每一次输出的PersId，
+    --子查询最多仅可以返回一个结果，即一个PersId对应一个助教或无助教。
+    select PersId, p.Name, (select a.Name
+                            from Assistants a
+                            where a.Boss = p.PersId
+                            and JobTitle = 'personal assistant')
+    from Professors p
+  #+END_SRC
+
+
+
+*** join 的几种的 shuffle 算法
+1. broadcast join 的网络传输成本是：小表*节点数。适用于大表join极小表。
+2. shuffle join 的网络传输成本是：左表+右表。据说适用于大表join小表。
+3. doris 还支持 bucket shuffle join，解决一种特殊场景，当 join key 是数据分布列的时候，
+   只需要把一个表的数据传输到另外一个表所在的节点即可。和 shuffle join 的区别是，
+   shuffle join 需要把两个表的数据计算 hash 之后，相同 hash 的分布到一个节点。
+4. colocate 的网络传输成本是 0。
+
+https://doris.apache.org/zh-CN/docs/dev/query-acceleration/join-optimization/doris-join-optimization
+
+1. broadcast join（网络复杂度：N * T(R)）
+2. shuffle join（网络复杂度：T(S) + T(R)）
+3. bucket shuffle join（网络复杂度：T(R)）
+4. colocate/local join （网络传输：0）
+
+** 读懂执行计划                                                    :optimizer:
+拿到两个执行计划，一个是有 PhysicalDistribute，一个没有。那它们区别是什么呢？
+优化器开发者看到这个时，会觉得这两个计划分别对应 broadcast join / shuffle join。
+怎样才能有这个条件反射呢？
+
+#+BEGIN_SRC
+--hashJoin[RIGHT_OUTER_JOIN](t1.bk_x = t2.bk_x)(t1.ydate = t2.bus_x)
+----PhysicalDistribute
+------PhysicalProject
+--------PhysicalOlapScan[flt_prod_nav]
+----PhysicalDistribute
+------PhysicalLimit
+#+END_SRC
+
+#+BEGIN_SRC
+--hashJoin[RIGHT_OUTER_JOIN](t1.bk_x = t2.bk_x)(t1.ydate = t2.bus_x)
+----PhysicalDistribute
+------PhysicalProject
+--------PhysicalOlapScan[flt_prod_nav]
+----PhysicalDistribute
+------PhysicalLimit
+#+END_SRC
+
+有几个需要理解的点
+
+*** TODO exechange/sink/distribute 这些概念都发源于哪里？
+目前看起来都是来自 MPP 的概念。MPP 概念又来自哪里呢，暂时还没找到相关的论文？
+
+*** TODO runtime filter

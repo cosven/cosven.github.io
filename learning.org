@@ -531,61 +531,6 @@ L1 的文件大小是 target-file-size-base, tikv 默认配置为 8MB，但 tikv
 所以，compaction 不会把文件输出到 L2 层。这和测试观测到的现象一致。
 
 
-** 读懂执行计划                                                    :database:
-拿到两个执行计划，一个是有 PhysicalDistribute，一个没有。那它们区别是什么呢？
-优化器开发者看到这个时，会觉得这两个计划分别对应 broadcast join / shuffle join。
-怎样才能有这个条件反射呢？
-
-#+BEGIN_SRC
---hashJoin[RIGHT_OUTER_JOIN](t1.bk_x = t2.bk_x)(t1.ydate = t2.bus_x)
-----PhysicalDistribute
-------PhysicalProject
---------PhysicalOlapScan[flt_prod_nav]
-----PhysicalDistribute
-------PhysicalLimit
-#+END_SRC
-
-#+BEGIN_SRC
---hashJoin[RIGHT_OUTER_JOIN](t1.bk_x = t2.bk_x)(t1.ydate = t2.bus_x)
-----PhysicalDistribute
-------PhysicalProject
---------PhysicalOlapScan[flt_prod_nav]
-----PhysicalDistribute
-------PhysicalLimit
-#+END_SRC
-
-有几个需要理解的点
-
-*** DONE broadcast hash join 和 shuffle hash join 的原理区别
-1. broadcast join 的网络传输成本是：小表*节点数。适用于大表join极小表。
-2. shuffle join 的网络传输成本是：左表+右表。据说适用于大表join小表。
-3. doris 还支持 bucket shuffle join，解决一种特殊场景，当 join key 是数据分布列的时候，
-   只需要把一个表的数据传输到另外一个表所在的节点即可。和 shuffle join 的区别是，
-   shuffle join 需要把两个表的数据计算 hash 之后，相同 hash 的分布到一个节点。
-
-*** TODO exechange/sink/distribute 这些概念都发源于哪里？
-目前看起来都是来自 MPP 的概念。MPP 概念又来自哪里呢，暂时还没找到相关的论文？
-
-** JOIN 类型与区别                                                 :database:
-- INNER JOIN：如果表中有至少一个匹配，则返回行（join 默认就是 inner join）
-- OUTER JOIN
-  - LEFT [OUTER] JOIN：即使右表中没有匹配，也从左表返回所有的行，右边会补 null
-  - RIGHT [OUTER] JOIN：即使左表中没有匹配，也从右表返回所有的行，左边补 null
-  - FULL [OUTER] JOIN：只要其中一个表中存在匹配，则返回行
-- CROSS JOIN：笛卡尔积，左边的每一行都和右边的所有行都产生一个 join 结果。
-  据说这种用法比较少。
-- 特殊 JOIN（这些 JOIN 只取坐标或者右表数据）
-  - SEMI JOIN：只能查一个表的列。和 INNER JOIN 相似。
-    - LEFT SEMI JOIN 是取交集后，再取左表的列
-  - ANTI JOIN：只能查一个表的列。和 INNER JOIN 相反。
-    - LEFT ANTI JOIN 是左表减去左右交集部分（INNER JOIN 是取交集）
-- UNION
-  - UNION：似乎是取交集的意思
-  - UNION ALL：似乎是取并集的意思（结果里面允许有重复行）
-- UNION 和 INNER JOIN 区别在于：
-  - UNION 要求两个表的列都是一样的，结果集的列数和任意一个表一样
-  - JONI 是把两个标的列加在一起，新的列的个数是两者之和
-
 ** SQL 改写系列
 博客链接：https://open.oceanbase.com/blog/10900289
 
