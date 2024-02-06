@@ -1,9 +1,92 @@
 * 菜鸟学数据库                                                     :database:
-** 优化器100%覆盖率
+** SQL 100% 覆盖率
+目标：试图找到一个视角，可以梳理对优化器正确性问题的全覆盖。主要看 SELECT 查询。
 
-试图找到一个视角，可以完成对优化器 100% 的 SQL 覆盖率。
+*** 视角1：Doris SQL 的文法规则
+从 query 的根节点开始看：cte 主要就是由 query 组成，所以主要的复杂度在 querySpecification
+这个规则里面。
+#+BEGIN_SRC antlr
+  query
+      : cte? queryTerm queryOrganization
+      ;
 
-*** join 算法
+  queryTerm
+      : queryPrimary
+      | left=queryTerm operator=(UNION | EXCEPT | INTERSECT)
+          setQuantifier? right=queryTerm
+      ;
+
+  queryOrganization
+      : sortClause? limitClause?
+      ;
+
+  queryPrimary
+      : querySpecification                                                   #queryPrimaryDefault
+      | LEFT_PAREN query RIGHT_PAREN                                         #subquery
+      ;
+#+END_SRC
+
+看看 querySpecification
+#+BEGIN_SRC antlr
+querySpecification
+    : selectClause
+      fromClause?
+      whereClause?
+      aggClause?
+      havingClause?
+      {doris_legacy_SQL_syntax}? queryOrganization                         #regularQuerySpecification
+    ;
+#+END_SRC
+
+selectClause 里面可以有哪些元素？从下面的规则可以看出来，selectClause 的复杂度主要在
+expression。distinct, ASTERISK 也是一些可变项。
+#+BEGIN_SRC antlr
+  selectClause
+      : SELECT selectHint? DISTINCT? selectColumnClause
+      ;
+
+  selectColumnClause
+      : namedExpressionSeq
+      | ASTERISK EXCEPT LEFT_PAREN namedExpressionSeq RIGHT_PAREN
+      ;
+
+  namedExpressionSeq
+    : namedExpression (COMMA namedExpression)*
+    ;
+
+  namedExpression
+    : expression (AS? (identifierOrText))?
+    ;
+#+END_SRC
+
+另外
+- fromClause 的复杂度
+  - fromClause 里面会使用 query
+  - join 类型
+  - join 条件
+    - booleanExpression
+    - USING identifierList（不知道是个啥）
+  - lateralView
+  - ???
+- whereClause 的复杂度等价于 booleanExpression
+- aggClause 的复杂度有
+  - ROLLUP/CUBE/expression/expression,.../groupingSet
+- havingClause 的复杂度等价于 booleanExpression
+
+总的来说，query 的主要复杂度之一就是 expression。
+
+expression 复杂度
+- 架子上：expression 可以加上 bitand, not, and, or, ||, () 等符号。从而递归。
+- expression 自身的主要复杂度对应 primaryExpression 语法规则
+  - 架子上： primaryExpression 一个复杂度来自它的函数种类，有这么几大类
+    - 日期相关： TIMESTAMPDIFF, DATEDIFF, ADDDATE 等等
+    - case when 语句
+    - cast
+    - 常量, interval, *
+    - functionIdentifier( distinct|all? expression (order by sortItem)?)
+
+** 数据库的 JOIN
+*** JOIN 算法
 
 join 算法的思路
 1. nested loop join -> O(N^2)
@@ -62,8 +145,7 @@ join 算法的思路
   #+END_SRC
 
 
-
-*** join 的几种的 shuffle 算法
+*** JOIN 的几种的 shuffle 算法
 1. broadcast join 的网络传输成本是：小表*节点数。适用于大表join极小表。
 2. shuffle join 的网络传输成本是：左表+右表。据说适用于大表join小表。
 3. doris 还支持 bucket shuffle join，解决一种特殊场景，当 join key 是数据分布列的时候，
