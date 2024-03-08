@@ -160,7 +160,7 @@ https://doris.apache.org/zh-CN/docs/dev/query-acceleration/join-optimization/dor
 3. bucket shuffle join（网络复杂度：T(R)）
 4. colocate/local join （网络传输：0）
 
-** 读懂执行计划                                                    :optimizer:
+** TODO 读懂 doris 的执行计划                                     :optimizer:
 拿到两个执行计划，一个是有 PhysicalDistribute，一个没有。那它们区别是什么呢？
 优化器开发者看到这个时，会觉得这两个计划分别对应 broadcast join / shuffle join。
 怎样才能有这个条件反射呢？
@@ -185,7 +185,29 @@ https://doris.apache.org/zh-CN/docs/dev/query-acceleration/join-optimization/dor
 
 有几个需要理解的点
 
-*** TODO exechange/sink/distribute 这些概念都发源于哪里？
-目前看起来都是来自 MPP 的概念。MPP 概念又来自哪里呢，暂时还没找到相关的论文？
+- [ ] exechange/sink/distribute 这些概念都发源于哪里？
+  目前看起来都是来自 MPP 的概念。MPP 概念又来自哪里呢，暂时还没找到相关的论文？
+- [ ] TODO runtime filter
 
-*** TODO runtime filter
+** 读懂 doris 的 sql profile
+
+1. 一个可以关注的指标是 ScannerFilterTime（表过滤耗时）：可能是 be 表达式计算太慢。
+   比如 7547。
+
+** 查询计划的生成流程
+
+根据 [[https://mp.weixin.qq.com/s/iUnzVQYAeYTqD1JqBkF_sg][【源码解析系列】 Apache Doris 查询源码解析]]，查询计划的生成流程为：
+1. 语法解析
+2. 语义解析（包含：表存在性检查等）
+3. query 改写
+   1. 表达式改写
+   2. 子查询解嵌套
+4. 单机执行计划
+   1. join reorder
+   2. 谓词下推
+5. 注：步骤3和4的一些区别
+   1. 输出仍然是一个 AST，而 4 的输出就是一个执行计划了
+   2. 会用上其它的上下文，比如统计信息，join reorder 就是一个例子
+   3. GPT 说谓词下推也是可以在步骤3进行，看具体实现
+   4. 个人看代码，4 里面也会有表达式改写（比如恒真或恒假的条件消除）
+   5. Infer predicates 属于 plan rewriter
