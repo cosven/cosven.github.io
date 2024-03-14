@@ -1,7 +1,6 @@
 * 菜鸟学数据库                                                     :database:
 ** SQL 100% 覆盖率
 目标：试图找到一个视角，可以梳理对优化器正确性问题的全覆盖。主要看 SELECT 查询。
-
 *** 视角1：Doris SQL 的文法规则
 从 query 的根节点开始看：cte 主要就是由 query 组成，所以主要的复杂度在 querySpecification
 这个规则里面。
@@ -85,6 +84,20 @@ expression 复杂度
     - 常量, interval, *
     - functionIdentifier( distinct|all? expression (order by sortItem)?)
 
+几种相对不常见的语法的含义
+1. having 子句：由于 where 语句里面不能使用 agg 函数，而 having 子句可以。
+   同时，having 子句里面的列和 select 类似，也需要遵守 group by 语义规则。
+   having 子句和 group by 是一起出现的。
+2. 窗口函数（分析函数）：窗口函数也可以分组排序，和 group by + order by 不同的是，
+   它不会改变结果集的行数（group by 会聚合）。
+3. distinct 被单独划分为一类
+
+*** TODO [#A] 视角N：常问几个问题
+- [ ] 给定一个 topn 修改的 PR，怎样确定要覆盖哪些内容？
+  - 根据 SQL 种子来覆盖 -> 不足之处是太黑盒，说不出覆盖率如何
+  - 再比如为啥 limit 遇到同级的窗口函数时，不能产生 topn 呢？
+    这个问题其实从语义上就能解释，而不需要了解过多原理。
+
 ** 数据库的 JOIN
 *** JOIN 算法
 
@@ -160,7 +173,7 @@ https://doris.apache.org/zh-CN/docs/dev/query-acceleration/join-optimization/dor
 3. bucket shuffle join（网络复杂度：T(R)）
 4. colocate/local join （网络传输：0）
 
-** TODO 读懂 doris 的执行计划                                     :optimizer:
+** TODO [#A] 读懂 doris 的执行计划                                :optimizer:
 拿到两个执行计划，一个是有 PhysicalDistribute，一个没有。那它们区别是什么呢？
 优化器开发者看到这个时，会觉得这两个计划分别对应 broadcast join / shuffle join。
 怎样才能有这个条件反射呢？
@@ -185,11 +198,18 @@ https://doris.apache.org/zh-CN/docs/dev/query-acceleration/join-optimization/dor
 
 有几个需要理解的点
 
-- [ ] exechange/sink/distribute 这些概念都发源于哪里？
-  目前看起来都是来自 MPP 的概念。MPP 概念又来自哪里呢，暂时还没找到相关的论文？
-- [ ] TODO runtime filter
+*** exechange/sink/distribute 都是啥意思？
+Doris 文档上说了下面这句话。可以推断，DataStreamSink 是发送数据的节点，ExechangeNode 是接口数据的节点。
+两者都是成对出现。加之，[[https://docs.starrocks.io/zh/docs/administration/Query_planning/#%E5%88%86%E6%9E%90-query-plan][StarRocks 分析 Query Plan]] 这一节讲的比较具体。基本可以确定。
+而认真对比 doris 的 explain 和 explain shape plan 可以发现，PhysicalDistribute
+这个对应了发送和接口，语义上也是“分布数据”的意思。因此这个就说的通了。
+#+BEGIN_QUOTE
+每个Fragment之间都通过 DataStreamSink 和 ExchangeNode 进行数据传输。
+#+END_QUOTE
 
-** 读懂 doris 的 sql profile
+*** TODO runtime filter
+
+** TODO [#C] 读懂 doris 的 sql profile
 
 1. 一个可以关注的指标是 ScannerFilterTime（表过滤耗时）：可能是 be 表达式计算太慢。
    比如 7547。

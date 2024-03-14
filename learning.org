@@ -677,7 +677,7 @@ except ImportError:
 
 ** SQLAlchemy
 *** TODO [#C] 问题排差：2013, 'Lost connection to MySQL server during query'
-** TODO [#B] Python 3.7 Dataclasses
+** TODO [#C] Python 3.7 Dataclasses
 
 - [ ] 为什么要加入 dataclasses？
   - 不是已经有 attr 了么？

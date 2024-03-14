@@ -72,10 +72,6 @@ duration 之后缓解了这个问题。所以这个函数选择之后还需要�
 ** TODO [#C] feeluown 内存占用太多的问题
 详情请看 telegram feeluown 群讨论
 
-** TODO [#B] fuo 协议增强
-syntax-directed interpreter
-concrete syntax tree
-abstract syntax tree
 ** Picture In Picture 调研
 
 *uninit_gl 流程*
