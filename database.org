@@ -207,8 +207,6 @@ Doris 文档上说了下面这句话。可以推断，DataStreamSink 是发送�
 每个Fragment之间都通过 DataStreamSink 和 ExchangeNode 进行数据传输。
 #+END_QUOTE
 
-*** TODO runtime filter
-
 ** TODO [#C] 读懂 doris 的 sql profile
 
 1. 一个可以关注的指标是 ScannerFilterTime（表过滤耗时）：可能是 be 表达式计算太慢。

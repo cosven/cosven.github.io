@@ -563,3 +563,21 @@ docker inspect -f '{{.State.Pid}}' <container id>
 #+BEGIN_SRC
 sum(irate(tidb_executor_statement_total[1m])) < 0.1 * sum(rate(tidb_executor_statement_total[1m] offset 2m))
 #+END_SRC
+
+** gradle 下载依赖包很慢的问题
+flutter 项目和 groovy-language-server 这两个项目都用到了 gradle，它的编译很慢。
+直接用 proxychains4 是不行的，但是使用 http_proxy 等环境变量是可行的。
+
+** emacs 在一个新环境安装包时遇到 public key 错误
+Emacs 启动后，遇到这个错
+#+BEGIN_SRC text
+Failed to verify signature archive-contents.sig:
+No public key for 645357D2883A0966 created at 2024-10-22T05:05:02+0800 using EDDSA
+Command output:
+gpg: Signature made Tue 22 Oct 2024 05:05:02 AM CST
+gpg:                using EDDSA key 0327BE68D64D9A1A66859F15645357D2883A0966
+gpg: Can't check signature: No public key
+#+END_SRC
+
+解决办法：执行下述命令
+gpg --homedir ~/.emacs.d/elpa/gnupg --keyserver keyserver.ubuntu.com --recv-keys 645357D2883A0966
