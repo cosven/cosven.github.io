@@ -149,6 +149,9 @@ curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
 举个例子：[我的配置](https://github.com/cosven/rcfiles/commit/1af74b2352967f0a937a63cb03942b91c0fc7f42)
 测试脚本：[链接](https://github.com/cosven/rcfiles/commit/b608261986833bad359d13168229d9e6ccdc1a64#diff-9bf5a2f4d58325ac0e124b2525172d15) -> 如果输出的颜色润滑过度，就代表改环境是支持 true color 的。
 
+*** iterm2 重载 SSH_AUTH_SOCK 等环境变量
+export $(tmux show-environment | grep '^SSH_AUTH_SOCK=')
+
 *** linux 查看已经安装的内核
 
     dpkg -l | grep linux-image
